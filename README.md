@@ -21,6 +21,8 @@ Fun Stat Tracking:
 .broken (So how many rods HAVE we all broken?)
 
 .jobs (Tell Carby what jobs you're playing with, and ask what others have. Type without any other input for the syntax)
+
+.timer (Counts down how long is left until the fiesta begins!)
  
 DIY Fiesta:
  
