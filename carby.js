@@ -1,42 +1,56 @@
-let Discord = require('discord.io');
+const Discord = require("discord.io");
+const fs = require("fs");
 
 let bot = new Discord.Client({
     token: "",
-    autorun: true
+    autorun: false
 });
 
 let kyro = "103835146066599936";
 
-let file = "data.json";
 let data = {
-    victims: -1,
-    kinuVictims: -1,
-    rodsBroken: -1
+    stats: {
+        victims: -1,
+        kinuVictims: -1,
+        rodsBroken: -1
+    },
+    jobs: {
+        "316052390442958860": ["Mime", "Mime", "Mime", "Mime"]
+    },
+    monsters: []
 };
-let jobFile = "jobs.json";
-let jobData = [
-{
-    id: "316052390442958860",
-    jobs: ["Mime", "Mime", "Mime", "Mime"]
-}];
 
+function loadData(filename, key) {
+    return new Promise((resolve, reject) => {
+        console.log("Loading ${filename}...");
+        fs.readFile(filename, "utf8", (err, file) => {
+            if (err) {
+                reject(err);
+            } else {
+                data[key] = JSON.parse(file);
+                resolve();
+            }
+        });
+    });
+}
+let file = "data.json";
+let jobFile = "jobs.json";
 let monsterFile = "monsterdata.json";
-let monsterData = [];
+let proms = [loadData(file, stats), loadData(jobFile, jobs), loadData(monsterFile, monsters)];
+Promise.all(proms).then(() => {
+    bot.connect()
+}, err => {
+    console.error("Error loading data files!");
+    console.error(err);
+});
 
 bot.on('ready', function () {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
-    jsonfile.readFile(file, function (err, obj) {
-        data = obj;
-    });
-    jsonfile.readFile(jobFile, function (err, obj) {
-        jobData = obj;
-    });
-    jsonfile.readFile(monsterFile, function (err, obj) {
-        monsterData = obj;
-    });
 });
 
-bot.on('disconnect', function () {
+bot.on('disconnect', err => {
+    console.error("Bot disconnected with below error! Reconnecting...");
+    console.error(err);
     bot.connect();
 });
 
@@ -145,22 +159,22 @@ bot.on('message', function (user, userID, channelID, message, event) {
             zerky(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".oracle") === 0) {
-        	oracle(user, userID, channelID, message, event);
+            oracle(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf("!level5death") === 0) {
-        	levelFiveDeath(user, userID, channelID, message, event);
+            levelFiveDeath(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".quickleak") === 0) {
-        	quickleak(user, userID, channelID, message, event);
+            quickleak(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".timer") === 0) {
-        	countdown(user, userID, channelID, message, event);
+            countdown(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".fiestatimer") === 0) {
-        	countdown(user, userID, channelID, message, event);
+            countdown(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".countdown") === 0) {
-        	countdown(user, userID, channelID, message, event);
+            countdown(user, userID, channelID, message, event);
         }
         //job DB
         if (lowMes.indexOf(".jobs") === 0) {
@@ -453,15 +467,15 @@ function purechaos(user, userID, channelID, message, event) {
     let wind = allJobs[getIncInt(0, allJobs.length - 1)];
     let water;
     do {
-    	water = allJobs[getIncInt(0, allJobs.length - 1)];
+        water = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (water === wind);
     let fire;
     do {
-    	fire = allJobs[getIncInt(0, allJobs.length - 1)];
+        fire = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (fire === wind || fire === water);
     let earth;
     do {
-    	earth = allJobs[getIncInt(0, allJobs.length - 1)];
+        earth = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (earth === wind || earth === water || earth === fire);
     bot.createDMChannel(userID);
     bot.sendMessage({
@@ -523,15 +537,15 @@ function dd(user, userID, channelID, message, event) {
             message: ddLines[getIncInt(0, ddLines.length - 1)]
         });
     } else if (isNaN(index)) {
-    	bot.sendMessage({
-    		to: channelID,
-    		message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
-    	});
+        bot.sendMessage({
+            to: channelID,
+            message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
+        });
     } else if (index > ddLines.length || index < 1) { 
-    	bot.sendMessage({
-    		to: channelID,
-    		message: "Oh my god, the quote wand missed!\n" + ddLines[getIncInt(0, ddLines.length - 1)]
-    	});
+        bot.sendMessage({
+            to: channelID,
+            message: "Oh my god, the quote wand missed!\n" + ddLines[getIncInt(0, ddLines.length - 1)]
+        });
     } else {
         bot.sendMessage({
             to: channelID,
@@ -542,23 +556,21 @@ function dd(user, userID, channelID, message, event) {
 
 //speedtrap
 function trapped(user, userID, channelID, message, event) {
-    data.victims++;
+    data.stats.victims++;
     if (userID === "90507312564805632") {
-        data.kinuVictims++;
+        data.stats.kinuVictims++;
     }
     bot.sendMessage({
         to: channelID,
-        message: "Gotta go fast! Total Victims: " + data.victims
+        message: "Gotta go fast! Total Victims: " + data.stats.victims
     });
-    jsonfile.writeFile(file, data, function (err) {
-        console.error(err);
-    });
+    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => console.error(err));
 }
 
 function victim(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
-        message: "<@" + userID + ">: Dr. Clapperclaw's Deadly Speed Trap has snared " + data.victims + " victims! (" + data.kinuVictims + " of them are alcharagia...)"
+        message: "<@" + userID + ">: Dr. Clapperclaw's Deadly Speed Trap has snared " + data.stats.victims + " victims! (" + data.stats.kinuVictims + " of them are alcharagia...)"
     });
 }
 
@@ -566,23 +578,21 @@ function breakRod(user, userID, channelID, message, event) {
     let args = message.toLowerCase().split(" ");
     let index = parseInt(args[1]);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100 ) {
-        data.rodsBroken++;
+        data.stats.rodsBroken++;
     } else {
-        data.rodsBroken += index;
+        data.stats.rodsBroken += index;
     }
     bot.sendMessage({
         to: channelID,
-        message: "750 blaze rods errday (" + data.rodsBroken + " broken so far!)"
+        message: "750 blaze rods errday (" + data.stats.rodsBroken + " broken so far!)"
     });
-    jsonfile.writeFile(file, data, function (err) {
-        console.error(err);
-    });
+    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => console.error(err));
 }
 
 function broken(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
-        message: "You godless heathens have blazed " + data.rodsBroken + " rods so far. DARE has failed you all."
+        message: "You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all."
     });
 }
 
@@ -702,56 +712,46 @@ function zerky(user, userID, channelID, message, event) {
 }
 
 function oracle(user, userID, channelID, message, event) {
-	bot.sendMessage({
-		to: channelID,
-		message: "https://www.youtube.com/watch?v=makazgIRzfg"
-	});
+    bot.sendMessage({
+        to: channelID,
+        message: "https://www.youtube.com/watch?v=makazgIRzfg"
+    });
 }
 
 function levelFiveDeath(user, userID, channelID, message, event) {
-	bot.sendMessage({
-		to: channelID,
-		message: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp"
-	});
+    bot.sendMessage({
+        to: channelID,
+        message: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp"
+    });
 }
 
 function quickleak(user, userID, channelID, message, event){
-	bot.sendMessage({
-		to: channelID,
-		message: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
-	});
+    bot.sendMessage({
+        to: channelID,
+        message: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
+    });
 }
 
 //job DB
 function jobs(user, userID, channelID, message, event) {
     let args = message.split(" ");
     //expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str), 3: water job (str), 4: fire job (str), 5: earth job (str)
-    if (args[1] === undefined) {
-        args[1] = "a";
-    } //prevents crash on no args
-    if (args[1].toLowerCase() === "register") {
-        let hasUser = false;
-        for (let user of jobData) {
-            if (user.id === userID) {
-                hasUser = true;
-                user.jobs = [args[2], args[3], args[4], args[5]];
-            }
-        }
-        if (!hasUser) {
-            jobData.push({
-                id: userID,
-                jobs: [args[2], args[3], args[4], args[5]]
-            });
-        }
-        jsonfile.writeFile(jobFile, jobData, function (err) {
-            console.error(err);
-        });
+    if (args.length < 3 || args.length > 6) {
         bot.sendMessage({
             to: channelID,
-            message: "Got it, <@" + userID + ">. Your jobs (" + args[2] + " / " + args[3] + " / " + args[4] + " / " + args[5] + ") are registered."
+            message: "Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. Please ensure you provide jobs when registering. Please delimit with spaces, and keep two-word jobs to one word."
+        });
+        return;
+    }
+    if (args[1].toLowerCase() === "register") {
+        let jobs = args.slice(2);
+        data.jobs[userID] = jobs;
+        fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => console.error(err));
+        bot.sendMessage({
+            to: channelID,
+            message: "Got it, <@" + userID + ">. Your jobs (" + jobs.join("/") + ") are registered."
         });
     } else if (args[1].toLowerCase() === "lookup") {
-        let current;
         let mentioned = message.replace(/\D/g, '');
         if (bot.fixMessage("<@" + mentioned + ">") === "undefined") {
             bot.sendMessage({
@@ -759,12 +759,8 @@ function jobs(user, userID, channelID, message, event) {
                 message: "Sorry <@" + userID + ">, I can only lookup with @mentions!"
             });
         } else {
-            for (let user of jobData) {
-                if (user.id === mentioned) {
-                    current = user;
-                }
-            }
-            if (current === undefined) {
+            jobs = data.jobs[mentioned]
+            if (!jobs) {
                 bot.sendMessage({
                     to: channelID,
                     message: "I don't have jobs on file for <@" + mentioned + ">, sorry!"
@@ -772,7 +768,7 @@ function jobs(user, userID, channelID, message, event) {
             } else {
                 bot.sendMessage({
                     to: channelID,
-                    message: "I have <@" + mentioned + ">'s jobs as: " + current.jobs[0] + " / " + current.jobs[1] + " / " + current.jobs[2] + " / " + current.jobs[3] + "."
+                    message: "I have <@" + mentioned + ">'s jobs as: " + jobs.join("/") + "."
                 });
             }
         }
