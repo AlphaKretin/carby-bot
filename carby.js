@@ -1,12 +1,17 @@
 const Discord = require("discord.io");
 const fs = require("fs");
 
+let auth = fs.readFileSync("auth.json", "utf8");
+
+if (!auth.token) {
+    console.error("Bot token not found at auth.json.token!");
+    process.exit();
+}
+
 let bot = new Discord.Client({
-    token: "",
+    token: auth.token,
     autorun: false
 });
-
-let kyro = "103835146066599936";
 
 let data = {
     stats: {
@@ -206,7 +211,7 @@ let commands = [
     {
         names: ["purify"],
         func: help
-        chk: (_, userID) => userID === kyro;
+        chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1;
     },
 ];
 
