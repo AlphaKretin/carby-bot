@@ -549,55 +549,56 @@ function forbidden(user, userID, channelID, message, event) {
 
 //.dd
 let ddLines = [
-    "I suggest using **ENCOUNTER MANIPULATION** (#1)",
-    "Good thing I can !Control Shield Dragons so I can hashtag grind on them for **TWO HOURS** (#2)",
-    "No, I have to let the Aegis Shield burn, I ran the numbers, doing it without the Flame Shield is impossible. (#3)",
-    "Running through the Gil Turtle cave four times lets you buy sufficient cottages! (#4)",
-    "You'll need Bartz in critical HP for this fight. It's not like the Seal Guardians have physical attacks... (#5)",
-    "I may not have Summoner, but I absolutely have to go get Catoblepas for... some reason! (#6)",
-    "...what free Hermes Sandals? (#7)",
-    "I just realized I didn't put Butz in the front row... (I didn't notice Krile either...) (#8)",
-    "I'm not using Catch and Release for this fight because I can't have four Beastmasters. (#9)",
-    "**I'M NOT USING FOCUS, IT DOESN'T DO ENOUGH DAMAGE. I TESTED THIS EXTENSIVELY** (#10)",
-    "I can't get the genji shield off of Gilgamesh because I can't steal. (#11)",
-    "THE LAG IN THE GAME just prevented my full party curaga! (#12)",
-    "Hold on, I need to use my eyedrops on the person WHO HAS RAPID FIRE. (#13)",
-    "Good thing I have a map of Exdeath's Castle so I can completely miss the Hayate Bow! (#14)",
-    "Giving your Dancer the Chicken Knife over your Ranger is Sound Dragondarch Planning! (#15)",
-    "Yes, I believe my Ranger with Rapid Fire is the lowest damage character. I will make her a Red Mage instead. (#16)",
-    "Bartz, please use !Dance while we attempt to run. While wielding the Chicken Knife. (#17)",
-    "http://winvm.kyrosiris.com/optimalhelmchoices.png (#18)",
-    "I wish I, a person with access to Equip Bows, had a way to blind someone! (#19)",
-    "But he's not weak to Air, as far as I'm aware of! ...Oh, wait, yes he is, never mind. (#20)",
-    "Sword Dance is the best form of damage we've got with this team. (#21)",
-    "Good thing I have Red Mage so I can hashtag grind Mini Dragons for **TWO HOURS** while my sycophants in chat defend it! (#22)",
-    "Ladies and gentlemen, the grinding is over, we've hit level 32! ...now what do I do? (#23)",
-    "Yes! Sub 5-hour world 1! I'm so good. (#24)",
-    "Oh my god, the Wonder Wand missed! (#25)",
-    "...Does the Hayate Bow even sell? (#26)",
-    "There's no save points around here. *enters next room, finds save point* (#27)",
-    "I am a fucking idiot. I have this thing called !Mix, why am I not using it? (#28)",
-    "Is Archeosaur fuckin' heavy or something? (#29)",
-    "ANYTHING but the fucking chicken knife! (#30)",
-    "Now I actually know what the fuck I'm doing here. (#31)",
-    "I actually don't do serious speedruns of this game. I just have a fairly good amount of knowledge about how the mechanics work and stuff. (#32)",
-    "I need Faris solo to gain experience for **#GOBLINPUNCH**. *game overs in the Wind Shrine without having saved the game* (#33)",
-    "THE CHEST IS OPEN! WHERE IS THE DRAGON FANG? I'M STARING AT THE OPEN CHEST!!! (#34)",
-    "I'm gonna try something dumb! (#35)",
-    "\\*swings Blizzara Blade at immune target\\* Can you guys please hit??? (#36)",
-    "Well, he can't cast Aero now. \\*Gigas casts Aero twice\\* (#37)",
-    "Being higher level isn't really going to help outside of getting higher damage multipliers, basically. (#38)",
-    "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\* (#39)",
-    "I have a really really dumb strategy! <:yayclod:362777481838592010> (#40)"
+    "I suggest using **ENCOUNTER MANIPULATION**",
+    "Good thing I can !Control Shield Dragons so I can hashtag grind on them for **TWO HOURS**",
+    "No, I have to let the Aegis Shield burn, I ran the numbers, doing it without the Flame Shield is impossible.",
+    "Running through the Gil Turtle cave four times lets you buy sufficient cottages!",
+    "You'll need Bartz in critical HP for this fight. It's not like the Seal Guardians have physical attacks...",
+    "I may not have Summoner, but I absolutely have to go get Catoblepas for... some reason!",
+    "...what free Hermes Sandals?",
+    "I just realized I didn't put Butz in the front row... (I didn't notice Krile either...)",
+    "I'm not using Catch and Release for this fight because I can't have four Beastmasters.",
+    "**I'M NOT USING FOCUS, IT DOESN'T DO ENOUGH DAMAGE. I TESTED THIS EXTENSIVELY**",
+    "I can't get the genji shield off of Gilgamesh because I can't steal.",
+    "THE LAG IN THE GAME just prevented my full party curaga!",
+    "Hold on, I need to use my eyedrops on the person WHO HAS RAPID FIRE.",
+    "Good thing I have a map of Exdeath's Castle so I can completely miss the Hayate Bow!",
+    "Giving your Dancer the Chicken Knife over your Ranger is Sound Dragondarch Planning!",
+    "Yes, I believe my Ranger with Rapid Fire is the lowest damage character. I will make her a Red Mage instead.",
+    "Bartz, please use !Dance while we attempt to run. While wielding the Chicken Knife.",
+    "http://winvm.kyrosiris.com/optimalhelmchoices.png",
+    "I wish I, a person with access to Equip Bows, had a way to blind someone!",
+    "But he's not weak to Air, as far as I'm aware of! ...Oh, wait, yes he is, never mind.",
+    "Sword Dance is the best form of damage we've got with this team.",
+    "Good thing I have Red Mage so I can hashtag grind Mini Dragons for **TWO HOURS** while my sycophants in chat defend it!",
+    "Ladies and gentlemen, the grinding is over, we've hit level 32! ...now what do I do?",
+    "Yes! Sub 5-hour world 1! I'm so good.",
+    "Oh my god, the Wonder Wand missed!",
+    "...Does the Hayate Bow even sell?",
+    "There's no save points around here. *enters next room, finds save point*",
+    "I am a fucking idiot. I have this thing called !Mix, why am I not using it?",
+    "Is Archeosaur fuckin' heavy or something?",
+    "ANYTHING but the fucking chicken knife!",
+    "Now I actually know what the fuck I'm doing here.",
+    "I actually don't do serious speedruns of this game. I just have a fairly good amount of knowledge about how the mechanics work and stuff.",
+    "I need Faris solo to gain experience for **#GOBLINPUNCH**. *game overs in the Wind Shrine without having saved the game*",
+    "THE CHEST IS OPEN! WHERE IS THE DRAGON FANG? I'M STARING AT THE OPEN CHEST!!!",
+    "I'm gonna try something dumb!",
+    "\\*swings Blizzara Blade at immune target\\* Can you guys please hit???",
+    "Well, he can't cast Aero now. \\*Gigas casts Aero twice\\*",
+    "Being higher level isn't really going to help outside of getting higher damage multipliers, basically.",
+    "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\*",
+    "I have a really really dumb strategy! <:yayclod:362777481838592010>"
 ];
 
 function dd(user, userID, channelID, message, event) {
     let args = message.toLowerCase().split(" ");
     let index = parseInt(args[1]);
     if (args.length === 1) {
+        index = getIncInt(0, ddLines.length - 1);
         bot.sendMessage({
             to: channelID,
-            message: ddLines[getIncInt(0, ddLines.length - 1)]
+            message: ddLines[index] + " (#" + (index + 1) + ")"
         });
     } else if (isNaN(index)) {
         bot.sendMessage({
@@ -605,14 +606,15 @@ function dd(user, userID, channelID, message, event) {
             message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
         });
     } else if (index > ddLines.length || index < 1) { 
+        index = getIncInt(0, ddLines.length - 1);
         bot.sendMessage({
             to: channelID,
-            message: "Oh my god, the quote wand missed!\n" + ddLines[getIncInt(0, ddLines.length - 1)]
+            message: "Oh my god, the quote wand missed!\n" + ddLines[index] + " (#" + (index + 1) + ")"
         });
     } else {
         bot.sendMessage({
             to: channelID,
-            message: ddLines[index - 1]
+            message: ddLines[index - 1] + " (#" + index + ")"
         });
     }
 }
