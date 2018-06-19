@@ -689,10 +689,9 @@ function giltoss(user, userID, channelID, message, event) {
 }
 
 function ddstrat(user, userID, channelID, message, event) {
-    let os = require('os');
     bot.sendMessage({
         to: channelID,
-        message: "**PREMIUM TACTICAL INFORMATION ITT**" + os.EOL + "Dragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest." + os.EOL + os.EOL + "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32." + os.EOL + "2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings." + os.EOL + "3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone." + os.EOL + "4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3." + os.EOL + "5. Let the Aegis Shield be transformed into the Flame Shield." + os.EOL + "6. Make Bartz a Mystic Knight and weaken him to critical HP." + os.EOL + "7. Give Bartz the Flame Shield, give everyone else Reflect Rings." + os.EOL + "8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight." + os.EOL + "9. Kill the Water, Earth and Wind Crystals." + os.EOL + "10. Kill off everyone except Bartz." + os.EOL + "11. Use !Focus + Drain Sword to kill the Fire Crystal." + os.EOL + os.EOL + "It's easy!"
+        message: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!"
     });
 }
 
