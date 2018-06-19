@@ -368,7 +368,7 @@ let mcalcTable = {
 };
 
 function mcalc(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(" ").slice(1); //remove command name
+    let args = message.toLowerCase().split(/ +/).slice(1); //remove command name
     let strs = args.filter(i => isNaN(parseInt(i))); //extracts strings
     let type;
     if (strs.length < 1) {
@@ -404,7 +404,7 @@ function mcalc(user, userID, channelID, message) {
 
 //.almagest
 function almagest(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(" ");
+    let args = message.toLowerCase().split(/ +/);
     let vit = parseInt(args[1]);
     if (isNaN(vit) || args.length === 1) {
         bot.sendMessage({
@@ -613,7 +613,7 @@ let ddLines = [
 ];
 
 function dd(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(" ");
+    let args = message.toLowerCase().split(/ +/);
     let index = parseInt(args[1]);
     if (args.length === 1) {
         index = getIncInt(0, ddLines.length - 1);
@@ -665,7 +665,7 @@ function victim(user, userID, channelID) {
 }
 
 function breakRod(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(" ");
+    let args = message.toLowerCase().split(/ +/);
     let index = parseInt(args[1]);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100 ) {
         data.stats.rodsBroken++;
@@ -827,7 +827,7 @@ function quickleak(user, userID, channelID){
 
 //job DB
 function jobs(user, userID, channelID, message) {
-    let args = message.split(" ");
+    let args = message.split(/ +/);
     //expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str), 3: water job (str), 4: fire job (str), 5: earth job (str)
     if (args.length < 3 || args.length > 6) {
         bot.sendMessage({
@@ -1009,7 +1009,7 @@ function enemyClarify(user, userID, channelID, message) {
 }
 
 function info(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(" ");
+    let args = message.toLowerCase().split(/ +/);
     if (args.length < 2) {
         bot.sendMessage({
             to: userID,
