@@ -42,7 +42,7 @@ function loadData(filename, key) {
 }
 let file = "data.json";
 let jobFile = "jobs.json";
-let monsterFile = "data.monsters.json";
+let monsterFile = "monsterdata.json";
 let proms = [loadData(file, "stats"), loadData(jobFile, "jobs"), loadData(monsterFile, "monsters")];
 Promise.all(proms).then(() => {
     bot.connect();
@@ -982,6 +982,7 @@ function enemySearch(userID, query, att) {
         let i = 1; //lists from 1-n for humans even tho arrays start at 0
         for (let match of matches) {
             out += i + ". " + match.name + "\n";
+            i++;
         }
         queries[userID] = { //store data in queries, in the form of its own tiny key-value pair
             list: matches,
