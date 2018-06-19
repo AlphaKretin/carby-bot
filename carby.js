@@ -634,7 +634,11 @@ function trapped(user, userID, channelID, message, event) {
         to: channelID,
         message: "Gotta go fast! Total Victims: " + data.stats.victims
     });
-    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => console.error(err));
+    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => {
+        if (err) {
+            console.log(err);
+        }
+    });
 }
 
 function victim(user, userID, channelID, message, event) {
@@ -656,7 +660,11 @@ function breakRod(user, userID, channelID, message, event) {
         to: channelID,
         message: "750 blaze rods errday (" + data.stats.rodsBroken + " broken so far!)"
     });
-    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => console.error(err));
+    fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => {
+        if (err) {
+            console.log(err);
+        }
+    });
 }
 
 function broken(user, userID, channelID, message, event) {
@@ -815,7 +823,11 @@ function jobs(user, userID, channelID, message, event) {
     if (args[1].toLowerCase() === "register") {
         let jobs = args.slice(2);
         data.jobs[userID] = jobs;
-        fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => console.error(err));
+        fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => {
+            if (err) {
+                console.log(err);
+            }
+        });
         bot.sendMessage({
             to: channelID,
             message: "Got it, <@" + userID + ">. Your jobs (" + jobs.join("/") + ") are registered."
@@ -863,11 +875,7 @@ function intersect(a, b) {
         b = a;
         a = t;
     } // indexOf to loop over shorter
-    return a.filter(function (e) {
-        return b.indexOf(e) > -1;
-    }).filter(function (e, i, c) { // extra step to remove duplicates
-        return c.indexOf(e) === i;
-    });
+    return a.filter(e => b.indexOf(e) > -1).filter((e, i, c) => c.indexOf(e) === i);  // extra step to remove duplicates
 }
 
 function forbiddenRisk(user, userID, channelID, message, event) {
@@ -875,7 +883,11 @@ function forbiddenRisk(user, userID, channelID, message, event) {
         serverID: "315364487882342401",
         userID: userID,
         roleID: "451768175152070657"
-    },function(err) {if(err) {console.log(err);}});
+    }, err => {
+        if (err) {
+            console.log(err);
+        }
+    });
     bot.sendMessage({
         to: channelID,
         message: "<:forbidden:451764608202571816> <:black101:326153094868238338>"
@@ -887,7 +899,11 @@ function forbiddenLite(user, userID, channelID, message, event) {
         serverID: "315364487882342401",
         userID: userID,
         roleID: "451874821245108225"
-    },function(err) {if(err) {console.log(err);}});
+    }, err => {
+        if (err) {
+            console.log(err);
+        }
+    });
     bot.sendMessage({
         to: channelID,
         message: "<:forbidden:451764608202571816>"
@@ -896,10 +912,10 @@ function forbiddenLite(user, userID, channelID, message, event) {
 
 function purify(user, userID, channelID, message, event) {
     data = {
-    victims: 0,
-    kinuVictims: 0,
-    rodsBroken: 0
-};
+        victims: 0,
+        kinuVictims: 0,
+        rodsBroken: 0
+    };
 }
 
 // attributes
