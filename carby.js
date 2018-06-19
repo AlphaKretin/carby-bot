@@ -54,140 +54,166 @@ bot.on('disconnect', err => {
     bot.connect();
 });
 
+let commands = [
+    {
+        names: ["help"],
+        func: help
+    },
+    {
+        names: ["mcalc"],
+        func: mcalc
+    },
+    {
+        names: ["almagest"],
+        func: almagest
+    },
+    {
+        names: ["normal"],
+        func: normal
+    },
+    {
+        names: ["random"],
+        func: random
+    },
+    {
+        names: ["750"],
+        func: sevenFifty
+    },
+    {
+        names: ["no750"],
+        func: noSevenFifty
+    },
+    {
+        names: ["chaos"],
+        func: chaos
+    },
+    {
+        names: ["chaos750"],
+        func: chaosSevenFifty
+    },
+    {
+        names: ["chaosno750"],
+        func: chaosNoSevenFifty
+    },
+    {
+        names: ["purechaos"],
+        func: purechaos
+    },
+    {
+        names: ["dd"],
+        func: dd
+    },
+    {
+        names: ["trapped"],
+        func: trapped
+    },
+    {
+        names: ["victims"],
+        func: victim
+    },
+    {
+        names: ["break"],
+        func: breakRod
+    },
+    {
+        names: ["broken"],
+        func: broken
+    },
+    {
+        names: ["gaia"],
+        func: gaia
+    },
+    {
+        names: ["dance"],
+        func: dance
+    },
+    {
+        names: ["zeninage"],
+        func: giltoss
+    },
+    {
+        names: ["yburns"],
+        func: yburns
+    },
+    {
+        names: ["quicksave"],
+        func: quicksave
+    },
+    {
+        names: ["badfaq"],
+        func: badfaq
+    },
+    {
+        names: ["badfiesta"],
+        func: badfiesta
+    },
+    {
+        names: ["equipharps"],
+        func: equipharps
+    },
+    {
+        names: ["crystelle"],
+        func: crystelle
+    },
+    {
+        names: ["runthenumbers", "numbers"],
+        func: ddstrat
+    },
+    {
+        names: ["sandworm"],
+        func: sandworm
+    },
+    {
+        names: ["happyworm"],
+        func: happyworm
+    },
+    {
+        names: ["iainuki"],
+        func: iainuki
+    },
+    {
+        names: ["oracle"],
+        func: oracle
+    },
+    {
+        names: ["level5death"],
+        func: levelFiveDeath
+    },
+    {
+        names: ["quickleak"],
+        func: quickleak
+    },
+    {
+        names: ["timer", "fiestatimer", "countdown"],
+        func: countdown
+    },
+    {
+        names: ["jobs"],
+        func: jobs
+    },
+    {
+        names: ["forbiddenrisk"],
+        func: forbiddenRisk
+    },
+    {
+        names: ["forbiddenlite"],
+        func: forbidden
+    },
+    {
+        names: ["purify"],
+        func: help
+        chk: (_, userID) => userID === kyro;
+    },
+];
+
+let prefixes = [".", "!"];
+
 //reads incoming messages for commands and redirects to functions to handle them
-bot.on('message', function (user, userID, channelID, message, event) {
+bot.on('message', (user, userID, channelID, message, event) => {
     let lowMes = message.toLowerCase();
-    if ((userID !== bot.id) && (lowMes.charAt(0) === "!" || lowMes.charAt(0) === "." || lowMes.charAt(0) === "z")) {
-        //.help
-        if (lowMes.indexOf(".help") === 0) {
-            help(user, userID, channelID, message, event);
-        }
-        //.mcalc
-        if (lowMes.indexOf(".mcalc") === 0) {
-            mcalc(user, userID, channelID, message, event);
-        }
-        //.almagest
-        if (lowMes.indexOf(".almagest") === 0) {
-            almagest(user, userID, channelID, message, event);
-        }
-        //fiesta rolls
-        if (lowMes.indexOf(".normal") === 0) {
-            normal(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".random") === 0) {
-            random(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".750") === 0) {
-            sevenFifty(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".no750") === 0) {
-            noSevenFifty(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".chaos") === 0 && lowMes.indexOf("750") === -1) {
-            chaos(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".chaosno750") === 0) {
-            chaosNoSevenFifty(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".chaos750") === 0) {
-            chaosSevenFifty(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".purechaos") === 0) {
-            purechaos(user, userID, channelID, message, event);
-        }
-        //.dd
-        if (lowMes.indexOf(".dd") === 0) {
-            dd(user, userID, channelID, message, event);
-        }
-        //speedtrap and rods
-        if (lowMes.indexOf(".trapped") === 0) {
-            trapped(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".victims") === 0) {
-            victim(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".break") === 0) {
-            breakRod(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".broken") === 0) {
-            broken(user, userID, channelID, message, event);
-        }
-        //goofy shit
-        if (lowMes.indexOf("!gaia") === 0) {
-            gaia(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf("!dance") === 0) {
-            galufdance(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf("!zeninage") === 0) {
-            giltoss(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".yburns") === 0) {
-            yburns(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".quicksave") === 0) {
-            quicksave(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".badfaq") === 0) {
-            badfaq(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".badfiesta") === 0) {
-            badfiesta(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".equipharps") === 0) {
-            equipharps(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".crystelle") === 0) {
-            crystelle(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".runthenumbers") === 0) {
-            ddstrat(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".numbers") === 0) {
-            ddstrat(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".sandworm") === 0) {
-            sandworm(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".happyworm") === 0) {
-            happyworm(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf("!iainuki") === 0) {
-            iainuki(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf("zerky!") === 0) {
+    if (userID !== bot.id) {
+        if (lowMes.startsWith("zerky!")) {
             zerky(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".oracle") === 0) {
-            oracle(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf("!level5death") === 0) {
-            levelFiveDeath(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".quickleak") === 0) {
-            quickleak(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".timer") === 0) {
-            countdown(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".fiestatimer") === 0) {
-            countdown(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".countdown") === 0) {
-            countdown(user, userID, channelID, message, event);
-        }
-        //job DB
-        if (lowMes.indexOf(".jobs") === 0) {
-            jobs(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".forbiddenrisk") === 0) {
-            forbiddenRisk(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".forbiddenlite") === 0) {
-            forbidden(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".purify") === 0 && userID === kyro) {
-            purify(user, userID, channelID, message, event);
         }
         //monster data search (not working atm)
         /* if (lowMes.indexOf(".info") === 0) {
@@ -196,6 +222,17 @@ bot.on('message', function (user, userID, channelID, message, event) {
         if (lowMes.indexOf(".attributes") === 0) {
             attributes(user, userID, channelID, message, event);
         } */
+        for (let cmd of commands) {
+            if (!cmd.chk || cmd.chk(user, userID, channelID, message, event)) {
+                for (let name of names) {
+                    for (let pre of prefixes) {
+                        if (lowMes.startsWith(pre + name)) {
+                            cmd.func(user, userID, channelID, message, event);
+                        }
+                    }
+                }
+            }
+        }
     }
 });
 
