@@ -888,9 +888,15 @@ function forbiddenRisk(user, userID, channelID, message, event) {
             console.log(err);
         }
     });
-    bot.sendMessage({
-        to: channelID,
-        message: "<:forbidden:451764608202571816> <:black101:326153094868238338>"
+    bot.addReaction({
+        channelID: channelID,
+        messageID: event.d.id,
+        reaction: "forbidden:451764608202571816"
+    });
+    bot.addReaction({
+        channelID: channelID,
+        messageID: event.d.id,
+        reaction: "black101:326153094868238338"
     });
 }
 
@@ -904,9 +910,10 @@ function forbiddenLite(user, userID, channelID, message, event) {
             console.log(err);
         }
     });
-    bot.sendMessage({
-        to: channelID,
-        message: "<:forbidden:451764608202571816>"
+    bot.addReaction({
+        channelID: channelID,
+        messageID: event.d.id,
+        reaction: "forbidden:451764608202571816"
     });
 }
 
