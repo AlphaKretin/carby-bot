@@ -100,6 +100,10 @@ let commands = [
         func: purechaos
     },
     {
+        names: ["forbidden"],
+        func: forbidden
+    }
+    {
         names: ["dd"],
         func: dd
     },
@@ -197,7 +201,7 @@ let commands = [
     },
     {
         names: ["forbiddenlite"],
-        func: forbidden
+        func: forbiddenLite
     },
     {
         names: ["purify"],
@@ -382,14 +386,6 @@ function mcalc(user, userID, channelID, message, event) {
     });
 }
 
-function abortMcalc(user, userID, channelID, message, event) {
-    bot.sendMessage({
-        to: channelID,
-        message: "The syntax for this command is: .mcalc level strength/magic <type> <agility/magic>; example: .mcalc 20 46 rune 44 (valid types: physical, magic, knife, chicken, rune, fists, cannon)"
-    });
-    return;
-}
-
 //.almagest
 function almagest(user, userID, channelID, message, event) {
     let args = message.toLowerCase().split(" ");
@@ -417,13 +413,16 @@ let earthJobs = ["Dragoon", "Dancer", "Samurai", "Chemist"];
 let miscJobs = ["Freelancer", "Mime"];
 let mageJobs = ["Black Mage", "White Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner", "Geomancer", "Bard", "Dancer", "Chemist", "Mime"];
 let noMageJobs = ["Monk", "Thief", "Knight", "Berserker", "Mystic Knight", "Ninja", "Ranger", "Beastmaster", "Samurai", "Dragoon"];
+let forbiddenWind = windJobs.slice().push("Time Mage");
+let forbiddenWater = waterJobs.slice(2).unshift("Red Mage").concat(fireJobs.slice(0,3));
+let forbiddenFire = fireJobs.slice(3).concat(earthJobs);
+let forbiddenEarth = ["Cannoneer", "Gladiator", "Oracle"];
 
 function normal(user, userID, channelID, message, event) {
     let wind = windJobs[getIncInt(0, windJobs.length - 1)];
     let water = waterJobs[getIncInt(0, waterJobs.length - 1)];
     let fire = fireJobs[getIncInt(0, fireJobs.length - 1)];
     let earth = earthJobs[getIncInt(0, earthJobs.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -438,7 +437,6 @@ function random(user, userID, channelID, message, event) {
     let fire = randFire[getIncInt(0, randFire.length - 1)];
     let randEarth = randFire.concat(earthJobs);
     let earth = randEarth[getIncInt(0, randEarth.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -454,7 +452,6 @@ function sevenFifty(user, userID, channelID, message, event) {
     let fire = mageFire[getIncInt(0, mageFire.length - 1)];
     let mageEarth = intersect(earthJobs, mageJobs);
     let earth = mageEarth[getIncInt(0, mageEarth.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -470,7 +467,6 @@ function noSevenFifty(user, userID, channelID, message, event) {
     let fire = noFire[getIncInt(0, noFire.length - 1)];
     let noEarth = intersect(earthJobs, noMageJobs);
     let earth = noEarth[getIncInt(0, noEarth.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -497,7 +493,6 @@ function chaosNoSevenFifty(user, userID, channelID, message, event) {
     let water = noJobs[getIncInt(0, noJobs.length - 1)];
     let fire = noJobs[getIncInt(0, noJobs.length - 1)];
     let earth = noJobs[getIncInt(0, noJobs.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -511,7 +506,6 @@ function chaosSevenFifty(user, userID, channelID, message, event) {
     let water = magJobs[getIncInt(0, magJobs.length - 1)];
     let fire = magJobs[getIncInt(0, magJobs.length - 1)];
     let earth = magJobs[getIncInt(0, magJobs.length - 1)];
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -533,11 +527,24 @@ function purechaos(user, userID, channelID, message, event) {
     do {
         earth = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (earth === wind || earth === water || earth === fire);
-    bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
     });
+}
+
+function forbidden(user, userID, channelID, message, event) {
+    let jobs = [
+        forbiddenWind[getIncInt(0, forbiddenWind.length - 1)],
+        forbiddenWater[getIncInt(0, forbiddenWater.length - 1)],
+        forbiddenFire[getIncInt(0, forbiddenFire.length - 1)],
+        forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)]
+    ];
+    bot.sendMessage({
+        to: userID,
+        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[getIncInt(0, jobs.length - 1)]
+    });
+
 }
 
 //.dd
@@ -869,7 +876,7 @@ function forbiddenRisk(user, userID, channelID, message, event) {
     });
 }
 
-function forbidden(user, userID, channelID, message, event) {
+function forbiddenLite(user, userID, channelID, message, event) {
     bot.addToRole({
         serverID: "315364487882342401",
         userID: userID,
