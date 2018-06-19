@@ -27,7 +27,7 @@ let data = {
 
 function loadData(filename, key) {
     return new Promise((resolve, reject) => {
-        console.log("Loading ${filename}...");
+        console.log("Loading " + filename + "...");
         fs.readFile(filename, "utf8", (err, file) => {
             if (err) {
                 reject(err);
@@ -41,19 +41,19 @@ function loadData(filename, key) {
 let file = "data.json";
 let jobFile = "jobs.json";
 let monsterFile = "monsterdata.json";
-let proms = [loadData(file, stats), loadData(jobFile, jobs), loadData(monsterFile, monsters)];
+let proms = [loadData(file, "stats"), loadData(jobFile, "jobs"), loadData(monsterFile, "monsters")];
 Promise.all(proms).then(() => {
-    bot.connect()
+    bot.connect();
 }, err => {
     console.error("Error loading data files!");
     console.error(err);
 });
 
-bot.on('ready', function () {
-    console.log('Logged in as %s - %s\n', bot.username, bot.id);
+bot.on("ready", function () {
+    console.log("Logged in as %s - %s\n", bot.username, bot.id);
 });
 
-bot.on('disconnect', err => {
+bot.on("disconnect", err => {
     console.error("Bot disconnected with below error! Reconnecting...");
     console.error(err);
     bot.connect();
@@ -107,7 +107,7 @@ let commands = [
     {
         names: ["forbidden"],
         func: forbidden
-    }
+    },
     {
         names: ["dd"],
         func: dd
@@ -134,7 +134,7 @@ let commands = [
     },
     {
         names: ["dance"],
-        func: dance
+        func: galufdance
     },
     {
         names: ["zeninage"],
@@ -210,15 +210,15 @@ let commands = [
     },
     {
         names: ["purify"],
-        func: help
-        chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1;
+        func: purify,
+        chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1
     },
 ];
 
 let prefixes = [".", "!"];
 
 //reads incoming messages for commands and redirects to functions to handle them
-bot.on('message', (user, userID, channelID, message, event) => {
+bot.on("message", (user, userID, channelID, message, event) => {
     let lowMes = message.toLowerCase();
     if (userID !== bot.id) {
         if (lowMes.startsWith("zerky!")) {
@@ -233,7 +233,7 @@ bot.on('message', (user, userID, channelID, message, event) => {
         } */
         for (let cmd of commands) {
             if (!cmd.chk || cmd.chk(user, userID, channelID, message, event)) {
-                for (let name of names) {
+                for (let name of cmd.names) {
                     for (let pre of prefixes) {
                         if (lowMes.startsWith(pre + name)) {
                             cmd.func(user, userID, channelID, message, event);
@@ -246,7 +246,7 @@ bot.on('message', (user, userID, channelID, message, event) => {
 });
 
 //.help
-function help(user, userID, channelID, message, event) {
+function help(user, userID) {
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -260,16 +260,16 @@ let mcalcTable = {
         args: ["Level", "Strength"],
         calc: nums => {
             let m = Math.floor(((nums[0] * nums[1]) / 128) + 2);
-            let nextLevel = Math.ceil((128 * ((m + 1) - 2)) / nums[1];
-            return "At Level ${nums[0]}, with ${nums[1]} Strength, your physical M is ${m}. To reach the next M, you need to reach level ${nextLevel}";
+            let nextLevel = Math.ceil((128 * ((m + 1) - 2)) / nums[1]);
+            return "At Level " + nums[0] + ", with " + nums[1] + " Strength, your physical M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "";
         }
     },
     magic: {
         args: ["Level", "Magic"],
         calc: nums => {
-            let m = Math.floor(((nums[0] * nums[1]) / 256) + 4)
-            let nextLevel = Math.ceil((256 * ((m + 1) - 4)) / nums[1])
-            return "At Level ${nums[0]}, with ${nums[1]} Magic, your magic M is ${m}. To reach the next M, you need to reach level ${nextLevel}";
+            let m = Math.floor(((nums[0] * nums[1]) / 256) + 4);
+            let nextLevel = Math.ceil((256 * ((m + 1) - 4)) / nums[1]);
+            return "At Level " + nums[0] + ", with " + nums[1] + " Magic, your magic M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "";
         }
     },
     knife: {
@@ -278,7 +278,7 @@ let mcalcTable = {
             let level = nums[0];
             let str = nums[1];
             let agil = nums[2];
-            m = level;
+            let m = level;
             let bonus = level;
             m = m * str;
             bonus = bonus * agil;
@@ -298,10 +298,10 @@ let mcalcTable = {
             ns = Math.floor(ns / agil);
             m += 2;
             if (bonus === 0) {
-                return "At Level ${level}, with ${str} Strength and ${agil} Agility, your knife M is ${m} (no Agility bonus). To reach the next M, you need to reach level ${n} (Bonus Agility M gained at level ${ns}).";
+                return "At Level " + level + ", with " + str + " Strength and " + agil + " Agility, your knife M is " + m + " (no Agility bonus). To reach the next M, you need to reach level " + n + " (Bonus Agility M gained at level " + ns + ").";
             } else { //if bonus = 1
                 m = m + 1;
-                return "At Level ${level}, with ${str} Strength and ${agil} Agility, your knife M is ${m} (including Agility bonus). To reach the next M, you need to reach level ${n} (Bonus Agility M **LOST** at level ${ns}).";
+                return "At Level " + level + ", with " + str + " Strength and " + agil + " Agility, your knife M is " + m + " (including Agility bonus). To reach the next M, you need to reach level " + n + " (Bonus Agility M **LOST** at level " + ns + ").";
             }
         }
     },
@@ -311,12 +311,12 @@ let mcalcTable = {
             let level = nums[0];
             let str = nums[1];
             let agil = nums[2];
-            m = Math.floor((level * str) / 128);
+            let m = Math.floor((level * str) / 128);
             let bonus = Math.floor((level * agil) / 128);
             let n = Math.ceil((128 * (m + 1)) / str);
             let ns = Math.ceil((128 * (bonus + 1)) / agil);
             m += bonus + 2;
-            return "At Level ${level}, with ${str} Strength and ${agil} Agility, your Chicken Knife M is ${m}. To reach the next M, you need to reach level ${n} for Strength and ${ns} for Agility.";
+            return "At Level " + level + ", with " + str + " Strength and " + agil + " Agility, your Chicken Knife M is " + m + ". To reach the next M, you need to reach level " + n + " for Strength and " + ns + " for Agility.";
         }
     },
     rune: {
@@ -325,54 +325,54 @@ let mcalcTable = {
             let level = nums[0];
             let str = nums[1];
             let mag = nums[2];
-            m = Math.floor((level * str) / 128);
+            let m = Math.floor((level * str) / 128);
             let bonus = Math.floor((level * mag) / 128);
             let n = Math.ceil((128 * (m + 1)) / str);
             let ns = Math.ceil((128 * (bonus + 1)) / mag);
             m += bonus + 2;
-            return "At Level ${level}, with ${str} Strength and ${mag} Magic, your Rune Weapon M is ${m}. To reach the next M, you need to reach level ${n} for Strength and ${ns} for Magic.";
+            return "At Level " + level + ", with " + str + " Strength and " + mag + " Magic, your Rune Weapon M is " + m + ". To reach the next M, you need to reach level " + n + " for Strength and " + ns + " for Magic.";
         }
-    }
+    },
     fists: {
         args: ["Level", "Strength"],
         calc: nums => {
             let level = nums[0];
             let str = nums[1];
-            m = Math.floor(((level * str) / 256) + 2);
-            nextLevel = Math.ceil((256 * ((m + 1) - 2)) / str);
+            let m = Math.floor(((level * str) / 256) + 2);
+            let nextLevel = Math.ceil((256 * ((m + 1) - 2)) / str);
             let pow = level * 2 + 3;
             m = m + " (with " + pow + " attack power)";
-            return "At Level ${level}, with ${str} Strength, your fist M is ${m} (with ${pow} attack power). To reach the next M, you need to reach level ${n}.";
+            return "At Level " + level + ", with " + str + " Strength, your fist M is " + m + " (with " + pow + " attack power). To reach the next M, you need to reach level " + nextLevel + ".";
         }
     },
     cannon: {
         args: ["Level"],
         calc: nums => {
-            m = Math.floor(((nums[0] * nums[0]) / 256) + 4);
-            nextLevel = Math.ceil((256 * ((m + 1) - 4)));
+            let m = Math.floor(((nums[0] * nums[0]) / 256) + 4);
+            let nextLevel = Math.ceil((256 * ((m + 1) - 4)));
             nextLevel = Math.ceil(Math.sqrt(nextLevel));
-            return "At level ${nums[0]}, your Cannoneer M is ${m}. To reach the next M, you need to reach level ${nextLevel}."
+            return "At level " + nums[0] + ", your Cannoneer M is " + m + ". To reach the next M, you need to reach level " + nextLevel + ".";
         }
     },
-}
+};
 
-function mcalc(user, userID, channelID, message, event) {
+function mcalc(user, userID, channelID, message) {
     let args = message.toLowerCase().split(" ").slice(1); //remove command name
     let strs = args.filter(i => isNaN(parseInt(i))); //extracts strings
     let type;
     if (strs.length < 1) {
         bot.sendMessage({
             to: channelID,
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`";
+            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`"
         });
         return;
     } else {
         type = strs[0].toLowerCase();
     }
-    if (!type in mcalcTable) {
+    if (!(type in mcalcTable)) {
         bot.sendMessage({
             to: channelID,
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`";
+            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`"
         });
         return;
     }
@@ -381,7 +381,7 @@ function mcalc(user, userID, channelID, message, event) {
     if (nums.length < mtype.args.length) {
         bot.sendMessage({
             to: channelID,
-            message: "Sorry, I need more numbers! Arguments for `${type}`: " + mtype.args.join(", ")
+            message: "Sorry, I need more numbers! Arguments for `" + type + "`: " + mtype.args.join(", ")
         });
         return;
     }
@@ -392,7 +392,7 @@ function mcalc(user, userID, channelID, message, event) {
 }
 
 //.almagest
-function almagest(user, userID, channelID, message, event) {
+function almagest(user, userID, channelID, message) {
     let args = message.toLowerCase().split(" ");
     let vit = parseInt(args[1]);
     if (isNaN(vit) || args.length === 1) {
@@ -423,7 +423,7 @@ let forbiddenWater = waterJobs.slice(2).unshift("Red Mage").concat(fireJobs.slic
 let forbiddenFire = fireJobs.slice(3).concat(earthJobs);
 let forbiddenEarth = ["Cannoneer", "Gladiator", "Oracle"];
 
-function normal(user, userID, channelID, message, event) {
+function normal(user, userID) {
     let wind = windJobs[getIncInt(0, windJobs.length - 1)];
     let water = waterJobs[getIncInt(0, waterJobs.length - 1)];
     let fire = fireJobs[getIncInt(0, fireJobs.length - 1)];
@@ -434,7 +434,7 @@ function normal(user, userID, channelID, message, event) {
     });
 }
 
-function random(user, userID, channelID, message, event) {
+function random(user, userID) {
     let wind = windJobs[getIncInt(0, windJobs.length - 1)];
     let randWater = windJobs.concat(waterJobs);
     let water = randWater[getIncInt(0, randWater.length - 1)];
@@ -448,7 +448,7 @@ function random(user, userID, channelID, message, event) {
     });
 }
 
-function sevenFifty(user, userID, channelID, message, event) {
+function sevenFifty(user, userID) {
     let mageWind = intersect(windJobs, mageJobs);
     let wind = mageWind[getIncInt(0, mageWind.length - 1)];
     let mageWater = intersect(waterJobs, mageJobs);
@@ -463,7 +463,7 @@ function sevenFifty(user, userID, channelID, message, event) {
     });
 }
 
-function noSevenFifty(user, userID, channelID, message, event) {
+function noSevenFifty(user, userID) {
     let noWind = intersect(windJobs, noMageJobs);
     let wind = noWind[getIncInt(0, noWind.length - 1)];
     let noWater = intersect(waterJobs, noMageJobs);
@@ -478,7 +478,7 @@ function noSevenFifty(user, userID, channelID, message, event) {
     });
 }
 
-function chaos(user, userID, channelID, message, event) {
+function chaos(user, userID) {
     let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
     let wind = allJobs[getIncInt(0, allJobs.length - 1)];
     let water = allJobs[getIncInt(0, allJobs.length - 1)];
@@ -491,7 +491,7 @@ function chaos(user, userID, channelID, message, event) {
     });
 }
 
-function chaosNoSevenFifty(user, userID, channelID, message, event) {
+function chaosNoSevenFifty(user, userID) {
     let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
     let noJobs = intersect(allJobs, noMageJobs);
     let wind = noJobs[getIncInt(0, noJobs.length - 1)];
@@ -504,7 +504,7 @@ function chaosNoSevenFifty(user, userID, channelID, message, event) {
     });
 }
 
-function chaosSevenFifty(user, userID, channelID, message, event) {
+function chaosSevenFifty(user, userID) {
     let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
     let magJobs = intersect(allJobs, mageJobs);
     let wind = magJobs[getIncInt(0, magJobs.length - 1)];
@@ -517,7 +517,7 @@ function chaosSevenFifty(user, userID, channelID, message, event) {
     });
 }
 
-function purechaos(user, userID, channelID, message, event) {
+function purechaos(user, userID) {
     let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs).concat(miscJobs);
     let wind = allJobs[getIncInt(0, allJobs.length - 1)];
     let water;
@@ -538,7 +538,7 @@ function purechaos(user, userID, channelID, message, event) {
     });
 }
 
-function forbidden(user, userID, channelID, message, event) {
+function forbidden(user, userID) {
     let jobs = [
         forbiddenWind[getIncInt(0, forbiddenWind.length - 1)],
         forbiddenWater[getIncInt(0, forbiddenWater.length - 1)],
@@ -596,7 +596,7 @@ let ddLines = [
     "I have a really really dumb strategy! <:yayclod:362777481838592010>"
 ];
 
-function dd(user, userID, channelID, message, event) {
+function dd(user, userID, channelID, message) {
     let args = message.toLowerCase().split(" ");
     let index = parseInt(args[1]);
     if (args.length === 1) {
@@ -625,7 +625,7 @@ function dd(user, userID, channelID, message, event) {
 }
 
 //speedtrap
-function trapped(user, userID, channelID, message, event) {
+function trapped(user, userID, channelID) {
     data.stats.victims++;
     if (userID === "90507312564805632") {
         data.stats.kinuVictims++;
@@ -641,14 +641,14 @@ function trapped(user, userID, channelID, message, event) {
     });
 }
 
-function victim(user, userID, channelID, message, event) {
+function victim(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "<@" + userID + ">: Dr. Clapperclaw's Deadly Speed Trap has snared " + data.stats.victims + " victims! (" + data.stats.kinuVictims + " of them are alcharagia...)"
     });
 }
 
-function breakRod(user, userID, channelID, message, event) {
+function breakRod(user, userID, channelID, message) {
     let args = message.toLowerCase().split(" ");
     let index = parseInt(args[1]);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100 ) {
@@ -667,7 +667,7 @@ function breakRod(user, userID, channelID, message, event) {
     });
 }
 
-function broken(user, userID, channelID, message, event) {
+function broken(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all."
@@ -675,77 +675,77 @@ function broken(user, userID, channelID, message, event) {
 }
 
 //goofy shit
-function gaia(user, userID, channelID, message, event) {
+function gaia(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "THAT HIPPIE SHIT AIN'T MAGIC http://i.imgur.com/JkwTg5O.png"
     });
 }
 
-function galufdance(user, userID, channelID, message, event) {
+function galufdance(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif"
     });
 }
 
-function giltoss(user, userID, channelID, message, event) {
+function giltoss(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif"
     });
 }
 
-function ddstrat(user, userID, channelID, message, event) {
+function ddstrat(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!"
     });
 }
 
-function yburns(user, userID, channelID, message, event) {
+function yburns(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png"
     });
 }
 
-function quicksave(user, userID, channelID, message, event) {
+function quicksave(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "Hang on while I do some **ENCOUNTER MANIPULATION**"
     });
 }
 
-function badfaq(user, userID, channelID, message, event) {
+function badfaq(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687"
     });
 }
 
-function badfiesta(user, userID, channelID, message, event) {
+function badfiesta(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "The worst fiesta ever happened here: https://www.twitch.tv/dragondarchsda/v/48967944"
     });
 }
 
-function equipharps(user, userID, channelID, message, event) {
+function equipharps(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif"
     });
 }
 
-function crystelle(user, userID, channelID, message, event) {
+function crystelle(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png"
     });
 }
 
-function countdown(user, userID, channelID, message, event) {
+function countdown(user, userID, channelID) {
     let fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
     let now = new Date().getTime();
     let distance = fiestaDate - now;
@@ -753,56 +753,56 @@ function countdown(user, userID, channelID, message, event) {
     let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-        bot.sendMessage({
+    bot.sendMessage({
         to: channelID,
         //message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
         message: "The Run has Begun! What are you waiting for? Get in here and make fun of DD! https://www.twitch.tv/rpglimitbreak"
     });
 }
 
-function sandworm(user, userID, channelID, message, event) {
+function sandworm(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "http://i.imgur.com/UaOsyZS.gif"
     });
 }
 
-function happyworm(user, userID, channelID, message, event) {
+function happyworm(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11"
     });
 }
 
-function iainuki(user, userID, channelID, message, event) {
+function iainuki(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "That's a good ability! http://gfycat.com/TenseArtisticCobra"
     });
 }
 
-function zerky(user, userID, channelID, message, event) {
+function zerky(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png"
     });
 }
 
-function oracle(user, userID, channelID, message, event) {
+function oracle(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "https://www.youtube.com/watch?v=makazgIRzfg"
     });
 }
 
-function levelFiveDeath(user, userID, channelID, message, event) {
+function levelFiveDeath(user, userID, channelID) {
     bot.sendMessage({
         to: channelID,
         message: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp"
     });
 }
 
-function quickleak(user, userID, channelID, message, event){
+function quickleak(user, userID, channelID){
     bot.sendMessage({
         to: channelID,
         message: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
@@ -810,7 +810,7 @@ function quickleak(user, userID, channelID, message, event){
 }
 
 //job DB
-function jobs(user, userID, channelID, message, event) {
+function jobs(user, userID, channelID, message) {
     let args = message.split(" ");
     //expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str), 3: water job (str), 4: fire job (str), 5: earth job (str)
     if (args.length < 3 || args.length > 6) {
@@ -821,8 +821,8 @@ function jobs(user, userID, channelID, message, event) {
         return;
     }
     if (args[1].toLowerCase() === "register") {
-        let jobs = args.slice(2);
-        data.jobs[userID] = jobs;
+        let curJobs = args.slice(2);
+        data.jobs[userID] = curJobs;
         fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => {
             if (err) {
                 console.log(err);
@@ -830,18 +830,18 @@ function jobs(user, userID, channelID, message, event) {
         });
         bot.sendMessage({
             to: channelID,
-            message: "Got it, <@" + userID + ">. Your jobs (" + jobs.join("/") + ") are registered."
+            message: "Got it, <@" + userID + ">. Your jobs (" + curJobs.join("/") + ") are registered."
         });
     } else if (args[1].toLowerCase() === "lookup") {
-        let mentioned = message.replace(/\D/g, '');
+        let mentioned = message.replace(/\D/g, "");
         if (bot.fixMessage("<@" + mentioned + ">") === "undefined") {
             bot.sendMessage({
                 to: channelID,
                 message: "Sorry <@" + userID + ">, I can only lookup with @mentions!"
             });
         } else {
-            jobs = data.jobs[mentioned]
-            if (!jobs) {
+            let curJobs = data.jobs[mentioned];
+            if (!curJobs) {
                 bot.sendMessage({
                     to: channelID,
                     message: "I don't have jobs on file for <@" + mentioned + ">, sorry!"
@@ -849,7 +849,7 @@ function jobs(user, userID, channelID, message, event) {
             } else {
                 bot.sendMessage({
                     to: channelID,
-                    message: "I have <@" + mentioned + ">'s jobs as: " + jobs.join("/") + "."
+                    message: "I have <@" + mentioned + ">'s jobs as: " + curJobs.join("/") + "."
                 });
             }
         }
@@ -917,7 +917,7 @@ function forbiddenLite(user, userID, channelID, message, event) {
     });
 }
 
-function purify(user, userID, channelID, message, event) {
+function purify() {
     data = {
         victims: 0,
         kinuVictims: 0,
@@ -925,6 +925,7 @@ function purify(user, userID, channelID, message, event) {
     };
 }
 
+/*
 // attributes
 function attributes(user, userID, channelID, message, event) {
     bot.sendMessage({
@@ -940,7 +941,7 @@ function failQuery(destination) {
         message: "Sorry, I couldn't find the information you requested. Acceptable syntax: `.info <attribute> monster_name`. Monster name can be either RPGe or Advance translation. For a list of attributes I accept, use `.attributes`. "
     });
 }
-
+*/
 
 //monster data query (kinda busted)
 /* function info(user, userID, channelID, message, event) {
