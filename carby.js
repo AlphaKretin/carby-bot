@@ -1,7 +1,9 @@
 const Discord = require("discord.io");
 const fs = require("fs");
 
-let auth = fs.readFileSync("auth.json", "utf8");
+let auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
+
+//console.dir(auth);
 
 if (!auth.token) {
     console.error("Bot token not found at auth.json.token!");
@@ -105,10 +107,6 @@ let commands = [
         func: purechaos
     },
     {
-        names: ["forbidden"],
-        func: forbidden
-    },
-    {
         names: ["dd"],
         func: dd
     },
@@ -207,6 +205,10 @@ let commands = [
     {
         names: ["forbiddenlite"],
         func: forbiddenLite
+    },
+    {
+        names: ["forbidden"],
+        func: forbidden
     },
     {
         names: ["purify"],
@@ -386,7 +388,7 @@ function mcalc(user, userID, channelID, message) {
         return;
     }
     let mtype = mcalcTable[type];
-    let nums = args.map(i => parseInt(i).filter(i => !isNaN(i))); //extracts numbers
+    let nums = args.map(i => parseInt(i)).filter(i => !isNaN(i)); //extracts numbers
     if (nums.length < mtype.args.length) {
         bot.sendMessage({
             to: channelID,
@@ -427,8 +429,13 @@ let earthJobs = ["Dragoon", "Dancer", "Samurai", "Chemist"];
 let miscJobs = ["Freelancer", "Mime"];
 let mageJobs = ["Black Mage", "White Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner", "Geomancer", "Bard", "Dancer", "Chemist", "Mime"];
 let noMageJobs = ["Monk", "Thief", "Knight", "Berserker", "Mystic Knight", "Ninja", "Ranger", "Beastmaster", "Samurai", "Dragoon"];
-let forbiddenWind = windJobs.slice().push("Time Mage");
-let forbiddenWater = waterJobs.slice(2).unshift("Red Mage").concat(fireJobs.slice(0,3));
+//let forbiddenWind = windJobs.slice(0).push("Time Mage");
+let forbiddenWind = windJobs.slice(0);
+forbiddenWind.push("Time Mage");
+/*let forbiddenWater = waterJobs.slice(2).unshift("Red Mage");
+forbiddenWater = forbiddenWater + fireJobs.slice(0,3);*/
+let forbiddenWater = waterJobs.slice(2).concat(fireJobs.slice(0,3));
+forbiddenWater.unshift("Red Mage");
 let forbiddenFire = fireJobs.slice(3).concat(earthJobs);
 let forbiddenEarth = ["Cannoneer", "Gladiator", "Oracle"];
 
@@ -556,7 +563,7 @@ function forbidden(user, userID) {
     ];
     bot.sendMessage({
         to: userID,
-        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[getIncInt(0, jobs.length - 1)]
+        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[getIncInt(0, jobs.length - 2)]
     });
 
 }
