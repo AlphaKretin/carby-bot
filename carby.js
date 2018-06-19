@@ -213,34 +213,43 @@ let commands = [
         func: purify,
         chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1
     },
+    {
+        names: ["attributes"],
+        func: attributes
+    },
+    {
+        names: ["info"],
+        func: info
+    }
 ];
 
 let prefixes = [".", "!"];
+
+let queries = {};
 
 //reads incoming messages for commands and redirects to functions to handle them
 bot.on("message", (user, userID, channelID, message, event) => {
     let lowMes = message.toLowerCase();
     if (userID !== bot.id) {
-        if (lowMes.startsWith("zerky!")) {
-            zerky(user, userID, channelID, message, event);
-        }
-        //monster data search (not working atm)
-        /* if (lowMes.indexOf(".info") === 0) {
-            info(user, userID, channelID, message, event);
-        }
-        if (lowMes.indexOf(".attributes") === 0) {
-            attributes(user, userID, channelID, message, event);
-        } */
         for (let cmd of commands) {
             if (!cmd.chk || cmd.chk(user, userID, channelID, message, event)) {
                 for (let name of cmd.names) {
                     for (let pre of prefixes) {
                         if (lowMes.startsWith(pre + name)) {
                             cmd.func(user, userID, channelID, message, event);
+                            return;
                         }
                     }
                 }
             }
+        }
+        if (lowMes.startsWith("zerky!")) {
+            zerky(user, userID, channelID, message, event);
+            return;
+        }
+        if (userID in queries) {
+            enemyClarify(user, userID, channelID, message, event);
+            return;
         }
     }
 });
@@ -925,86 +934,88 @@ function purify() {
     };
 }
 
-/*
 // attributes
-function attributes(user, userID, channelID, message, event) {
+function attributes(user, userID) {
+    if (monsterData.length > 0) {
+        bot.sendMessage({
+            to: userID,
+            message: "Available attributes for use with `.info`:\n`" + Object.keys(monsterData[0]).join(", ") + "`." 
+        }); 
+    }
+}
+
+function enemyInfo(userID, enemyData, att) {
+    let out = "__Data for " + enemyData.name + "__:\n";
+    if (att && att in enemyData) {
+        out += JSON.stringify(enemyData[att], null, 4);
+    } else {
+        if (att) {
+            console.error("enemyInfo called with invalid attribute " + att);
+        }
+        out += JSON.stringify(enemyData, null, 4);
+    }
     bot.sendMessage({
         to: userID,
-        message: "Available attributes:\n`name, rpge_name, level, exp, hp, mp, gil, speed, atk, mag_power, atk_m, mag_m, def, mag_def, evade, mag_evade, status_immunity, elem_immunity, elem_absorb, auto_hit, weakness, immunity, creature_type, init_status, specialty, spells, control, blue, catch, drop, steal, ai`." 
+        message: out
     });
 }
 
-
-function failQuery(destination) {
-    bot.sendMessage({
-        to: destination,
-        message: "Sorry, I couldn't find the information you requested. Acceptable syntax: `.info <attribute> monster_name`. Monster name can be either RPGe or Advance translation. For a list of attributes I accept, use `.attributes`. "
-    });
-}
-*/
-
-//monster data query (kinda busted)
-/* function info(user, userID, channelID, message, event) {
-    let args = message.split(" ");
-    let monster = "";
-    // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
-    if (args[1] === undefined) {
-        args[1] = "a"; // prevents crash on no args
-    }
-    if(monsterData[0][args[1]] === undefined) { // no query, try and find monster 
-        monster = args.slice(1, args.length).join(" "); // recreate monster name
-        monsterList = monsterData.filter((x) => { 
-            return (x.name.includes(monster) || x.rpge_name.includes(monster));
+//monster data query
+function enemySearch(userID, query, att) {
+    let matches = enemyList.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
+    if (matches.length < 1) {
+        bot.sendMessage({
+            to: userID,
+            message: "Sorry, I couldn't find any enemies with that name!"
         });
-        if (monsterList === []) { // no monster found :( 
-            failQuery(channelID);        
-        } else { // got just a monster
-            if (monsterList.length > 1) { // which monster do we want?
-                monsters = "\n```";
-                for (let i = 0; i < monsterList.length; i++) {
-                    monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
-                }
-                monsters = monsters + "```\n";
-                bot.sendMessage({
-                    to: userID,
-                    message: "Here are all the results I have for \"" + monster + "\":" + monsters + "Please be more specific when querying."
-                }); // holy fuck this is janky
-            } else { // just one monster, good:
-                bot.sendMessage({
-                    to: userID,
-                    message: "Info for \"" + monster + "\":\n```" + JSON.stringify(monsterList[0], null, 2) + "```"
-                });
-            }
+    } else if (matches.length === 1) {
+        enemyInfo(userID, matches[0], att);
+    } else {
+        let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
+        let i = 1; //lists from 1-n for humans even tho arrays start at 0
+        for (let match of matches) {
+            out += i + ". " + match.name + "\n"
         }
-    } else { // there's a query, we can just do it
-        query = args[1];
-        monster = args.slice(2, args.length).join(" "); // set up args
-        if(monsterData[0][query] === undefined) { // user asked for nonexistent attribute
-            failQuery(channelID);
-        } else { // do the thing
-            monsterList = monsterData.filter((x) => {
-                return (x.name.includes(monster) || x.rpge_name.includes(monster));
-            });
-            if (monsterList === []) { // no monster found :(
-                failQuery(channelID);
-            } else { // got monster and query
-                if (monsterList.length > 1) { // which monster do we want?
-                    monsters = "\n```";
-                    for (let i = 0; i < monsterList.length; i++) {
-                        monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
-                    }
-                    monsters = monsters + "```\n";
-                    bot.sendMessage({
-                        to: userID,
-                        message: "Here are all the results I have for \"" + monster + "\":" + monsters + "Please be more specific when querying."
-                    });
-                } else { // just one monster + query
-                    bot.sendMessage({
-                        to: userID,
-                        message: monster + "'s `" + query + "`:\n```" + JSON.stringify(monsterList[0][query], null, 2) + "```"
-                });
-            }
-        }
+        queries[userID] = { //store data in queries, in the form of its own tiny key-value pair
+            list: matches,
+            att: att
+        };
+        bot.sendMessage({
+            to: userID,
+            message: out
+        });
     }
 }
-} */
+
+function enemyClarify(user, userID, channelID, message, event) {
+    let input = parseInt(message);
+    if (isNaN(input) || !((input - 1) in queries[userID].list)) { //if user didn't type a number or the number wasn't listed (-1 to convert from 1-start to 0-start)
+        bot.sendMessage({
+            to: userID,
+            message: "Sorry, that wasn't the number of a result I had saved. Please try searching again."
+        });
+    } else {
+        enemyInfo(userID, queries[userID].list[input - 1], queries[userID].att);
+    }
+    delete queries[userID]; //remove element from object
+}
+
+function info(user, userID, channelID, message, event) {
+    let args = message.toLowerCase().split(" ");
+    if (args.length < 2) {
+        bot.sendMessage({
+            to: userID,
+            message: "Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\nYou can see a list of valid attributes with `.attributes`.\nSpecifying an attribute is optional.\nEnemy name can be RPGe or Advance translation."
+        });
+        return;
+    }
+    // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
+    if (args[1] in monsterData[0]) {
+        let att = args[1];
+        let query = args.slice(2).join(" ");
+        enemySearch(userID, query, att);
+    } else {
+        let query = args.slice(1).join(" ");
+        enemySearch(userID, query);
+    }    
+}
