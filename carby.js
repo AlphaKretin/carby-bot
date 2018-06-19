@@ -246,35 +246,32 @@ function help(user, userID, channelID, message, event) {
 }
 
 //.mcalc
-function mcalc(user, userID, channelID, message, event) {
-    let args = message.toLowerCase().split(" ");
-    let m;
-    let nextLevel;
-    //expected args - 0: ".mcalc", 1: level (int), 2: str/mag (int), 3: type (string), 4: extra stat (int)
-    let level = parseInt(args[1]);
-    let strMag = parseInt(args[2]);
-    let statString = "";
-    if (isNaN(level) || isNaN(strMag)) {
-        abortMcalc(user, userID, channelID, message, event);
-        return;
-    }
-    if (args[3] === "physical") {
-        m = Math.floor(((level * strMag) / 128) + 2);
-        nextLevel = Math.ceil((128 * ((m + 1) - 2)) / strMag);
-        statString = "Strength";
-    } else if (args[3] === "magic") {
-        m = Math.floor(((level * strMag) / 256) + 4);
-        nextLevel = Math.ceil((256 * ((m + 1) - 4)) / strMag);
-        statString = "Magic";
-    } else if (args[3] === "knife") {
-        let agil = parseInt(args[4]);
-        if (isNaN(agil)) {
-            abortMcalc(user, userID, channelID, message, event);
-            return;
-        } else {
+let mcalcTable = {
+    physical: {
+        args: ["Level", "Strength"],
+        calc: nums => {
+            let m = Math.floor(((nums[0] * nums[1]) / 128) + 2);
+            let nextLevel = Math.ceil((128 * ((m + 1) - 2)) / nums[1];
+            return "At Level ${nums[0]}, with ${nums[1]} Strength, your physical M is ${m}. To reach the next M, you need to reach level ${nextLevel}";
+        }
+    },
+    magic: {
+        args: ["Level", "Magic"],
+        calc: nums => {
+            let m = Math.floor(((nums[0] * nums[1]) / 256) + 4)
+            let nextLevel = Math.ceil((256 * ((m + 1) - 4)) / nums[1])
+            return "At Level ${nums[0]}, with ${nums[1]} Magic, your magic M is ${m}. To reach the next M, you need to reach level ${nextLevel}";
+        }
+    },
+    knife: {
+        args: ["Level", "Strength", "Agility"],
+        calc: nums => {
+            let level = nums[0];
+            let str = nums[1];
+            let agil = nums[2];
             m = level;
             let bonus = level;
-            m = m * strMag;
+            m = m * str;
             bonus = bonus * agil;
             m = Math.floor(m / 128);
             bonus = Math.floor(bonus / 128);
@@ -288,79 +285,101 @@ function mcalc(user, userID, channelID, message, event) {
             ns++;
             n = n * 128;
             ns = ns * 128;
-            n = Math.floor(n / strMag);
+            n = Math.floor(n / str);
             ns = Math.floor(ns / agil);
             m += 2;
-            //n++;  ???
-            //ns++; forget why these are
             if (bonus === 0) {
-                m = m + " (no Agility bonus)";
-                nextLevel = n + " (Bonus Agility M gained at level " + ns + ")";
+                return "At Level ${level}, with ${str} Strength and ${agil} Agility, your knife M is ${m} (no Agility bonus). To reach the next M, you need to reach level ${n} (Bonus Agility M gained at level ${ns}).";
             } else { //if bonus = 1
                 m = m + 1;
-                m = m + " (+1 from Agility bonus)";
-                nextLevel = n + " (Bonus Agility M **LOST** at level " + ns + ")";
+                return "At Level ${level}, with ${str} Strength and ${agil} Agility, your knife M is ${m} (including Agility bonus). To reach the next M, you need to reach level ${n} (Bonus Agility M **LOST** at level ${ns}).";
             }
-            statString = "Strength and " + agil + " Agility";
         }
-    } else if (args[3] === "chicken") {
-        let agil = parseInt(args[4]);
-        if (isNaN(agil)) {
-            abortMcalc(user, userID, channelID, message, event);
-            return;
-        } else {
-            m = Math.floor((level * strMag) / 128);
+    },
+    chicken: {
+        args: ["Level", "Strength", "Agility"],
+        calc: nums => {
+            let level = nums[0];
+            let str = nums[1];
+            let agil = nums[2];
+            m = Math.floor((level * str) / 128);
             let bonus = Math.floor((level * agil) / 128);
-            let n = Math.ceil((128 * (m + 1)) / strMag);
+            let n = Math.ceil((128 * (m + 1)) / str);
             let ns = Math.ceil((128 * (bonus + 1)) / agil);
             m += bonus + 2;
-            statString = "Strength and " + agil + " Agility";
-            nextLevel = n + " for Strength and " + ns + " for Agility";
-            args[3] = "Chicken Knife";
+            return "At Level ${level}, with ${str} Strength and ${agil} Agility, your Chicken Knife M is ${m}. To reach the next M, you need to reach level ${n} for Strength and ${ns} for Agility.";
         }
-    } else if (args[3] === "rune") {
-        let mag = parseInt(args[4]);
-        if (isNaN(mag)) {
-            abortMcalc(user, userID, channelID, message, event);
-            return;
-        } else {
-            m = Math.floor((level * strMag) / 128);
+    },
+    rune: {
+        args: ["Level", "Strength", "Magic"],
+        calc: nums => {
+            let level = nums[0];
+            let str = nums[1];
+            let mag = nums[2];
+            m = Math.floor((level * str) / 128);
             let bonus = Math.floor((level * mag) / 128);
-            let n = Math.ceil((128 * (m + 1)) / strMag);
+            let n = Math.ceil((128 * (m + 1)) / str);
             let ns = Math.ceil((128 * (bonus + 1)) / mag);
             m += bonus + 2;
-            statString = "Strength and " + mag + " Magic Power";
-            nextLevel = n + " for Strength and " + ns + " for Magic";
-            args[3] = "Rune weapon";
+            return "At Level ${level}, with ${str} Strength and ${mag} Magic, your Rune Weapon M is ${m}. To reach the next M, you need to reach level ${n} for Strength and ${ns} for Magic.";
         }
-    } else if (args[3] === "fists") {
-        m = Math.floor(((level * strMag) / 256) + 2);
-        nextLevel = Math.ceil((256 * ((m + 1) - 2)) / strMag);
-        let pow = level * 2 + 3;
-        m = m + " (with " + pow + " attack power)";
-        statString = "Strength";
-        args[3] = "fist";
-    } else if (args[3] === "cannon") {
-        m = Math.floor(((level * level) / 256) + 4);
-        nextLevel = Math.ceil((256 * ((m + 1) - 4)));
-        nextLevel = Math.ceil(Math.sqrt(nextLevel));
-        args[3] = "Cannoneer";
-        statString = "useless stat"
+    }
+    fists: {
+        args: ["Level", "Strength"],
+        calc: nums => {
+            let level = nums[0];
+            let str = nums[1];
+            m = Math.floor(((level * str) / 256) + 2);
+            nextLevel = Math.ceil((256 * ((m + 1) - 2)) / str);
+            let pow = level * 2 + 3;
+            m = m + " (with " + pow + " attack power)";
+            return "At Level ${level}, with ${str} Strength, your fist M is ${m} (with ${pow} attack power). To reach the next M, you need to reach level ${n}.";
+        }
+    },
+    cannon: {
+        args: ["Level"],
+        calc: nums => {
+            m = Math.floor(((nums[0] * nums[0]) / 256) + 4);
+            nextLevel = Math.ceil((256 * ((m + 1) - 4)));
+            nextLevel = Math.ceil(Math.sqrt(nextLevel));
+            return "At level ${nums[0]}, your Cannoneer M is ${m}. To reach the next M, you need to reach level ${nextLevel}."
+        }
+    },
+}
+
+function mcalc(user, userID, channelID, message, event) {
+    let args = message.toLowerCase().split(" ").slice(1); //remove command name
+    let strs = args.filter(i => isNaN(parseInt(i))); //extracts strings
+    let type;
+    if (strs.length < 1) {
+        bot.sendMessage({
+            to: channelID,
+            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`";
+        });
+        return;
     } else {
-        abortMcalc(user, userID, channelID, message, event);
+        type = strs[0].toLowerCase();
+    }
+    if (!type in mcalcTable) {
+        bot.sendMessage({
+            to: channelID,
+            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" + Object.keys(mcalcTable).join(", ") + "`";
+        });
         return;
     }
-    if (args[3] === "Cannoneer") {
+    let mtype = mcalcTable[type];
+    let nums = args.map(i => parseInt(i).filter(i => !isNaN(i))); //extracts numbers
+    if (nums.length < mtype.args.length) {
+        bot.sendMessage({
+            to: channelID,
+            message: "Sorry, I need more numbers! Arguments for `${type}`: " + mtype.args.join(", ")
+        });
+        return;
+    }
     bot.sendMessage({
         to: channelID,
-        message: "At level " + level + ", your " + args[3] + " M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "."
+        message: mtype.calc(nums)
     });
-    } else {
-     bot.sendMessage({
-        to: channelID,
-        message: "At level " + level + " with " + strMag + " " + statString + ", your " + args[3] + " M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "."
-    });
-    }
 }
 
 function abortMcalc(user, userID, channelID, message, event) {
