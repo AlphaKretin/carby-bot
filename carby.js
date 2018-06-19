@@ -5,6 +5,9 @@ var bot = new Discord.Client({
     autorun: true
 });
 
+var kyro = new String;
+kyro = "103835146066599936";
+
 var jsonfile = require('jsonfile');
 var file = "data.json";
 var data = {
@@ -19,6 +22,9 @@ var jobData = [
     jobs: ["Mime", "Mime", "Mime", "Mime"]
 }];
 
+var monsterFile = "monsterdata.json";
+var monsterData = [];
+
 bot.on('ready', function () {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
     jsonfile.readFile(file, function (err, obj) {
@@ -26,6 +32,9 @@ bot.on('ready', function () {
     });
     jsonfile.readFile(jobFile, function (err, obj) {
         jobData = obj;
+    });
+    jsonfile.readFile(monsterFile, function (err, obj) {
+        monsterData = obj;
     });
 });
 
@@ -95,6 +104,12 @@ bot.on('message', function (user, userID, channelID, message, event) {
         if (lowMes.indexOf("!gaia") === 0) {
             gaia(user, userID, channelID, message, event);
         }
+        if (lowMes.indexOf("!dance") === 0) {
+            galufdance(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf("!zeninage") === 0) {
+            giltoss(user, userID, channelID, message, event);
+        }
         if (lowMes.indexOf(".yburns") === 0) {
             yburns(user, userID, channelID, message, event);
         }
@@ -112,6 +127,12 @@ bot.on('message', function (user, userID, channelID, message, event) {
         }
         if (lowMes.indexOf(".crystelle") === 0) {
             crystelle(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".runthenumbers") === 0) {
+            ddstrat(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".numbers") === 0) {
+            ddstrat(user, userID, channelID, message, event);
         }
         if (lowMes.indexOf(".sandworm") === 0) {
             sandworm(user, userID, channelID, message, event);
@@ -134,10 +155,35 @@ bot.on('message', function (user, userID, channelID, message, event) {
         if (lowMes.indexOf(".quickleak") === 0) {
         	quickleak(user, userID, channelID, message, event);
         }
+        if (lowMes.indexOf(".timer") === 0) {
+        	countdown(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".fiestatimer") === 0) {
+        	countdown(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".countdown") === 0) {
+        	countdown(user, userID, channelID, message, event);
+        }
         //job DB
         if (lowMes.indexOf(".jobs") === 0) {
             jobs(user, userID, channelID, message, event);
         }
+        if (lowMes.indexOf(".forbiddenrisk") === 0) {
+            forbiddenRisk(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".forbiddenlite") === 0) {
+            forbidden(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".purify") === 0 && userID === kyro) {
+            purify(user, userID, channelID, message, event);
+        }
+        //monster data search (not working atm)
+        /* if (lowMes.indexOf(".info") === 0) {
+            info(user, userID, channelID, message, event);
+        }
+        if (lowMes.indexOf(".attributes") === 0) {
+            attributes(user, userID, channelID, message, event);
+        } */
     }
 });
 
@@ -146,7 +192,7 @@ function help(user, userID, channelID, message, event) {
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
-        message: "I have a lot of commands, too many to list in this Discord PM. Check this readme: https://tinyurl.com/carbydocs"
+        message: "I have a lot of commands, too many to list in this Discord PM. Check this readme: https://tinyurl.com/ybh7lrz2"
     });
 }
 
@@ -196,12 +242,13 @@ function mcalc(user, userID, channelID, message, event) {
             n = Math.floor(n / strMag);
             ns = Math.floor(ns / agil);
             m += 2;
-            n++;
-            ns++;
+            //n++;  ???
+            //ns++; forget why these are
             if (bonus === 0) {
                 m = m + " (no Agility bonus)";
                 nextLevel = n + " (Bonus Agility M gained at level " + ns + ")";
             } else { //if bonus = 1
+                m = m + 1;
                 m = m + " (+1 from Agility bonus)";
                 nextLevel = n + " (Bonus Agility M **LOST** at level " + ns + ")";
             }
@@ -244,20 +291,33 @@ function mcalc(user, userID, channelID, message, event) {
         m = m + " (with " + pow + " attack power)";
         statString = "Strength";
         args[3] = "fist";
+    } else if (args[3] === "cannon") {
+        m = Math.floor(((level * level) / 256) + 4);
+        nextLevel = Math.ceil((256 * ((m + 1) - 4)));
+        nextLevel = Math.ceil(Math.sqrt(nextLevel));
+        args[3] = "Cannoneer";
+        statString = "useless stat"
     } else {
         abortMcalc(user, userID, channelID, message, event);
         return;
     }
+    if (args[3] === "Cannoneer") {
     bot.sendMessage({
         to: channelID,
-        message: "At level " + level + " with " + strMag + " " + statString + ", your " + args[3] + " M is " + m + ". To reach the next M, you need to reach level " + nextLevel
+        message: "At level " + level + ", your " + args[3] + " M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "."
     });
+    } else {
+     bot.sendMessage({
+        to: channelID,
+        message: "At level " + level + " with " + strMag + " " + statString + ", your " + args[3] + " M is " + m + ". To reach the next M, you need to reach level " + nextLevel + "."
+    });
+    }
 }
 
 function abortMcalc(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
-        message: "The syntax for this command is: .mcalc level strength/magic <type> <agility/magic>; example: .mcalc 20 46 rune 44 (valid types: physical, magic, knife, chicken, rune, fists)"
+        message: "The syntax for this command is: .mcalc level strength/magic <type> <agility/magic>; example: .mcalc 20 46 rune 44 (valid types: physical, magic, knife, chicken, rune, fists, cannon)"
     });
     return;
 }
@@ -447,17 +507,33 @@ var ddLines = [
     "Now I actually know what the fuck I'm doing here. (#31)",
     "I actually don't do serious speedruns of this game. I just have a fairly good amount of knowledge about how the mechanics work and stuff. (#32)",
     "I need Faris solo to gain experience for **#GOBLINPUNCH**. *game overs in the Wind Shrine without having saved the game* (#33)",
-    "THE CHEST IS OPEN! WHERE IS THE DRAGON FANG? I'M STARING AT THE OPEN CHEST!!! (#34)"
+    "THE CHEST IS OPEN! WHERE IS THE DRAGON FANG? I'M STARING AT THE OPEN CHEST!!! (#34)",
+    "I'm gonna try something dumb! (#35)",
+    "\\*swings Blizzara Blade at immune target\\* Can you guys please hit??? (#36)",
+    "Well, he can't cast Aero now. \\*Gigas casts Aero twice\\* (#37)",
+    "Being higher level isn't really going to help outside of getting higher damage multipliers, basically. (#38)",
+    "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\* (#39)",
+    "I have a really really dumb strategy! <:yayclod:362777481838592010> (#40)"
 ];
 
 function dd(user, userID, channelID, message, event) {
     var args = message.toLowerCase().split(" ");
     var index = parseInt(args[1]);
-    if (isNaN(index) || args.length === 1 || index > ddLines.length || index < 1) {
+    if (args.length === 1) {
         bot.sendMessage({
             to: channelID,
             message: ddLines[getIncInt(0, ddLines.length - 1)]
         });
+    } else if (isNaN(index)) {
+    	bot.sendMessage({
+    		to: channelID,
+    		message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
+    	});
+    } else if (index > ddLines.length || index < 1) { 
+    	bot.sendMessage({
+    		to: channelID,
+    		message: "Oh my god, the quote wand missed!\n" + ddLines[getIncInt(0, ddLines.length - 1)]
+    	});
     } else {
         bot.sendMessage({
             to: channelID,
@@ -491,7 +567,7 @@ function victim(user, userID, channelID, message, event) {
 function breakRod(user, userID, channelID, message, event) {
     var args = message.toLowerCase().split(" ");
     var index = parseInt(args[1]);
-    if (isNaN(index) || args.length === 1 || index < 0) {
+    if (isNaN(index) || args.length === 1 || index < 0 || index > 100 ) {
         data.rodsBroken++;
     } else {
         data.rodsBroken += index;
@@ -520,6 +596,28 @@ function gaia(user, userID, channelID, message, event) {
     });
 }
 
+function galufdance(user, userID, channelID, message, event) {
+    bot.sendMessage({
+        to: channelID,
+        message: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif"
+    });
+}
+
+function giltoss(user, userID, channelID, message, event) {
+    bot.sendMessage({
+        to: channelID,
+        message: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif"
+    });
+}
+
+function ddstrat(user, userID, channelID, message, event) {
+    var os = require('os');
+    bot.sendMessage({
+        to: channelID,
+        message: "**PREMIUM TACTICAL INFORMATION ITT**" + os.EOL + "Dragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest." + os.EOL + os.EOL + "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32." + os.EOL + "2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings." + os.EOL + "3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone." + os.EOL + "4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3." + os.EOL + "5. Let the Aegis Shield be transformed into the Flame Shield." + os.EOL + "6. Make Bartz a Mystic Knight and weaken him to critical HP." + os.EOL + "7. Give Bartz the Flame Shield, give everyone else Reflect Rings." + os.EOL + "8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight." + os.EOL + "9. Kill the Water, Earth and Wind Crystals." + os.EOL + "10. Kill off everyone except Bartz." + os.EOL + "11. Use !Focus + Drain Sword to kill the Fire Crystal." + os.EOL + os.EOL + "It's easy!"
+    });
+}
+
 function yburns(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
@@ -537,7 +635,7 @@ function quicksave(user, userID, channelID, message, event) {
 function badfaq(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
-        message: "Can you believe people use this? http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687"
+        message: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687"
     });
 }
 
@@ -558,7 +656,22 @@ function equipharps(user, userID, channelID, message, event) {
 function crystelle(user, userID, channelID, message, event) {
     bot.sendMessage({
         to: channelID,
-        message: "TThose are easy to catch, right? http://i.imgur.com/WD40MES.png"
+        message: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png"
+    });
+}
+
+function countdown(user, userID, channelID, message, event) {
+    var fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
+    var now = new Date().getTime();
+    var distance = fiestaDate - now;
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        bot.sendMessage({
+        to: channelID,
+        //message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
+        message: "The Run has Begun! What are you waiting for? Get in here and make fun of DD! https://www.twitch.tv/rpglimitbreak"
     });
 }
 
@@ -693,3 +806,118 @@ function intersect(a, b) {
         return c.indexOf(e) === i;
     });
 }
+
+function forbiddenRisk(user, userID, channelID, message, event) {
+    bot.addToRole({
+        serverID: "315364487882342401",
+        userID: userID,
+        roleID: "451768175152070657"
+    },function(err) {if(err) {console.log(err);}});
+    bot.sendMessage({
+        to: channelID,
+        message: "<:forbidden:451764608202571816> <:black101:326153094868238338>"
+    });
+}
+
+function forbidden(user, userID, channelID, message, event) {
+    bot.addToRole({
+        serverID: "315364487882342401",
+        userID: userID,
+        roleID: "451874821245108225"
+    },function(err) {if(err) {console.log(err);}});
+    bot.sendMessage({
+        to: channelID,
+        message: "<:forbidden:451764608202571816>"
+    });
+}
+
+function purify(user, userID, channelID, message, event) {
+    data = {
+    victims: 0,
+    kinuVictims: 0,
+    rodsBroken: 0
+};
+}
+
+// attributes
+function attributes(user, userID, channelID, message, event) {
+    bot.sendMessage({
+        to: userID,
+        message: "Available attributes:\n`name, rpge_name, level, exp, hp, mp, gil, speed, atk, mag_power, atk_m, mag_m, def, mag_def, evade, mag_evade, status_immunity, elem_immunity, elem_absorb, auto_hit, weakness, immunity, creature_type, init_status, specialty, spells, control, blue, catch, drop, steal, ai`." 
+    });
+}
+
+
+function failQuery(destination) {
+    bot.sendMessage({
+        to: destination,
+        message: "Sorry, I couldn't find the information you requested. Acceptable syntax: `.info <attribute> monster_name`. Monster name can be either RPGe or Advance translation. For a list of attributes I accept, use `.attributes`. "
+    });
+}
+
+
+//monster data query (kinda busted)
+/* function info(user, userID, channelID, message, event) {
+    var args = message.split(" ");
+    var monster = "";
+    // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
+    if (args[1] === undefined) {
+        args[1] = "a"; // prevents crash on no args
+    }
+    if(monsterData[0][args[1]] === undefined) { // no query, try and find monster 
+        monster = args.slice(1, args.length).join(" "); // recreate monster name
+        monsterList = monsterData.filter((x) => { 
+            return (x.name.includes(monster) || x.rpge_name.includes(monster));
+        });
+        if (monsterList === []) { // no monster found :( 
+            failQuery(channelID);        
+        } else { // got just a monster
+            if (monsterList.length > 1) { // which monster do we want?
+                monsters = "\n```";
+                for (var i = 0; i < monsterList.length; i++) {
+                    monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
+                }
+                monsters = monsters + "```\n";
+                bot.sendMessage({
+                    to: userID,
+                    message: "Here are all the results I have for \"" + monster + "\":" + monsters + "Please be more specific when querying."
+                }); // holy fuck this is janky
+            } else { // just one monster, good:
+                bot.sendMessage({
+                    to: userID,
+                    message: "Info for \"" + monster + "\":\n```" + JSON.stringify(monsterList[0], null, 2) + "```"
+                });
+            }
+        }
+    } else { // there's a query, we can just do it
+        query = args[1];
+        monster = args.slice(2, args.length).join(" "); // set up args
+        if(monsterData[0][query] === undefined) { // user asked for nonexistent attribute
+            failQuery(channelID);
+        } else { // do the thing
+            monsterList = monsterData.filter((x) => {
+                return (x.name.includes(monster) || x.rpge_name.includes(monster));
+            });
+            if (monsterList === []) { // no monster found :(
+                failQuery(channelID);
+            } else { // got monster and query
+                if (monsterList.length > 1) { // which monster do we want?
+                    monsters = "\n```";
+                    for (var i = 0; i < monsterList.length; i++) {
+                        monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
+                    }
+                    monsters = monsters + "```\n";
+                    bot.sendMessage({
+                        to: userID,
+                        message: "Here are all the results I have for \"" + monster + "\":" + monsters + "Please be more specific when querying."
+                    });
+                } else { // just one monster + query
+                    bot.sendMessage({
+                        to: userID,
+                        message: monster + "'s `" + query + "`:\n```" + JSON.stringify(monsterList[0][query], null, 2) + "```"
+                });
+            }
+        }
+    }
+}
+} */
