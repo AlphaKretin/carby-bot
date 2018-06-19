@@ -42,7 +42,7 @@ function loadData(filename, key) {
 }
 let file = "data.json";
 let jobFile = "jobs.json";
-let monsterFile = "monsterdata.json";
+let monsterFile = "data.monsters.json";
 let proms = [loadData(file, "stats"), loadData(jobFile, "jobs"), loadData(monsterFile, "monsters")];
 Promise.all(proms).then(() => {
     bot.connect();
@@ -943,10 +943,10 @@ function purify() {
 
 // attributes
 function attributes(user, userID) {
-    if (monsterData.length > 0) {
+    if (data.monsters.length > 0) {
         bot.sendMessage({
             to: userID,
-            message: "Available attributes for use with `.info`:\n`" + Object.keys(monsterData[0]).join(", ") + "`." 
+            message: "Available attributes for use with `.info`:\n`" + Object.keys(data.monsters[0]).join(", ") + "`." 
         }); 
     }
 }
@@ -969,7 +969,7 @@ function enemyInfo(userID, enemyData, att) {
 
 //monster data query
 function enemySearch(userID, query, att) {
-    let matches = enemyList.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
+    let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
             to: userID,
@@ -981,7 +981,7 @@ function enemySearch(userID, query, att) {
         let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
         let i = 1; //lists from 1-n for humans even tho arrays start at 0
         for (let match of matches) {
-            out += i + ". " + match.name + "\n"
+            out += i + ". " + match.name + "\n";
         }
         queries[userID] = { //store data in queries, in the form of its own tiny key-value pair
             list: matches,
@@ -994,7 +994,7 @@ function enemySearch(userID, query, att) {
     }
 }
 
-function enemyClarify(user, userID, channelID, message, event) {
+function enemyClarify(user, userID, channelID, message) {
     let input = parseInt(message);
     if (isNaN(input) || !((input - 1) in queries[userID].list)) { //if user didn't type a number or the number wasn't listed (-1 to convert from 1-start to 0-start)
         bot.sendMessage({
@@ -1007,7 +1007,7 @@ function enemyClarify(user, userID, channelID, message, event) {
     delete queries[userID]; //remove element from object
 }
 
-function info(user, userID, channelID, message, event) {
+function info(user, userID, channelID, message) {
     let args = message.toLowerCase().split(" ");
     if (args.length < 2) {
         bot.sendMessage({
@@ -1017,7 +1017,7 @@ function info(user, userID, channelID, message, event) {
         return;
     }
     // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
-    if (args[1] in monsterData[0]) {
+    if (args[1] in data.monsters[0]) {
         let att = args[1];
         let query = args.slice(2).join(" ");
         enemySearch(userID, query, att);
