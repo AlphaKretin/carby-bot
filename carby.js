@@ -1,29 +1,27 @@
-var Discord = require('discord.io');
+let Discord = require('discord.io');
 
-var bot = new Discord.Client({
+let bot = new Discord.Client({
     token: "",
     autorun: true
 });
 
-var kyro = new String;
-kyro = "103835146066599936";
+let kyro = "103835146066599936";
 
-var jsonfile = require('jsonfile');
-var file = "data.json";
-var data = {
+let file = "data.json";
+let data = {
     victims: -1,
     kinuVictims: -1,
     rodsBroken: -1
 };
-var jobFile = "jobs.json";
-var jobData = [
+let jobFile = "jobs.json";
+let jobData = [
 {
     id: "316052390442958860",
     jobs: ["Mime", "Mime", "Mime", "Mime"]
 }];
 
-var monsterFile = "monsterdata.json";
-var monsterData = [];
+let monsterFile = "monsterdata.json";
+let monsterData = [];
 
 bot.on('ready', function () {
     console.log('Logged in as %s - %s\n', bot.username, bot.id);
@@ -44,7 +42,7 @@ bot.on('disconnect', function () {
 
 //reads incoming messages for commands and redirects to functions to handle them
 bot.on('message', function (user, userID, channelID, message, event) {
-    var lowMes = message.toLowerCase();
+    let lowMes = message.toLowerCase();
     if ((userID !== bot.id) && (lowMes.charAt(0) === "!" || lowMes.charAt(0) === "." || lowMes.charAt(0) === "z")) {
         //.help
         if (lowMes.indexOf(".help") === 0) {
@@ -198,13 +196,13 @@ function help(user, userID, channelID, message, event) {
 
 //.mcalc
 function mcalc(user, userID, channelID, message, event) {
-    var args = message.toLowerCase().split(" ");
-    var m;
-    var nextLevel;
+    let args = message.toLowerCase().split(" ");
+    let m;
+    let nextLevel;
     //expected args - 0: ".mcalc", 1: level (int), 2: str/mag (int), 3: type (string), 4: extra stat (int)
-    var level = parseInt(args[1]);
-    var strMag = parseInt(args[2]);
-    var statString = "";
+    let level = parseInt(args[1]);
+    let strMag = parseInt(args[2]);
+    let statString = "";
     if (isNaN(level) || isNaN(strMag)) {
         abortMcalc(user, userID, channelID, message, event);
         return;
@@ -218,23 +216,23 @@ function mcalc(user, userID, channelID, message, event) {
         nextLevel = Math.ceil((256 * ((m + 1) - 4)) / strMag);
         statString = "Magic";
     } else if (args[3] === "knife") {
-        var agil = parseInt(args[4]);
+        let agil = parseInt(args[4]);
         if (isNaN(agil)) {
             abortMcalc(user, userID, channelID, message, event);
             return;
         } else {
             m = level;
-            var bonus = level;
+            let bonus = level;
             m = m * strMag;
             bonus = bonus * agil;
             m = Math.floor(m / 128);
             bonus = Math.floor(bonus / 128);
-            var ns = bonus;
-            var divider = bonus;
+            let ns = bonus;
+            let divider = bonus;
             divider = Math.floor(divider / 2);
             bonus -= divider;
             bonus -= divider;
-            var n = m;
+            let n = m;
             n++;
             ns++;
             n = n * 128;
@@ -255,30 +253,30 @@ function mcalc(user, userID, channelID, message, event) {
             statString = "Strength and " + agil + " Agility";
         }
     } else if (args[3] === "chicken") {
-        var agil = parseInt(args[4]);
+        let agil = parseInt(args[4]);
         if (isNaN(agil)) {
             abortMcalc(user, userID, channelID, message, event);
             return;
         } else {
             m = Math.floor((level * strMag) / 128);
-            var bonus = Math.floor((level * agil) / 128);
-            var n = Math.ceil((128 * (m + 1)) / strMag);
-            var ns = Math.ceil((128 * (bonus + 1)) / agil);
+            let bonus = Math.floor((level * agil) / 128);
+            let n = Math.ceil((128 * (m + 1)) / strMag);
+            let ns = Math.ceil((128 * (bonus + 1)) / agil);
             m += bonus + 2;
             statString = "Strength and " + agil + " Agility";
             nextLevel = n + " for Strength and " + ns + " for Agility";
             args[3] = "Chicken Knife";
         }
     } else if (args[3] === "rune") {
-        var mag = parseInt(args[4]);
+        let mag = parseInt(args[4]);
         if (isNaN(mag)) {
             abortMcalc(user, userID, channelID, message, event);
             return;
         } else {
             m = Math.floor((level * strMag) / 128);
-            var bonus = Math.floor((level * mag) / 128);
-            var n = Math.ceil((128 * (m + 1)) / strMag);
-            var ns = Math.ceil((128 * (bonus + 1)) / mag);
+            let bonus = Math.floor((level * mag) / 128);
+            let n = Math.ceil((128 * (m + 1)) / strMag);
+            let ns = Math.ceil((128 * (bonus + 1)) / mag);
             m += bonus + 2;
             statString = "Strength and " + mag + " Magic Power";
             nextLevel = n + " for Strength and " + ns + " for Magic";
@@ -287,7 +285,7 @@ function mcalc(user, userID, channelID, message, event) {
     } else if (args[3] === "fists") {
         m = Math.floor(((level * strMag) / 256) + 2);
         nextLevel = Math.ceil((256 * ((m + 1) - 2)) / strMag);
-        var pow = level * 2 + 3;
+        let pow = level * 2 + 3;
         m = m + " (with " + pow + " attack power)";
         statString = "Strength";
         args[3] = "fist";
@@ -324,16 +322,16 @@ function abortMcalc(user, userID, channelID, message, event) {
 
 //.almagest
 function almagest(user, userID, channelID, message, event) {
-    var args = message.toLowerCase().split(" ");
-    var vit = parseInt(args[1]);
+    let args = message.toLowerCase().split(" ");
+    let vit = parseInt(args[1]);
     if (isNaN(vit) || args.length === 1) {
         bot.sendMessage({
             to: channelID,
             message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. Good luck! (Only 720 to 740 damage if you have Shell! Yay!)"
         });
     } else {
-        var target = Math.floor((32 * 1665) / (vit + 32));
-        var buffTarget = Math.floor((32 * 1725) / (vit + 32));
+        let target = Math.floor((32 * 1665) / (vit + 32));
+        let buffTarget = Math.floor((32 * 1725) / (vit + 32));
         bot.sendMessage({
             to: channelID,
             message: "You need " + target + " base HP to survive a max 1665 damage Almagest with " + vit + " Vitality (or " + buffTarget + " to have 1725 HP for a buffer). Refer here for the level you'll need! http://bit.ly/1WKSUyu"
@@ -342,19 +340,19 @@ function almagest(user, userID, channelID, message, event) {
 }
 
 //DIY fiestas
-var windJobs = ["Knight", "Monk", "Thief", "Black Mage", "White Mage", "Blue Mage"];
-var waterJobs = ["Red Mage", "Time Mage", "Summoner", "Berserker", "Mystic Knight"];
-var fireJobs = ["Beastmaster", "Geomancer", "Ninja", "Ranger", "Bard"];
-var earthJobs = ["Dragoon", "Dancer", "Samurai", "Chemist"];
-var miscJobs = ["Freelancer", "Mime"];
-var mageJobs = ["Black Mage", "White Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner", "Geomancer", "Bard", "Dancer", "Chemist", "Mime"];
-var noMageJobs = ["Monk", "Thief", "Knight", "Berserker", "Mystic Knight", "Ninja", "Ranger", "Beastmaster", "Samurai", "Dragoon"];
+let windJobs = ["Knight", "Monk", "Thief", "Black Mage", "White Mage", "Blue Mage"];
+let waterJobs = ["Red Mage", "Time Mage", "Summoner", "Berserker", "Mystic Knight"];
+let fireJobs = ["Beastmaster", "Geomancer", "Ninja", "Ranger", "Bard"];
+let earthJobs = ["Dragoon", "Dancer", "Samurai", "Chemist"];
+let miscJobs = ["Freelancer", "Mime"];
+let mageJobs = ["Black Mage", "White Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner", "Geomancer", "Bard", "Dancer", "Chemist", "Mime"];
+let noMageJobs = ["Monk", "Thief", "Knight", "Berserker", "Mystic Knight", "Ninja", "Ranger", "Beastmaster", "Samurai", "Dragoon"];
 
 function normal(user, userID, channelID, message, event) {
-    var wind = windJobs[getIncInt(0, windJobs.length - 1)];
-    var water = waterJobs[getIncInt(0, waterJobs.length - 1)];
-    var fire = fireJobs[getIncInt(0, fireJobs.length - 1)];
-    var earth = earthJobs[getIncInt(0, earthJobs.length - 1)];
+    let wind = windJobs[getIncInt(0, windJobs.length - 1)];
+    let water = waterJobs[getIncInt(0, waterJobs.length - 1)];
+    let fire = fireJobs[getIncInt(0, fireJobs.length - 1)];
+    let earth = earthJobs[getIncInt(0, earthJobs.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -363,13 +361,13 @@ function normal(user, userID, channelID, message, event) {
 }
 
 function random(user, userID, channelID, message, event) {
-    var wind = windJobs[getIncInt(0, windJobs.length - 1)];
-    var randWater = windJobs.concat(waterJobs);
-    var water = randWater[getIncInt(0, randWater.length - 1)];
-    var randFire = randWater.concat(fireJobs);
-    var fire = randFire[getIncInt(0, randFire.length - 1)];
-    var randEarth = randFire.concat(earthJobs);
-    var earth = randEarth[getIncInt(0, randEarth.length - 1)];
+    let wind = windJobs[getIncInt(0, windJobs.length - 1)];
+    let randWater = windJobs.concat(waterJobs);
+    let water = randWater[getIncInt(0, randWater.length - 1)];
+    let randFire = randWater.concat(fireJobs);
+    let fire = randFire[getIncInt(0, randFire.length - 1)];
+    let randEarth = randFire.concat(earthJobs);
+    let earth = randEarth[getIncInt(0, randEarth.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -378,14 +376,14 @@ function random(user, userID, channelID, message, event) {
 }
 
 function sevenFifty(user, userID, channelID, message, event) {
-    var mageWind = intersect(windJobs, mageJobs);
-    var wind = mageWind[getIncInt(0, mageWind.length - 1)];
-    var mageWater = intersect(waterJobs, mageJobs);
-    var water = mageWater[getIncInt(0, mageWater.length - 1)];
-    var mageFire = intersect(fireJobs, mageJobs);
-    var fire = mageFire[getIncInt(0, mageFire.length - 1)];
-    var mageEarth = intersect(earthJobs, mageJobs);
-    var earth = mageEarth[getIncInt(0, mageEarth.length - 1)];
+    let mageWind = intersect(windJobs, mageJobs);
+    let wind = mageWind[getIncInt(0, mageWind.length - 1)];
+    let mageWater = intersect(waterJobs, mageJobs);
+    let water = mageWater[getIncInt(0, mageWater.length - 1)];
+    let mageFire = intersect(fireJobs, mageJobs);
+    let fire = mageFire[getIncInt(0, mageFire.length - 1)];
+    let mageEarth = intersect(earthJobs, mageJobs);
+    let earth = mageEarth[getIncInt(0, mageEarth.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -394,14 +392,14 @@ function sevenFifty(user, userID, channelID, message, event) {
 }
 
 function noSevenFifty(user, userID, channelID, message, event) {
-    var noWind = intersect(windJobs, noMageJobs);
-    var wind = noWind[getIncInt(0, noWind.length - 1)];
-    var noWater = intersect(waterJobs, noMageJobs);
-    var water = noWater[getIncInt(0, noWater.length - 1)];
-    var noFire = intersect(fireJobs, noMageJobs);
-    var fire = noFire[getIncInt(0, noFire.length - 1)];
-    var noEarth = intersect(earthJobs, noMageJobs);
-    var earth = noEarth[getIncInt(0, noEarth.length - 1)];
+    let noWind = intersect(windJobs, noMageJobs);
+    let wind = noWind[getIncInt(0, noWind.length - 1)];
+    let noWater = intersect(waterJobs, noMageJobs);
+    let water = noWater[getIncInt(0, noWater.length - 1)];
+    let noFire = intersect(fireJobs, noMageJobs);
+    let fire = noFire[getIncInt(0, noFire.length - 1)];
+    let noEarth = intersect(earthJobs, noMageJobs);
+    let earth = noEarth[getIncInt(0, noEarth.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -410,11 +408,11 @@ function noSevenFifty(user, userID, channelID, message, event) {
 }
 
 function chaos(user, userID, channelID, message, event) {
-    var allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    var wind = allJobs[getIncInt(0, allJobs.length - 1)];
-    var water = allJobs[getIncInt(0, allJobs.length - 1)];
-    var fire = allJobs[getIncInt(0, allJobs.length - 1)];
-    var earth = allJobs[getIncInt(0, allJobs.length - 1)];
+    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
+    let wind = allJobs[getIncInt(0, allJobs.length - 1)];
+    let water = allJobs[getIncInt(0, allJobs.length - 1)];
+    let fire = allJobs[getIncInt(0, allJobs.length - 1)];
+    let earth = allJobs[getIncInt(0, allJobs.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -423,12 +421,12 @@ function chaos(user, userID, channelID, message, event) {
 }
 
 function chaosNoSevenFifty(user, userID, channelID, message, event) {
-    var allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    var noJobs = intersect(allJobs, noMageJobs);
-    var wind = noJobs[getIncInt(0, noJobs.length - 1)];
-    var water = noJobs[getIncInt(0, noJobs.length - 1)];
-    var fire = noJobs[getIncInt(0, noJobs.length - 1)];
-    var earth = noJobs[getIncInt(0, noJobs.length - 1)];
+    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
+    let noJobs = intersect(allJobs, noMageJobs);
+    let wind = noJobs[getIncInt(0, noJobs.length - 1)];
+    let water = noJobs[getIncInt(0, noJobs.length - 1)];
+    let fire = noJobs[getIncInt(0, noJobs.length - 1)];
+    let earth = noJobs[getIncInt(0, noJobs.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -437,12 +435,12 @@ function chaosNoSevenFifty(user, userID, channelID, message, event) {
 }
 
 function chaosSevenFifty(user, userID, channelID, message, event) {
-    var allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    var magJobs = intersect(allJobs, mageJobs);
-    var wind = magJobs[getIncInt(0, magJobs.length - 1)];
-    var water = magJobs[getIncInt(0, magJobs.length - 1)];
-    var fire = magJobs[getIncInt(0, magJobs.length - 1)];
-    var earth = magJobs[getIncInt(0, magJobs.length - 1)];
+    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
+    let magJobs = intersect(allJobs, mageJobs);
+    let wind = magJobs[getIncInt(0, magJobs.length - 1)];
+    let water = magJobs[getIncInt(0, magJobs.length - 1)];
+    let fire = magJobs[getIncInt(0, magJobs.length - 1)];
+    let earth = magJobs[getIncInt(0, magJobs.length - 1)];
     bot.createDMChannel(userID);
     bot.sendMessage({
         to: userID,
@@ -451,17 +449,17 @@ function chaosSevenFifty(user, userID, channelID, message, event) {
 }
 
 function purechaos(user, userID, channelID, message, event) {
-    var allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs).concat(miscJobs);
-    var wind = allJobs[getIncInt(0, allJobs.length - 1)];
-    var water;
+    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs).concat(miscJobs);
+    let wind = allJobs[getIncInt(0, allJobs.length - 1)];
+    let water;
     do {
     	water = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (water === wind);
-    var fire;
+    let fire;
     do {
     	fire = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (fire === wind || fire === water);
-    var earth;
+    let earth;
     do {
     	earth = allJobs[getIncInt(0, allJobs.length - 1)];
     } while (earth === wind || earth === water || earth === fire);
@@ -473,7 +471,7 @@ function purechaos(user, userID, channelID, message, event) {
 }
 
 //.dd
-var ddLines = [
+let ddLines = [
     "I suggest using **ENCOUNTER MANIPULATION** (#1)",
     "Good thing I can !Control Shield Dragons so I can hashtag grind on them for **TWO HOURS** (#2)",
     "No, I have to let the Aegis Shield burn, I ran the numbers, doing it without the Flame Shield is impossible. (#3)",
@@ -517,8 +515,8 @@ var ddLines = [
 ];
 
 function dd(user, userID, channelID, message, event) {
-    var args = message.toLowerCase().split(" ");
-    var index = parseInt(args[1]);
+    let args = message.toLowerCase().split(" ");
+    let index = parseInt(args[1]);
     if (args.length === 1) {
         bot.sendMessage({
             to: channelID,
@@ -565,8 +563,8 @@ function victim(user, userID, channelID, message, event) {
 }
 
 function breakRod(user, userID, channelID, message, event) {
-    var args = message.toLowerCase().split(" ");
-    var index = parseInt(args[1]);
+    let args = message.toLowerCase().split(" ");
+    let index = parseInt(args[1]);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100 ) {
         data.rodsBroken++;
     } else {
@@ -611,7 +609,7 @@ function giltoss(user, userID, channelID, message, event) {
 }
 
 function ddstrat(user, userID, channelID, message, event) {
-    var os = require('os');
+    let os = require('os');
     bot.sendMessage({
         to: channelID,
         message: "**PREMIUM TACTICAL INFORMATION ITT**" + os.EOL + "Dragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest." + os.EOL + os.EOL + "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32." + os.EOL + "2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings." + os.EOL + "3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone." + os.EOL + "4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3." + os.EOL + "5. Let the Aegis Shield be transformed into the Flame Shield." + os.EOL + "6. Make Bartz a Mystic Knight and weaken him to critical HP." + os.EOL + "7. Give Bartz the Flame Shield, give everyone else Reflect Rings." + os.EOL + "8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight." + os.EOL + "9. Kill the Water, Earth and Wind Crystals." + os.EOL + "10. Kill off everyone except Bartz." + os.EOL + "11. Use !Focus + Drain Sword to kill the Fire Crystal." + os.EOL + os.EOL + "It's easy!"
@@ -661,13 +659,13 @@ function crystelle(user, userID, channelID, message, event) {
 }
 
 function countdown(user, userID, channelID, message, event) {
-    var fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
-    var now = new Date().getTime();
-    var distance = fiestaDate - now;
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    let fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
+    let now = new Date().getTime();
+    let distance = fiestaDate - now;
+    let days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
         bot.sendMessage({
         to: channelID,
         //message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
@@ -726,14 +724,14 @@ function quickleak(user, userID, channelID, message, event){
 
 //job DB
 function jobs(user, userID, channelID, message, event) {
-    var args = message.split(" ");
+    let args = message.split(" ");
     //expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str), 3: water job (str), 4: fire job (str), 5: earth job (str)
     if (args[1] === undefined) {
         args[1] = "a";
     } //prevents crash on no args
     if (args[1].toLowerCase() === "register") {
-        var hasUser = false;
-        for (var user of jobData) {
+        let hasUser = false;
+        for (let user of jobData) {
             if (user.id === userID) {
                 hasUser = true;
                 user.jobs = [args[2], args[3], args[4], args[5]];
@@ -753,15 +751,15 @@ function jobs(user, userID, channelID, message, event) {
             message: "Got it, <@" + userID + ">. Your jobs (" + args[2] + " / " + args[3] + " / " + args[4] + " / " + args[5] + ") are registered."
         });
     } else if (args[1].toLowerCase() === "lookup") {
-        var current;
-        var mentioned = message.replace(/\D/g, '');
+        let current;
+        let mentioned = message.replace(/\D/g, '');
         if (bot.fixMessage("<@" + mentioned + ">") === "undefined") {
             bot.sendMessage({
                 to: channelID,
                 message: "Sorry <@" + userID + ">, I can only lookup with @mentions!"
             });
         } else {
-            for (var user of jobData) {
+            for (let user of jobData) {
                 if (user.id === mentioned) {
                     current = user;
                 }
@@ -794,7 +792,7 @@ function getIncInt(min, max) {
 }
 
 function intersect(a, b) {
-    var t;
+    let t;
     if (b.length > a.length) {
         t = b;
         b = a;
@@ -858,8 +856,8 @@ function failQuery(destination) {
 
 //monster data query (kinda busted)
 /* function info(user, userID, channelID, message, event) {
-    var args = message.split(" ");
-    var monster = "";
+    let args = message.split(" ");
+    let monster = "";
     // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
     if (args[1] === undefined) {
         args[1] = "a"; // prevents crash on no args
@@ -874,7 +872,7 @@ function failQuery(destination) {
         } else { // got just a monster
             if (monsterList.length > 1) { // which monster do we want?
                 monsters = "\n```";
-                for (var i = 0; i < monsterList.length; i++) {
+                for (let i = 0; i < monsterList.length; i++) {
                     monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
                 }
                 monsters = monsters + "```\n";
@@ -903,7 +901,7 @@ function failQuery(destination) {
             } else { // got monster and query
                 if (monsterList.length > 1) { // which monster do we want?
                     monsters = "\n```";
-                    for (var i = 0; i < monsterList.length; i++) {
+                    for (let i = 0; i < monsterList.length; i++) {
                         monsters = monsters + i + ") " + monsterList[i].name + "[" + monsterList[i].rpge_name + "]\n";
                     }
                     monsters = monsters + "```\n";
