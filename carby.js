@@ -971,7 +971,17 @@ function attributes(user, userID) {
 function enemyInfo(userID, enemyData, att) {
     let out = "__Data for " + enemyData.name + "__:\n";
     if (att && att in enemyData) {
-        out += JSON.stringify(enemyData[att], null, 4);
+        switch(att) {
+            case "ai":
+                out += "```\n";
+                for(let line of enemyData[att]) {
+                    out += line + "\n";
+                }
+                out += "```";
+                break;
+            default:
+                out += JSON.stringify(enemyData[att], null, 4);
+        }
     } else {
         if (att) {
             console.error("enemyInfo called with invalid attribute " + att);
