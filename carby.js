@@ -973,7 +973,7 @@ function enemyInfo(userID, enemyData, att) {
     if (att && att in enemyData) {
         switch(att) {
             case "ai":
-                out += "```\n" + enemyData[att].join("\n") + "```";
+                out += "```css\n" + enemyData[att].join("\n") + "```";
                 break;
             default:
                 out += JSON.stringify(enemyData[att], null, 4);
