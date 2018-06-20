@@ -972,11 +972,11 @@ function enemyInfo(userID, enemyData, att) {
     let out = "__Data for " + enemyData.name + "__:\n";
     if (att && att in enemyData) {
         switch(att) {
-            case "ai":
-                out += "```css\n" + enemyData[att].join("\n") + "```";
-                break;
-            default:
-                out += JSON.stringify(enemyData[att], null, 4);
+        case "ai":
+            out += "```css\n" + enemyData[att].join("\n") + "```";
+            break;
+        default:
+            out += JSON.stringify(enemyData[att], null, 4);
         }
     } else {
         if (att) {
