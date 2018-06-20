@@ -973,11 +973,7 @@ function enemyInfo(userID, enemyData, att) {
     if (att && att in enemyData) {
         switch(att) {
             case "ai":
-                out += "```\n";
-                for(let line of enemyData[att]) {
-                    out += line + "\n";
-                }
-                out += "```";
+                out += "```\n" + enemyData[att].join("\n") + "```";
                 break;
             default:
                 out += JSON.stringify(enemyData[att], null, 4);
