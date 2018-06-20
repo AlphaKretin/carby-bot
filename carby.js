@@ -303,8 +303,8 @@ let mcalcTable = {
             ns++;
             n = n * 128;
             ns = ns * 128;
-            n = Math.floor(n / str);
-            ns = Math.floor(ns / agil);
+            n = Math.ceil(n / str);
+            ns = Math.ceil(ns / agil);
             m += 2;
             if (bonus === 0) {
                 return "At Level " + level + ", with " + str + " Strength and " + agil + " Agility, your knife M is " + m + " (no Agility bonus). To reach the next M, you need to reach level " + n + " (Bonus Agility M gained at level " + ns + ").";
