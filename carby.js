@@ -3,8 +3,6 @@ const fs = require("fs");
 
 let auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
 
-//console.dir(auth);
-
 if (!auth.token) {
     console.error("Bot token not found at auth.json.token!");
     process.exit();
@@ -652,7 +650,7 @@ function trapped(user, userID, channelID) {
     });
     fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
 }
@@ -678,7 +676,7 @@ function breakRod(user, userID, channelID, message) {
     });
     fs.writeFile(file, JSON.stringify(data.stats, null, 4), err => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
 }
@@ -826,22 +824,29 @@ function quickleak(user, userID, channelID){
 }
 
 //job DB
-function jobs(user, userID, channelID, message) {
+function jobs(user, userID, channelID, message, event) {
     let args = message.split(/ +/);
     //expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str), 3: water job (str), 4: fire job (str), 5: earth job (str)
-    if (args.length < 3 || args.length > 6) {
+    if (args.length < 2 || args.length > 6) {
         bot.sendMessage({
             to: channelID,
-            message: "Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. Please ensure you provide jobs when registering. Please delimit with spaces, and keep two-word jobs to one word."
+            message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. Please ensure you provide jobs when registering. Please delimit with spaces, and keep two-word jobs to one word."
         });
         return;
     }
     if (args[1].toLowerCase() === "register") {
+        if (args.length < 3) {
+            bot.sendMessage({
+                to: channelID,
+                message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. Please ensure you provide jobs when registering. Please delimit with spaces, and keep two-word jobs to one word."
+            });
+            return;
+        }
         let curJobs = args.slice(2);
         data.jobs[userID] = curJobs;
         fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => {
             if (err) {
-                console.log(err);
+                console.error(err);
             }
         });
         bot.sendMessage({
@@ -849,25 +854,37 @@ function jobs(user, userID, channelID, message) {
             message: "Got it, <@" + userID + ">. Your jobs (" + curJobs.join("/") + ") are registered."
         });
     } else if (args[1].toLowerCase() === "lookup") {
-        let mentioned = message.replace(/\D/g, "");
-        if (bot.fixMessage("<@" + mentioned + ">") === "undefined") {
-            bot.sendMessage({
-                to: channelID,
-                message: "Sorry <@" + userID + ">, I can only lookup with @mentions!"
-            });
-        } else {
-            let curJobs = data.jobs[mentioned];
-            if (!curJobs) {
-                bot.sendMessage({
-                    to: channelID,
-                    message: "I don't have jobs on file for <@" + mentioned + ">, sorry!"
-                });
+        let mentioned;
+        if (event.d.mentions.length > 0) {
+            mentioned = event.d.mentions[0].id;
+        } else if (args.length > 2) {
+            //try lookup by name
+            let name = args.slice(2).join(" ").toLowerCase();
+            let matches = Object.values(bot.users).filter(u => u.username.toLowerCase().includes(name));
+            if (matches.length > 0) {
+                mentioned = matches[0].id;
             } else {
                 bot.sendMessage({
                     to: channelID,
-                    message: "I have <@" + mentioned + ">'s jobs as: " + curJobs.join("/") + "."
+                    message: "Sorry, I can't find that user! Have you tried using an @mention?"
                 });
+                return;
             }
+        } else {
+            mentioned = userID;
+        }
+        let curJobs = data.jobs[mentioned];
+        let name = mentioned in bot.users ? bot.users[mentioned].username : "that user";
+        if (!curJobs) {
+            bot.sendMessage({
+                to: channelID,
+                message: "I don't have jobs on file for " + name + ", sorry!"
+            });
+        } else {
+            bot.sendMessage({
+                to: channelID,
+                message: "I have " + name + "'s jobs as: " + curJobs.join("/") + "."
+            });
         }
     } else {
         bot.sendMessage({
@@ -901,7 +918,7 @@ function forbiddenRisk(user, userID, channelID, message, event) {
         roleID: "451768175152070657"
     }, err => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
     bot.addReaction({
@@ -923,7 +940,7 @@ function forbiddenLite(user, userID, channelID, message, event) {
         roleID: "451874821245108225"
     }, err => {
         if (err) {
-            console.log(err);
+            console.error(err);
         }
     });
     bot.addReaction({
