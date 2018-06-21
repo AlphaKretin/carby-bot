@@ -559,9 +559,11 @@ function forbidden(user, userID) {
         forbiddenFire[getIncInt(0, forbiddenFire.length - 1)],
         forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)]
     ];
+    let index = getIncInt(0, jobs.length - 2);
+    jobs[index] = "~~" + jobs[index] + "~~";
     bot.sendMessage({
         to: userID,
-        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[getIncInt(0, jobs.length - 2)]
+        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[index]
     });
 
 }
