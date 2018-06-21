@@ -860,17 +860,7 @@ function jobs(user, userID, channelID, message, event) {
         } else if (args.length > 2) {
             //try lookup by name
             let name = args.slice(2).join(" ").toLowerCase();
-            let matches = Object.values(bot.users).filter(u => {
-                try {
-                    return u.username.toLowerCase().includes(name);
-                } catch(e) {
-                    console.error("Error filtering for usernames!");
-                    console.error(e);
-                    console.dir(u);
-                    return false;
-                }
-                
-            });
+            let matches = Object.values(bot.users).filter(u => u.username && u.username.toLowerCase().includes(name));
             if (matches.length > 0) {
                 mentioned = matches[0].id;
             } else {
