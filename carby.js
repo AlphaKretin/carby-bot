@@ -200,13 +200,17 @@ bot.on("message", (user, userID, channelID, message, event) => {
             zerky(user, userID, channelID, message, event);
             return;
         }
-        for (let key in Object.keys(responses)) {
-            if (lowMes.startsWith(key)) {
-                bot.sendMessage({
-                    to: channelID,
-                    message: responses[key]
-                });
-                return;
+        for (let key in responses) {
+            if (responses.hasOwnProperty(key)) {
+                for (let pre of prefixes) {
+                    if (lowMes.startsWith(pre + key)) {
+                        bot.sendMessage({
+                            to: channelID,
+                            message: responses[key]
+                        });
+                        return;
+                    }
+                }
             }
         }
         if (userID in queries) {
