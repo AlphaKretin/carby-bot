@@ -576,11 +576,11 @@ function dd(user, userID, channelID, message) {
             message: ddLines[index] + " (#" + (index + 1) + ")"
         });
     } else if (isNaN(index)) {
-        let matches = ddLines.filter(l => l.toLowerCase().includes(index.toLowerCase()));
+        let matches = ddLines.filter(l => l.toLowerCase().includes(args.slice(1).join(" ")));
         if (matches.length > 0) {
             bot.sendMessage({
                 to: channelID,
-                message: matches[0] + " (#" + ddLines.indexOf(matches[0]) + ")"
+                message: matches[0] + " (#" + (ddLines.indexOf(matches[0]) + 1) + ")"
             });
         } else {
             bot.sendMessage({
