@@ -615,17 +615,25 @@ let ddLines = [
 function dd(user, userID, channelID, message) {
     let args = message.toLowerCase().split(/ +/);
     let index = parseInt(args[1]);
-    if (args.length === 1) {
+    if (args.length < 2) {
         index = getIncInt(0, ddLines.length - 1);
         bot.sendMessage({
             to: channelID,
             message: ddLines[index] + " (#" + (index + 1) + ")"
         });
     } else if (isNaN(index)) {
-        bot.sendMessage({
-            to: channelID,
-            message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
-        });
+        let matches = ddLines.filter(l => l.toLowerCase().includes(index.toLowerCase()));
+        if (matches.length > 0) {
+            bot.sendMessage({
+                to: channelID,
+                message: matches[0] + " (#" + ddLines.indexOf(matches[0]) + ")"
+            });
+        } else {
+            bot.sendMessage({
+                to: channelID,
+                message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible."
+            });
+        }
     } else if (index > ddLines.length || index < 1) { 
         index = getIncInt(0, ddLines.length - 1);
         bot.sendMessage({
