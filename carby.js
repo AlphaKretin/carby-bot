@@ -582,9 +582,10 @@ function dd(user, userID, channelID, message) {
     } else if (isNaN(index)) {
         let matches = ddLines.filter(l => l.toLowerCase().includes(args.slice(1).join(" ")));
         if (matches.length > 0) {
+            let i = getIncInt(0, matches.length - 1);
             bot.sendMessage({
                 to: channelID,
-                message: matches[0] + " (#" + (ddLines.indexOf(matches[0]) + 1) + ")"
+                message: matches[i] + " (#" + (ddLines.indexOf(matches[i]) + 1) + ")"
             });
         } else {
             bot.sendMessage({
