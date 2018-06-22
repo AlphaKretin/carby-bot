@@ -361,6 +361,10 @@ function mcalc(user, userID, channelID, message) {
 function almagest(user, userID, channelID, message) {
     let args = message.toLowerCase().split(/ +/);
     let vit = parseInt(args[1]);
+    let hps = [0, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 
+        480, 500, 530, 560, 590, 620, 650, 690, 730, 770, 810, 850, 900, 950, 1000, 1050, 1100, 1160, 1220, 1280, 1340, 1400, 1460, 1520, 1580, 
+        1640, 1700, 1760, 1820, 1880, 1940, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 
+        2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
     if (isNaN(vit) || args.length === 1) {
         bot.sendMessage({
             to: channelID,
@@ -369,9 +373,19 @@ function almagest(user, userID, channelID, message) {
     } else {
         let target = Math.floor((32 * 1665) / (vit + 32));
         let buffTarget = Math.floor((32 * 1725) / (vit + 32));
+        let level = 0;
+        let buffLevel = 0;
+        while (hps[level] < target && hps[buffLevel] < buffTarget) {
+            if (hps[level] < target) {
+                level++;
+            }
+            if (hps[buffLevel] < buffTarget) {
+                buffLevel++;
+            }
+        }
         bot.sendMessage({
             to: channelID,
-            message: "You need " + target + " base HP to survive a max 1665 damage Almagest with " + vit + " Vitality (or " + buffTarget + " to have 1725 HP for a buffer). Refer here for the level you'll need! http://bit.ly/1WKSUyu"
+            message: "At " + vit + " vitality, you will need to be level " + level + " (" + hps[level] + " HP) to survive Almagest, or level " + buffLevel + " (" + hps[buffLevel] + " HP) to survive Almagest with a safe buffer.";
         });
     }
 }
