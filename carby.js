@@ -174,7 +174,7 @@ let responses = {
     oracle: "https://www.youtube.com/watch?v=makazgIRzfg",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
     quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
-}
+};
 
 let prefixes = [".", "!"];
 
@@ -513,10 +513,11 @@ function forbidden(user, userID) {
         forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)]
     ];
     let index = getIncInt(0, jobs.length - 2);
+    let voidJob = jobs[index];
     jobs[index] = "~~" + jobs[index] + "~~";
     bot.sendMessage({
         to: userID,
-        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + jobs[index]
+        message: "Wind Job: " + jobs[0] + "\nWater Job: " + jobs[1] + "\nFire Job: " + jobs[2] + "\nEarth Job: " + jobs[3] + "\nLost to the void: " + voidJob
     });
 
 }
