@@ -307,7 +307,6 @@ let mcalcTable = {
             let m = Math.floor(((level * str) / 256) + 2);
             let nextLevel = Math.ceil((256 * ((m + 1) - 2)) / str);
             let pow = level * 2 + 3;
-            m = m + " (with " + pow + " attack power)";
             return "At Level " + level + ", with " + str + " Strength, your fist M is " + m + " (with " + pow + " attack power). To reach the next M, you need to reach level " + nextLevel + ".";
         }
     },
