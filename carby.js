@@ -865,6 +865,9 @@ function enemyInfo(userID, enemyData, att) {
 
 //monster data query
 function enemySearch(userID, query, att) {
+    if (query === "rugwizard" || query === "Rugwizard") {
+        query === "Omniscient";
+    } 
     let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
