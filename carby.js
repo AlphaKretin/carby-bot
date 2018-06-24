@@ -864,10 +864,18 @@ function enemyInfo(userID, enemyData, att) {
 }
 
 //monster data query
+let aliases = {
+    "rugwizard": "Omniscient",
+    "meatdeath": "Exdeath (Exdeath's Castle)",
+    "treedeath": "Exdeath (Final)",
+    "shipgamesh": "Gilgamesh (Ship)",
+    "meatgamesh": "Gilgamesh (Exdeath's Castle)"
+}
+
 function enemySearch(userID, query, att) {
-    if (query === "rugwizard" || query === "Rugwizard") {
-        query === "Omniscient";
-    } 
+    if (query.trim().toLowerCase() in aliases) {
+        query = aliases[query.trim().toLowerCase()];
+    }
     let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
