@@ -1,5 +1,6 @@
 const Discord = require("discord.io");
 const fs = require("fs");
+const request = require("request").defaults({ encoding: null });;
 
 let auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
 
@@ -166,23 +167,51 @@ let commands = [
 
 let responses = {
     help: "I have a lot of commands, too many to list in this Discord PM. Check this readme: https://tinyurl.com/ybh7lrz2",
-    gaia: "THAT HIPPIE SHIT AIN'T MAGIC http://i.imgur.com/JkwTg5O.png",
-    dance: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif",
-    zeninage: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif",
-    yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png",
     quicksave: "Hang on while I do some **ENCOUNTER MANIPULATION**",
     badfaq: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687",
     badfiesta: "The worst fiesta ever happened here: https://www.twitch.tv/dragondarchsda/v/48967944",
-    equipharps: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif",
-    crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     numbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     runthenumbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
-    sandworm: "http://i.imgur.com/UaOsyZS.gif",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",
     iainuki: "That's a good ability! http://gfycat.com/TenseArtisticCobra",
     oracle: "https://www.youtube.com/watch?v=makazgIRzfg",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
     quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
+};
+
+let images = {
+    sandworm: {
+        name: "sandworm.gif",
+        url: "http://kyrosiris.com/sandworm.gif"
+    },
+    gaia: {
+        name: "gaia.png",
+        url: "http://i.imgur.com/JkwTg5O.png",
+        msg: "THAT HIPPIE SHIT AIN'T MAGIC"
+    },
+    dance: {
+        name: "dance.gif",
+        url: "https://i.imgur.com/qX3ElWK.gif",
+        msg: "It's *sensual.*"
+    },
+    zeninage: {
+        name: "zeninage.gif",
+        url: "http://i.imgur.com/7wxm7dy.gif",
+        msg: "The damage only goes up uP UP!"
+    },
+    yburns: {
+        name: "yburns.png",
+        url: "http://i.imgur.com/aQ18OQF.png",
+        msg: "The Y-BURNS? My favorite team!"
+    }, 
+    equipharps: {
+        name: "1-MaximumTruckStyleLove.gif"
+        url: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif"
+    },
+    crystelle: {
+        name: "crystelle.png",
+        url: "http://i.imgur.com/WD40MES.png"
+    }
 };
 
 let prefixes = [".", "!"];
@@ -217,6 +246,30 @@ bot.on("message", (user, userID, channelID, message, event) => {
                             to: channelID,
                             message: responses[key]
                         });
+                        return;
+                    }
+                }
+            }
+        }
+        for (let key in images) {
+            if (images.hasOwnProperty(key)) {
+                for (let pre of prefixes) {
+                    if (lowMes.startsWith(pre + key)) {
+                        getImage(key).then(buf => {
+                            let args = {
+                                to: channelID,
+                                file: buf,
+                                filename: images[key].name,
+                            };
+                            if ("msg" in images[key]) {
+                                args.message = images[key].msg;
+                            }
+                            bot.uploadFile(args, err => {
+                                if (err) {
+                                    console.error(err);
+                                }
+                            });
+                        }).catch(e => console.error(e));
                         return;
                     }
                 }
@@ -1030,4 +1083,40 @@ function deathByMaths(user, userID, channelID, message) {
             message: out
         });
     }
+}
+
+function getImage(image) {
+    return new Promise((resolve, reject) => {
+        if (image in images) {
+            let img = images[image];
+            if (!fs.existsSync("images")) {
+                fs.mkdirSync("images");
+            }
+            if (fs.existsSync("images/" + img.name)) {
+                fs.readFile("images/" + img.name, (err, res) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(res);
+                    }
+                });
+            } else {
+                request(img.url, (err, res, body) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        fs.writeFile("images/" + img.name, body, (e) => {
+                            if (e) {
+                                reject(e);
+                            } else {
+                                resolve(body);
+                            }
+                        });
+                    }
+                });
+            }
+        } else {
+            reject("Invalid image code " + image + "!");
+        } 
+    });
 }
