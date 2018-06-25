@@ -152,7 +152,12 @@ let commands = [
     {
         names: ["info"],
         func: info
-    }
+    },
+    //does not work
+    /*{
+        names: ["color", "colour"],
+        func: randcolour
+    }*/
 ];
 
 let responses = {
@@ -386,7 +391,7 @@ function almagest(user, userID, channelID, message) {
         let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
         bot.sendMessage({
             to: channelID,
-            message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.");
+            message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
         });
     }
 }
@@ -794,17 +799,7 @@ function forbiddenRisk(user, userID, channelID, message, event) {
             console.error(err);
         }
     });
-    bot.addReaction({
-        channelID: channelID,
-        messageID: event.d.id,
-        reaction: "forbidden:451764608202571816"
-    });
-    bot.addReaction({
-        channelID: channelID,
-        messageID: event.d.id,
-        reaction: "black101:326153094868238338"
-    });
-}
+    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));}
 
 function forbiddenLite(user, userID, channelID, message, event) {
     bot.addToRole({
@@ -870,7 +865,7 @@ let aliases = {
     "treedeath": "Exdeath (Final)",
     "shipgamesh": "Gilgamesh (Ship)",
     "meatgamesh": "Gilgamesh (Exdeath's Castle)"
-}
+};
 
 function enemySearch(userID, query, att) {
     if (query.trim().toLowerCase() in aliases) {
@@ -933,4 +928,54 @@ function info(user, userID, channelID, message) {
         let query = args.slice(1).join(" ");
         enemySearch(userID, query);
     }    
+}
+
+//discord doesn't like this, will revisit
+let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
+
+const addReaction = (channelID, event, reaction) => {
+    return new Promise((resolve, reject) => {
+        bot.addReaction({
+            channelID: channelID,
+            messageID: event.d.id,
+            reaction: reaction
+        }, (err, res) => {
+            if (err) {
+                if (err.response && err.response.retry_after) {
+                    setTimeout(() => {
+                        reject(err); //still rejects, but after a delay. Attempts to add a reaction are all on loops, so it will try to add the same reaction again, but now with the rate limit safely awaited.
+                    }, err.response.retry_after + 1);
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(res);
+            }
+        });
+    });
+};
+
+const addMultReactions = (channelID, event, reactions) => {
+    return new Promise(async (resolve, reject) => {
+        let i = 0;
+        let errs = 0;
+        while (i in reactions) {
+            await addReaction(channelID, event, reactions[i]).then(() => i++).catch(err => {
+                if (!(err.response && err.response.retry_after)) { //if the error wasn't a rate limit
+                    errs++;
+                    if (errs > reactions.length) {
+                        i = -1;
+                        reject(err);
+                    }
+                }
+            });
+        }
+        resolve();
+    });
+};
+
+function randcolour(user, userID, channelID, message, event) {
+    let colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
+    let emoji = colours.map(i => numEmoji[i]);
+    addMultReactions(channelID, event, emoji).catch(e => console.error(e));
 }
