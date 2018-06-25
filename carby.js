@@ -158,6 +158,10 @@ let commands = [
         names: ["color", "colour"],
         func: randcolour
     }*/
+    {
+        names: ["math", "deathbymath"], //"maths" handled because it only checks the start
+        func: deathByMaths
+    }
 ];
 
 let responses = {
@@ -931,7 +935,10 @@ function info(user, userID, channelID, message) {
 }
 
 //discord doesn't like this, will revisit
-let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
+//let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
+//let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
+//let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
+let numEmoji = [ "0", "1", "2", "3", "4", "5", "6", "7"];
 
 const addReaction = (channelID, event, reaction) => {
     return new Promise((resolve, reject) => {
@@ -978,4 +985,49 @@ function randcolour(user, userID, channelID, message, event) {
     let colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
     let emoji = colours.map(i => numEmoji[i]);
     addMultReactions(channelID, event, emoji).catch(e => console.error(e));
+}
+
+function deathByMaths(user, userID, channelID, message) {
+    let args = message.toLowerCase().split(/ +/).slice(1);
+    let level = parseInt(args[0]);
+    let oLevel = level;
+    if (isNaN(level)) { //later make it search enemy name
+        bot.sendMessage({
+            to: channelID,
+            message: "Sorry, I need the level of an enemy!"
+        });
+    } else {
+        let sparks = {
+            2: -1,
+            3: -1,
+            4: -1,
+            5: -1
+        };
+        let s = 0;
+        while (level > 1 && Object.values(sparks).filter(i => i < 0).length > 0) {
+            Object.keys(sparks).forEach(key => {
+                if (level % key === 0 && sparks[key] < 0) {
+                    sparks[key] = s;
+                }
+            });
+            level = Math.floor(level / 2);
+            s++;
+        }
+        let out = "To get a level " + oLevel + " enemy's level divisible by the following numbers, it will take this many Dark Sparks:\n";
+        out += Object.keys(sparks).map(key => {
+            if (sparks[key] > 1) {
+                return "**Level " + key + "**: " + sparks[key] + " Dark Sparks";
+            } else if (sparks[key] === 1) {
+                return "**Level " + key + "**: " + sparks[key] + " Dark Spark";
+            } else if (sparks[key] === 0) {
+                return "**Level " + key + "**: Already there!";
+            } else {
+                return "**Level " + key + "**: Will never reach";
+            }
+        }).join("\n");
+        bot.sendMessage({
+            to: channelID,
+            message: out
+        });
+    }
 }
