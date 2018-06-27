@@ -384,31 +384,37 @@ function almagest(user, userID, channelID, message) {
         480, 500, 530, 560, 590, 620, 650, 690, 730, 770, 810, 850, 900, 950, 1000, 1050, 1100, 1160, 1220, 1280, 1340, 1400, 1460, 1520, 1580, 
         1640, 1700, 1760, 1820, 1880, 1940, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 
         2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
-    if (isNaN(vit) || args.length === 1) {
-        bot.sendMessage({
-            to: channelID,
-            message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. Good luck! (Only 720 to 740 damage if you have Shell! Yay!)"
-        });
-    } else {
-        let target = Math.floor((32 * 1665) / (vit + 32));
-        let buffTarget = Math.floor((32 * 1725) / (vit + 32));
-        let level = 0;
-        let buffLevel = 0;
-        while (hps[level] < target && hps[buffLevel] < buffTarget) {
-            if (hps[level] < target) {
-                level++;
-            }
-            if (hps[buffLevel] < buffTarget) {
-                buffLevel++;
-            }
+    if (isNaN(vit)) {
+        let query = args.slice(1).join(" ");
+        let result = data.classes.find(c => c.name.toLowerCase().replace(/ +/g, "").includes(query));
+        if (result && args.length > 1) {
+            vit = result.vit;
+        } else {
+            bot.sendMessage({
+                to: channelID,
+                message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. Good luck! (Only 720 to 740 damage if you have Shell! Yay!)"
+            });
+            return; 
         }
-        let finalHP = Math.floor((hps[level] * (vit + 32))/32);
-        let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
-        bot.sendMessage({
-            to: channelID,
-            message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
-        });
     }
+    let target = Math.floor((32 * 1665) / (vit + 32));
+    let buffTarget = Math.floor((32 * 1725) / (vit + 32));
+    let level = 0;
+    let buffLevel = 0;
+    while (hps[level] < target && hps[buffLevel] < buffTarget) {
+        if (hps[level] < target) {
+            level++;
+        }
+        if (hps[buffLevel] < buffTarget) {
+            buffLevel++;
+        }
+    }
+    let finalHP = Math.floor((hps[level] * (vit + 32))/32);
+    let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
+    bot.sendMessage({
+        to: channelID,
+        message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
+    });
 }
 
 //DIY fiestas
