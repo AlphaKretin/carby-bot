@@ -177,12 +177,16 @@ let responses = {
     crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     numbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     runthenumbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
-    sandworm: "http://i.imgur.com/UaOsyZS.gif",
+    sandworm2: "This is to go ***FURTHER BEYOND!!!*** http://kyrosiris.com/sandworm2.png",
+    sandworm: "http://kyrosiris.com/sandworm.gif",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",
     iainuki: "That's a good ability! http://gfycat.com/TenseArtisticCobra",
     oracle: "https://www.youtube.com/watch?v=makazgIRzfg",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
-    quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
+    quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ",
+    rocksfall: "...and *NED* dies? sure, why not https://clips.twitch.tv/ProductiveSavoryHorseradishSoBayed",
+    badmod: "\`No balance, at all`\ -mod author http://kyrosiris.com/changes_overview.txt https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)"
+    
 };
 
 let prefixes = [".", "!"];
@@ -372,18 +376,18 @@ function almagest(user, userID, channelID, message) {
     let hps = [0, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 
         480, 500, 530, 560, 590, 620, 650, 690, 730, 770, 810, 850, 900, 950, 1000, 1050, 1100, 1160, 1220, 1280, 1340, 1400, 1460, 1520, 1580, 
         1640, 1700, 1760, 1820, 1880, 1940, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 
-        2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
-    if (isNaN(vit) || args.length === 1) {
++        2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
+    if (isNaN(vit) || args.length === 1 || vit > 99) {
         bot.sendMessage({
             to: channelID,
             message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. Good luck! (Only 720 to 740 damage if you have Shell! Yay!)"
         });
     } else {
-        let target = Math.floor((32 * 1665) / (vit + 32));
-        let buffTarget = Math.floor((32 * 1725) / (vit + 32));
+        let target = Math.ceil((32 * 1665) / (vit + 32));
+        let buffTarget = Math.ceil((32 * 1725) / (vit + 32));
         let level = 0;
-        let buffLevel = 0;
-        while (hps[level] < target && hps[buffLevel] < buffTarget) {
+        let buffLevel = 1;
+        while (hps[level] < target || hps[buffLevel] < buffTarget) {
             if (hps[level] < target) {
                 level++;
             }
@@ -393,9 +397,16 @@ function almagest(user, userID, channelID, message) {
         }
         let finalHP = Math.floor((hps[level] * (vit + 32))/32);
         let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
+        let out = "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest";
+        if (level === buffLevel) {
+          out += " with a safe buffer.";
+        }
+        else {
+          out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
+        }
         bot.sendMessage({
             to: channelID,
-            message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
+            message: out
         });
     }
 }
@@ -803,7 +814,8 @@ function forbiddenRisk(user, userID, channelID, message, event) {
             console.error(err);
         }
     });
-    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));}
+    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));
+}
 
 function forbiddenLite(user, userID, channelID, message, event) {
     bot.addToRole({
