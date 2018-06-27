@@ -152,6 +152,15 @@ let commands = [
     {
         names: ["info"],
         func: info
+    },
+    //does not work
+    /*{
+        names: ["color", "colour"],
+        func: randcolour
+    }*/
+    {
+        names: ["math", "deathbymath"], //"maths" handled because it only checks the start
+        func: deathByMaths
     }
 ];
 
@@ -805,16 +814,7 @@ function forbiddenRisk(user, userID, channelID, message, event) {
             console.error(err);
         }
     });
-    bot.addReaction({
-        channelID: channelID,
-        messageID: event.d.id,
-        reaction: "forbidden:451764608202571816"
-    });
-    bot.addReaction({
-        channelID: channelID,
-        messageID: event.d.id,
-        reaction: "black101:326153094868238338"
-    });
+    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));
 }
 
 function forbiddenLite(user, userID, channelID, message, event) {
@@ -875,7 +875,18 @@ function enemyInfo(userID, enemyData, att) {
 }
 
 //monster data query
+let aliases = {
+    "rugwizard": "Omniscient",
+    "meatdeath": "Exdeath (Exdeath's Castle)",
+    "treedeath": "Exdeath (Final)",
+    "shipgamesh": "Gilgamesh (Ship)",
+    "meatgamesh": "Gilgamesh (Exdeath's Castle)"
+};
+
 function enemySearch(userID, query, att) {
+    if (query.trim().toLowerCase() in aliases) {
+        query = aliases[query.trim().toLowerCase()];
+    }
     let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
@@ -933,4 +944,102 @@ function info(user, userID, channelID, message) {
         let query = args.slice(1).join(" ");
         enemySearch(userID, query);
     }    
+}
+
+//discord doesn't like this, will revisit
+//let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
+//let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
+//let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
+let numEmoji = [ "0", "1", "2", "3", "4", "5", "6", "7"];
+
+const addReaction = (channelID, event, reaction) => {
+    return new Promise((resolve, reject) => {
+        bot.addReaction({
+            channelID: channelID,
+            messageID: event.d.id,
+            reaction: reaction
+        }, (err, res) => {
+            if (err) {
+                if (err.response && err.response.retry_after) {
+                    setTimeout(() => {
+                        reject(err); //still rejects, but after a delay. Attempts to add a reaction are all on loops, so it will try to add the same reaction again, but now with the rate limit safely awaited.
+                    }, err.response.retry_after + 1);
+                } else {
+                    reject(err);
+                }
+            } else {
+                resolve(res);
+            }
+        });
+    });
+};
+
+const addMultReactions = (channelID, event, reactions) => {
+    return new Promise(async (resolve, reject) => {
+        let i = 0;
+        let errs = 0;
+        while (i in reactions) {
+            await addReaction(channelID, event, reactions[i]).then(() => i++).catch(err => {
+                if (!(err.response && err.response.retry_after)) { //if the error wasn't a rate limit
+                    errs++;
+                    if (errs > reactions.length) {
+                        i = -1;
+                        reject(err);
+                    }
+                }
+            });
+        }
+        resolve();
+    });
+};
+
+function randcolour(user, userID, channelID, message, event) {
+    let colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
+    let emoji = colours.map(i => numEmoji[i]);
+    addMultReactions(channelID, event, emoji).catch(e => console.error(e));
+}
+
+function deathByMaths(user, userID, channelID, message) {
+    let args = message.toLowerCase().split(/ +/).slice(1);
+    let level = parseInt(args[0]);
+    let oLevel = level;
+    if (isNaN(level)) { //later make it search enemy name
+        bot.sendMessage({
+            to: channelID,
+            message: "Sorry, I need the level of an enemy!"
+        });
+    } else {
+        let sparks = {
+            2: -1,
+            3: -1,
+            4: -1,
+            5: -1
+        };
+        let s = 0;
+        while (level > 1 && Object.values(sparks).filter(i => i < 0).length > 0) {
+            Object.keys(sparks).forEach(key => {
+                if (level % key === 0 && sparks[key] < 0) {
+                    sparks[key] = s;
+                }
+            });
+            level = Math.floor(level / 2);
+            s++;
+        }
+        let out = "To get a level " + oLevel + " enemy's level divisible by the following numbers, it will take this many Dark Sparks:\n";
+        out += Object.keys(sparks).map(key => {
+            if (sparks[key] > 1) {
+                return "**Level " + key + "**: " + sparks[key] + " Dark Sparks";
+            } else if (sparks[key] === 1) {
+                return "**Level " + key + "**: " + sparks[key] + " Dark Spark";
+            } else if (sparks[key] === 0) {
+                return "**Level " + key + "**: Already there!";
+            } else {
+                return "**Level " + key + "**: Will never reach";
+            }
+        }).join("\n");
+        bot.sendMessage({
+            to: channelID,
+            message: out
+        });
+    }
 }
