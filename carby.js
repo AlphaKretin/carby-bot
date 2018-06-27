@@ -426,12 +426,6 @@ function almagest(user, userID, channelID, message) {
         to: channelID,
         message: out
     });
-    let finalHP = Math.floor((hps[level] * (vit + 32))/32);
-    let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
-    bot.sendMessage({
-        to: channelID,
-        message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
-    });
 }
 
 //DIY fiestas
