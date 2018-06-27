@@ -152,15 +152,6 @@ let commands = [
     {
         names: ["info"],
         func: info
-    },
-    //does not work
-    /*{
-        names: ["color", "colour"],
-        func: randcolour
-    }*/
-    {
-        names: ["math", "deathbymath"], //"maths" handled because it only checks the start
-        func: deathByMaths
     }
 ];
 
@@ -177,12 +168,16 @@ let responses = {
     crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     numbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     runthenumbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n3. Go to Drakenvale and get a Poison Eagle to cast Float on everyone.\n4. Go to the Gil Cave to grind out 370,000 Gil to buy Hermes Sandals with in World 3.\n5. Let the Aegis Shield be transformed into the Flame Shield.\n6. Make Bartz a Mystic Knight and weaken him to critical HP.\n7. Give Bartz the Flame Shield, give everyone else Reflect Rings.\n8. Reset the game because Bartz got one-shotted immediately in the Seal Guardian fight.\n9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
-    sandworm: "http://i.imgur.com/UaOsyZS.gif",
+    sandworm2: "This is to go ***FURTHER BEYOND!!!*** http://kyrosiris.com/sandworm2.png",
+    sandworm: "http://kyrosiris.com/sandworm.gif",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",
     iainuki: "That's a good ability! http://gfycat.com/TenseArtisticCobra",
     oracle: "https://www.youtube.com/watch?v=makazgIRzfg",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
-    quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ"
+    quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ",
+    rocksfall: "...and *NED* dies? sure, why not https://clips.twitch.tv/ProductiveSavoryHorseradishSoBayed",
+    badmod: "\`No balance, at all`\ -mod author http://kyrosiris.com/changes_overview.txt https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)"
+    
 };
 
 let prefixes = [".", "!"];
@@ -372,18 +367,18 @@ function almagest(user, userID, channelID, message) {
     let hps = [0, 20, 25, 30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340, 360, 380, 400, 420, 440, 460, 
         480, 500, 530, 560, 590, 620, 650, 690, 730, 770, 810, 850, 900, 950, 1000, 1050, 1100, 1160, 1220, 1280, 1340, 1400, 1460, 1520, 1580, 
         1640, 1700, 1760, 1820, 1880, 1940, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 
-        2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
-    if (isNaN(vit) || args.length === 1) {
++        2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
+    if (isNaN(vit) || args.length === 1 || vit > 99) {
         bot.sendMessage({
             to: channelID,
             message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. Good luck! (Only 720 to 740 damage if you have Shell! Yay!)"
         });
     } else {
-        let target = Math.floor((32 * 1665) / (vit + 32));
-        let buffTarget = Math.floor((32 * 1725) / (vit + 32));
+        let target = Math.ceil((32 * 1665) / (vit + 32));
+        let buffTarget = Math.ceil((32 * 1725) / (vit + 32));
         let level = 0;
-        let buffLevel = 0;
-        while (hps[level] < target && hps[buffLevel] < buffTarget) {
+        let buffLevel = 1;
+        while (hps[level] < target || hps[buffLevel] < buffTarget) {
             if (hps[level] < target) {
                 level++;
             }
@@ -393,9 +388,16 @@ function almagest(user, userID, channelID, message) {
         }
         let finalHP = Math.floor((hps[level] * (vit + 32))/32);
         let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
+        let out = "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest";
+        if (level === buffLevel) {
+          out += " with a safe buffer.";
+        }
+        else {
+          out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
+        }
         bot.sendMessage({
             to: channelID,
-            message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
+            message: out
         });
     }
 }
@@ -803,7 +805,17 @@ function forbiddenRisk(user, userID, channelID, message, event) {
             console.error(err);
         }
     });
-    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));}
+    bot.addReaction({
+        channelID: channelID,
+        messageID: event.d.id,
+        reaction: "forbidden:451764608202571816"
+    });
+    bot.addReaction({
+        channelID: channelID,
+        messageID: event.d.id,
+        reaction: "black101:326153094868238338"
+    });
+}
 
 function forbiddenLite(user, userID, channelID, message, event) {
     bot.addToRole({
@@ -863,18 +875,7 @@ function enemyInfo(userID, enemyData, att) {
 }
 
 //monster data query
-let aliases = {
-    "rugwizard": "Omniscient",
-    "meatdeath": "Exdeath (Exdeath's Castle)",
-    "treedeath": "Exdeath (Final)",
-    "shipgamesh": "Gilgamesh (Ship)",
-    "meatgamesh": "Gilgamesh (Exdeath's Castle)"
-};
-
 function enemySearch(userID, query, att) {
-    if (query.trim().toLowerCase() in aliases) {
-        query = aliases[query.trim().toLowerCase()];
-    }
     let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
@@ -932,102 +933,4 @@ function info(user, userID, channelID, message) {
         let query = args.slice(1).join(" ");
         enemySearch(userID, query);
     }    
-}
-
-//discord doesn't like this, will revisit
-//let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
-//let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
-//let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
-let numEmoji = [ "0", "1", "2", "3", "4", "5", "6", "7"];
-
-const addReaction = (channelID, event, reaction) => {
-    return new Promise((resolve, reject) => {
-        bot.addReaction({
-            channelID: channelID,
-            messageID: event.d.id,
-            reaction: reaction
-        }, (err, res) => {
-            if (err) {
-                if (err.response && err.response.retry_after) {
-                    setTimeout(() => {
-                        reject(err); //still rejects, but after a delay. Attempts to add a reaction are all on loops, so it will try to add the same reaction again, but now with the rate limit safely awaited.
-                    }, err.response.retry_after + 1);
-                } else {
-                    reject(err);
-                }
-            } else {
-                resolve(res);
-            }
-        });
-    });
-};
-
-const addMultReactions = (channelID, event, reactions) => {
-    return new Promise(async (resolve, reject) => {
-        let i = 0;
-        let errs = 0;
-        while (i in reactions) {
-            await addReaction(channelID, event, reactions[i]).then(() => i++).catch(err => {
-                if (!(err.response && err.response.retry_after)) { //if the error wasn't a rate limit
-                    errs++;
-                    if (errs > reactions.length) {
-                        i = -1;
-                        reject(err);
-                    }
-                }
-            });
-        }
-        resolve();
-    });
-};
-
-function randcolour(user, userID, channelID, message, event) {
-    let colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
-    let emoji = colours.map(i => numEmoji[i]);
-    addMultReactions(channelID, event, emoji).catch(e => console.error(e));
-}
-
-function deathByMaths(user, userID, channelID, message) {
-    let args = message.toLowerCase().split(/ +/).slice(1);
-    let level = parseInt(args[0]);
-    let oLevel = level;
-    if (isNaN(level)) { //later make it search enemy name
-        bot.sendMessage({
-            to: channelID,
-            message: "Sorry, I need the level of an enemy!"
-        });
-    } else {
-        let sparks = {
-            2: -1,
-            3: -1,
-            4: -1,
-            5: -1
-        };
-        let s = 0;
-        while (level > 1 && Object.values(sparks).filter(i => i < 0).length > 0) {
-            Object.keys(sparks).forEach(key => {
-                if (level % key === 0 && sparks[key] < 0) {
-                    sparks[key] = s;
-                }
-            });
-            level = Math.floor(level / 2);
-            s++;
-        }
-        let out = "To get a level " + oLevel + " enemy's level divisible by the following numbers, it will take this many Dark Sparks:\n";
-        out += Object.keys(sparks).map(key => {
-            if (sparks[key] > 1) {
-                return "**Level " + key + "**: " + sparks[key] + " Dark Sparks";
-            } else if (sparks[key] === 1) {
-                return "**Level " + key + "**: " + sparks[key] + " Dark Spark";
-            } else if (sparks[key] === 0) {
-                return "**Level " + key + "**: Already there!";
-            } else {
-                return "**Level " + key + "**: Will never reach";
-            }
-        }).join("\n");
-        bot.sendMessage({
-            to: channelID,
-            message: out
-        });
-    }
 }
