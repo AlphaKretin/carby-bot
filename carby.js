@@ -1,5 +1,6 @@
 const Discord = require("discord.io");
 const fs = require("fs");
+const Job = require("./job.js");
 
 let auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
 
@@ -22,7 +23,8 @@ let data = {
     jobs: {
         "316052390442958860": ["Mime", "Mime", "Mime", "Mime"]
     },
-    monsters: []
+    monsters: [],
+    classes: []
 };
 
 function loadData(filename, key) {
@@ -41,7 +43,12 @@ function loadData(filename, key) {
 let file = "data.json";
 let jobFile = "jobs.json";
 let monsterFile = "monsterdata.json";
-let proms = [loadData(file, "stats"), loadData(jobFile, "jobs"), loadData(monsterFile, "monsters")];
+let classFile = "classes.json";
+let proms = [loadData(file, "stats"), loadData(jobFile, "jobs"), loadData(monsterFile, "monsters"), loadData(classFile, "classes").then(() => {
+    data.classes.forEach((job, index) => {
+        data.classes[index] = new Job(job);
+    });
+})];
 Promise.all(proms).then(() => {
     bot.connect();
 }, err => {
@@ -161,6 +168,10 @@ let commands = [
     {
         names: ["math", "deathbymath"], //"maths" handled because it only checks the start
         func: deathByMaths
+    },
+    {
+        names: ["class"],
+        func: jobData
     }
 ];
 
@@ -1042,4 +1053,19 @@ function deathByMaths(user, userID, channelID, message) {
             message: out
         });
     }
+}
+
+function jobData(user, userID, channelID, message) {
+    let query = message.split(/ +/).slice(1).join("").toLowerCase();
+    let result = data.classes.find(c => c.name.toLowerCase().replace(/ +/g, "").includes(query));
+    let out;
+    if (result) {
+        out = result.profile;
+    } else {
+        out = "Sorry, I can't find a class with that name!";
+    }
+    bot.sendMessage({
+        to: channelID,
+        message: out
+    });
 }
