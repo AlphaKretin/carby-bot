@@ -68,97 +68,125 @@ bot.on("disconnect", err => {
 
 let commands = [
     {
+        names: ["commands"],
+        func: cmdList,
+        desc: "Lists all of my commands. You're looking at it now!"
+    },
+    {
         names: ["mcalc"],
-        func: mcalc
+        func: mcalc,
+        desc: "Caluclates the damage multiplier for various formulas. Try it out to see its arguments."
     },
     {
         names: ["almagest"],
-        func: almagest
+        func: almagest,
+        desc: "Tells you how much HP you need to survive Almagest, the final boss' most damaging attack. If you include a character's Vitality stat, also calculates the level needed to reach that HP."
     },
     {
         names: ["normal"],
-        func: normal
+        func: normal,
+        desc: "Generates a Four Job Fiesta team under Normal rules."
     },
     {
         names: ["random"],
-        func: random
+        func: random,
+        desc: "Generates a Four Job Fiesta team under Random rules."
     },
     {
         names: ["750"],
-        func: sevenFifty
+        func: sevenFifty,
+        desc: "Generates a Four Job Fiesta team under Normal Team 750 rules."
     },
     {
         names: ["no750"],
-        func: noSevenFifty
+        func: noSevenFifty,
+        desc: "Generates a Four Job Fiesta team under Normal Team No 750 rules."
     },
     {
         names: ["chaos"],
-        func: chaos
+        func: chaos,
+        desc: "Generates a Four Job Fiesta team under Chaos rules."
     },
     {
         names: ["chaos750"],
-        func: chaosSevenFifty
+        func: chaosSevenFifty,
+        desc: "Generates a Four Job Fiesta team under Chaos Team 750 rules."
     },
     {
         names: ["chaosno750"],
-        func: chaosNoSevenFifty
+        func: chaosNoSevenFifty,
+        desc: "Generates a Four Job Fiesta team under Chaos Team No 750 rules."
     },
     {
         names: ["purechaos"],
-        func: purechaos
+        func: purechaos,
+        desc: "Generates a Four Job Fiesta team under Pure Chaos rules."
     },
     {
         names: ["dd"],
-        func: dd
+        func: dd,
+        desc: "Recounts silly anecdotes about Dragondarch, a runner in The Run. Include a number to see a certain quote, or words to see a quote including them."
     },
     {
         names: ["trapped"],
-        func: trapped
+        func: trapped,
+        desc: "Tells me you fell in the Speed Trap, since I'm counting. It's OK, I won't judge!"
     },
     {
         names: ["victims"],
-        func: victim
+        func: victim,
+        desc: "Tells how many people fell in the Speed Trap."
     },
     {
         names: ["break"],
-        func: breakRod
+        func: breakRod,
+        desc: "Tells me you broke a rod. Include a number if you broke that many."
     },
     {
         names: ["broken"],
-        func: broken
+        func: broken,
+        desc: "Tells how many rods have been broken."
     },
     {
         names: ["timer", "fiestatimer", "countdown"],
-        func: countdown
+        func: countdown,
+        desc: "Tells how long until the fiesta starts."
     },
     {
         names: ["jobs"],
-        func: jobs
+        func: jobs,
+        desc: "Stores and recalls your jobs. Use `jobs register` to store them, and `jobs lookup` to recall a user's."
     },
     {
         names: ["forbiddenrisk"],
-        func: forbiddenRisk
+        func: forbiddenRisk,
+        desc: "Adds you to the role for people doing a Forbidden BERSERKER RISK run."
     },
     {
         names: ["forbiddenlite"],
-        func: forbiddenLite
+        func: forbiddenLite,
+        desc: "Adds you to the role for people doing a Forbidden run without BERSERKER RISK."
     },
     {
         names: ["forbidden"],
-        func: forbidden
+        func: forbidden,
+        desc: "Generates a Four Job Fiesta team under Forbidden rules."
     },
     {
         names: ["purify"],
         func: purify,
+        desc: "Clears the rod-breaking and speed trap stats for a new year. Hi, Kyro! :eyes:",
         chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1
     },
     {
         names: ["attributes"],
-        func: attributes
+        func: attributes,
+        desc: "Lists the attributes of enemy data you can look up with `info`."
     },
     {
         names: ["info"],
-        func: info
+        func: info,
+        desc: "Looks up information about an enemy with a given name. If you include an attribute from `attributes` before the name, will only show that attribute. If there's no response, the message is too long, try using an attribute!"
     },
     //does not work
     /*{
@@ -167,11 +195,13 @@ let commands = [
     }*/
     {
         names: ["math", "deathbymath"], //"maths" handled because it only checks the start
-        func: deathByMaths
+        func: deathByMaths,
+        desc: "Calculates how many uses of Dark Spark it'll take to make an enemy with the given level susceptible to the Level-based Blue Magic spells."
     },
     {
         names: ["class"],
-        func: jobData
+        func: jobData,
+        desc: "Looks up information about the given Job Class."
     }
 ];
 
@@ -196,7 +226,7 @@ let responses = {
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
     quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ",
     rocksfall: "...and *NED* dies? sure, why not https://clips.twitch.tv/ProductiveSavoryHorseradishSoBayed",
-    badmod: "\`No balance, at all`\ -mod author http://kyrosiris.com/changes_overview.txt https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)"
+    badmod: "`No balance, at all` -mod author http://kyrosiris.com/changes_overview.txt https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)"
     
 };
 
@@ -243,6 +273,45 @@ bot.on("message", (user, userID, channelID, message, event) => {
         }
     }
 });
+
+function cmdList(user, userID, channelID, message, event) {
+    let out = "Hi! I'm Carbybot, designed by Kyrosiris and adapted to Discord by AlphaKretin, with help from DigiPack. I have the following commands, which you can use by typing it after `!` or `.` at the start of a message!\n";
+    for (let cmd of commands) {
+        if (!cmd.chk || cmd.chk(user, userID, channelID, message, event)) {
+            out += "`" + cmd.names[0] + "`: " + cmd.desc;
+            if (cmd.names.length > 1) {
+                out += " (aka `" + cmd.names.slice(1).join("`, `") + "`)";
+            }
+            out += "\n";
+        }
+    }
+    out += "I also respond to the following commands, usually with something fun!\n`" + Object.keys(responses).join("`, `") + "`";
+    if (out.length > 2000) {
+        let outs = out.split("\n");
+        let o = "";
+        while (o.length + outs[0].length < 2000) {
+            o += outs.shift() + "\n";
+        }
+        bot.sendMessage({
+            to: userID,
+            message: o
+        }, (err, res) => {
+            if (err) {
+                console.error(err);
+            } else {
+                bot.sendMessage({
+                    to: userID,
+                    message: outs.join("\n")
+                });
+            }
+        });
+    } else {
+        bot.sendMessage({
+            to: userID,
+            message: out
+        }); 
+    }
+}
 
 //.mcalc
 let mcalcTable = {
@@ -417,10 +486,10 @@ function almagest(user, userID, channelID, message) {
     let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
     let out = "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest";
     if (level === buffLevel) {
-      out += " with a safe buffer.";
+        out += " with a safe buffer.";
     }
     else {
-      out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
+        out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
     }
     bot.sendMessage({
         to: channelID,
