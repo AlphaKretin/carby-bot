@@ -389,7 +389,7 @@ function almagest(user, userID, channelID, message) {
         1640, 1700, 1760, 1820, 1880, 1940, 2000, 2050, 2100, 2150, 2200, 2250, 2300, 2350, 2400, 2450, 2500, 2550, 2600, 2650, 2700, 2750, 2800, 
         2850, 2900, 2950, 3000, 3050, 3100, 3150, 3200, 3250, 3300, 3350, 3400, 3450, 3500, 3550, 3600, 3650, 3700, 3750, 3800, 3850, 3900, 3950];
     if (isNaN(vit) || vit > 99) {
-        let query = args.slice(1).join(" ");
+        let query = args.slice(1).join("");
         let result = data.classes.find(c => c.name.toLowerCase().replace(/ +/g, "").includes(query));
         if (result && args.length > 1) {
             vit = result.vit;
