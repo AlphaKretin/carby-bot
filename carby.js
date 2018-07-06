@@ -92,16 +92,16 @@ let commands = [
         func: noSevenFifty
     },
     {
-        names: ["chaos"],
-        func: chaos
-    },
-    {
         names: ["chaos750"],
         func: chaosSevenFifty
     },
     {
         names: ["chaosno750"],
         func: chaosNoSevenFifty
+    },
+    {
+        names: ["chaos"],
+        func: chaos
     },
     {
         names: ["purechaos"],
@@ -426,8 +426,8 @@ function almagest(user, userID, channelID, message) {
         to: channelID,
         message: out
     });
-    let finalHP = Math.floor((hps[level] * (vit + 32))/32);
-    let finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
+    finalHP = Math.floor((hps[level] * (vit + 32))/32);
+    finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32))/32);
     bot.sendMessage({
         to: channelID,
         message: "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest" + ((level == buffLevel) ? " with a safe buffer." : ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.")
@@ -458,16 +458,16 @@ function normal(user, userID) {
 }
 
 function random(user, userID) {
-    let wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
-    let randWater = windJobs().concat(waterJobs());
-    let water = randWater[getIncInt(0, randWater.length - 1)].name;
-    let randFire = randWater.concat(fireJobs());
-    let fire = randFire[getIncInt(0, randFire.length - 1)].name;
-    let randEarth = randFire.concat(earthJobs());
-    let earth = randEarth[getIncInt(0, randEarth.length - 1)].name;
+    let classes = [ windJobs()[getIncInt(0, windJobs.length - 1)].name ];
+    let randWater = data.classes.filter(c => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name));
+    classes.push(randWater[getIncInt(0, randWater.length - 1)].name);
+    let randFire = data.classes.filter(c => c.crystal > 0 && c.crystal < 4 && !classes.includes(c.name));
+    classes.push(randFire[getIncInt(0, randFire.length - 1)].name);
+    let randEarth = data.classes.filter(c => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name));
+    classes.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
     bot.sendMessage({
         to: userID,
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
+        message: "Wind Job: " + classes[0] + "\nWater Job: " + classes[1] + "\nFire Job: " + classes[2] + "\nEarth Job: " + classes[3]
     });
 }
 
