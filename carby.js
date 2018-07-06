@@ -92,16 +92,16 @@ let commands = [
         func: noSevenFifty
     },
     {
-        names: ["chaos"],
-        func: chaos
-    },
-    {
         names: ["chaos750"],
         func: chaosSevenFifty
     },
     {
         names: ["chaosno750"],
         func: chaosNoSevenFifty
+    },
+    {
+        names: ["chaos"],
+        func: chaos
     },
     {
         names: ["purechaos"],
@@ -429,28 +429,22 @@ function almagest(user, userID, channelID, message) {
 }
 
 //DIY fiestas
-let windJobs = ["Knight", "Monk", "Thief", "Black Mage", "White Mage", "Blue Mage"];
-let waterJobs = ["Red Mage", "Time Mage", "Summoner", "Berserker", "Mystic Knight"];
-let fireJobs = ["Beastmaster", "Geomancer", "Ninja", "Ranger", "Bard"];
-let earthJobs = ["Dragoon", "Dancer", "Samurai", "Chemist"];
-let miscJobs = ["Freelancer", "Mime"];
-let mageJobs = ["Black Mage", "White Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner", "Geomancer", "Bard", "Dancer", "Chemist", "Mime"];
-let noMageJobs = ["Monk", "Thief", "Knight", "Berserker", "Mystic Knight", "Ninja", "Ranger", "Beastmaster", "Samurai", "Dragoon"];
-//let forbiddenWind = windJobs.slice(0).push("Time Mage");
-let forbiddenWind = windJobs.slice(0);
-forbiddenWind.push("Time Mage");
-/*let forbiddenWater = waterJobs.slice(2).unshift("Red Mage");
-forbiddenWater = forbiddenWater + fireJobs.slice(0,3);*/
-let forbiddenWater = waterJobs.slice(2).concat(fireJobs.slice(0,3));
-forbiddenWater.unshift("Red Mage");
-let forbiddenFire = fireJobs.slice(3).concat(earthJobs);
-let forbiddenEarth = ["Cannoneer", "Gladiator", "Oracle"];
+function getClassesByNames(names) {
+    let classes = [];
+    names.forEach(n => classes.push(data.classes.find(c => c.name === n)));
+    return classes;
+}
+
+let windJobs = () => data.classes.filter(c => c.crystal === 1);
+let waterJobs = () => data.classes.filter(c => c.crystal === 2);
+let fireJobs = () => data.classes.filter(c => c.crystal === 3);
+let earthJobs = () => data.classes.filter(c => c.crystal === 4);
 
 function normal(user, userID) {
-    let wind = windJobs[getIncInt(0, windJobs.length - 1)];
-    let water = waterJobs[getIncInt(0, waterJobs.length - 1)];
-    let fire = fireJobs[getIncInt(0, fireJobs.length - 1)];
-    let earth = earthJobs[getIncInt(0, earthJobs.length - 1)];
+    let wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
+    let water = waterJobs()[getIncInt(0, waterJobs.length - 1)].name;
+    let fire = fireJobs()[getIncInt(0, fireJobs.length - 1)].name;
+    let earth = earthJobs()[getIncInt(0, earthJobs.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -458,28 +452,28 @@ function normal(user, userID) {
 }
 
 function random(user, userID) {
-    let wind = windJobs[getIncInt(0, windJobs.length - 1)];
-    let randWater = windJobs.concat(waterJobs);
-    let water = randWater[getIncInt(0, randWater.length - 1)];
-    let randFire = randWater.concat(fireJobs);
-    let fire = randFire[getIncInt(0, randFire.length - 1)];
-    let randEarth = randFire.concat(earthJobs);
-    let earth = randEarth[getIncInt(0, randEarth.length - 1)];
+    let classes = [ windJobs()[getIncInt(0, windJobs.length - 1)].name ];
+    let randWater = data.classes.filter(c => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name));
+    classes.push(randWater[getIncInt(0, randWater.length - 1)].name);
+    let randFire = data.classes.filter(c => c.crystal > 0 && c.crystal < 4 && !classes.includes(c.name));
+    classes.push(randFire[getIncInt(0, randFire.length - 1)].name);
+    let randEarth = data.classes.filter(c => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name));
+    classes.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
     bot.sendMessage({
         to: userID,
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
+        message: "Wind Job: " + classes[0] + "\nWater Job: " + classes[1] + "\nFire Job: " + classes[2] + "\nEarth Job: " + classes[3]
     });
 }
 
 function sevenFifty(user, userID) {
-    let mageWind = intersect(windJobs, mageJobs);
-    let wind = mageWind[getIncInt(0, mageWind.length - 1)];
-    let mageWater = intersect(waterJobs, mageJobs);
-    let water = mageWater[getIncInt(0, mageWater.length - 1)];
-    let mageFire = intersect(fireJobs, mageJobs);
-    let fire = mageFire[getIncInt(0, mageFire.length - 1)];
-    let mageEarth = intersect(earthJobs, mageJobs);
-    let earth = mageEarth[getIncInt(0, mageEarth.length - 1)];
+    let mageWind = windJobs().filter(c => c.is750);
+    let wind = mageWind[getIncInt(0, mageWind.length - 1)].name;
+    let mageWater = waterJobs().filter(c => c.is750);
+    let water = mageWater[getIncInt(0, mageWater.length - 1)].name;
+    let mageFire = fireJobs().filter(c => c.is750);
+    let fire = mageFire[getIncInt(0, mageFire.length - 1)].name;
+    let mageEarth = earthJobs().filter(c => c.is750);
+    let earth = mageEarth[getIncInt(0, mageEarth.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -487,14 +481,14 @@ function sevenFifty(user, userID) {
 }
 
 function noSevenFifty(user, userID) {
-    let noWind = intersect(windJobs, noMageJobs);
-    let wind = noWind[getIncInt(0, noWind.length - 1)];
-    let noWater = intersect(waterJobs, noMageJobs);
-    let water = noWater[getIncInt(0, noWater.length - 1)];
-    let noFire = intersect(fireJobs, noMageJobs);
-    let fire = noFire[getIncInt(0, noFire.length - 1)];
-    let noEarth = intersect(earthJobs, noMageJobs);
-    let earth = noEarth[getIncInt(0, noEarth.length - 1)];
+    let noWind = windJobs().filter(c => !c.is750);
+    let wind = noWind[getIncInt(0, noWind.length - 1)].name;
+    let noWater = waterJobs().filter(c => !c.is750);
+    let water = noWater[getIncInt(0, noWater.length - 1)].name;
+    let noFire = fireJobs().filter(c => !c.is750);
+    let fire = noFire[getIncInt(0, noFire.length - 1)].name;
+    let noEarth = earthJobs().filter(c => !c.is750);
+    let earth = noEarth[getIncInt(0, noEarth.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -502,12 +496,11 @@ function noSevenFifty(user, userID) {
 }
 
 function chaos(user, userID) {
-    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    let wind = allJobs[getIncInt(0, allJobs.length - 1)];
-    let water = allJobs[getIncInt(0, allJobs.length - 1)];
-    let fire = allJobs[getIncInt(0, allJobs.length - 1)];
-    let earth = allJobs[getIncInt(0, allJobs.length - 1)];
-    bot.createDMChannel(userID);
+    let allJobs = data.classes.filter(c => c.crystal > 0 && c.crystal < 5);
+    let wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
+    let water = allJobs[getIncInt(0, allJobs.length - 1)].name;
+    let fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
+    let earth = allJobs[getIncInt(0, allJobs.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -515,12 +508,11 @@ function chaos(user, userID) {
 }
 
 function chaosNoSevenFifty(user, userID) {
-    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    let noJobs = intersect(allJobs, noMageJobs);
-    let wind = noJobs[getIncInt(0, noJobs.length - 1)];
-    let water = noJobs[getIncInt(0, noJobs.length - 1)];
-    let fire = noJobs[getIncInt(0, noJobs.length - 1)];
-    let earth = noJobs[getIncInt(0, noJobs.length - 1)];
+    let noJobs = data.classes.filter(c => (c.crystal > 0) && (c.crystal < 5) && (!c.is750));
+    let wind = noJobs[getIncInt(0, noJobs.length - 1)].name;
+    let water = noJobs[getIncInt(0, noJobs.length - 1)].name;
+    let fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
+    let earth = noJobs[getIncInt(0, noJobs.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -528,12 +520,11 @@ function chaosNoSevenFifty(user, userID) {
 }
 
 function chaosSevenFifty(user, userID) {
-    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs);
-    let magJobs = intersect(allJobs, mageJobs);
-    let wind = magJobs[getIncInt(0, magJobs.length - 1)];
-    let water = magJobs[getIncInt(0, magJobs.length - 1)];
-    let fire = magJobs[getIncInt(0, magJobs.length - 1)];
-    let earth = magJobs[getIncInt(0, magJobs.length - 1)];
+    let magJobs = data.classes.filter(c => (c.crystal > 0) && (c.crystal < 5) && (c.is750));
+    let wind = magJobs[getIncInt(0, magJobs.length - 1)].name;
+    let water = magJobs[getIncInt(0, magJobs.length - 1)].name;
+    let fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
+    let earth = magJobs[getIncInt(0, magJobs.length - 1)].name;
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -541,20 +532,9 @@ function chaosSevenFifty(user, userID) {
 }
 
 function purechaos(user, userID) {
-    let allJobs = windJobs.concat(waterJobs).concat(fireJobs).concat(earthJobs).concat(miscJobs);
-    let wind = allJobs[getIncInt(0, allJobs.length - 1)];
-    let water;
-    do {
-        water = allJobs[getIncInt(0, allJobs.length - 1)];
-    } while (water === wind);
-    let fire;
-    do {
-        fire = allJobs[getIncInt(0, allJobs.length - 1)];
-    } while (fire === wind || fire === water);
-    let earth;
-    do {
-        earth = allJobs[getIncInt(0, allJobs.length - 1)];
-    } while (earth === wind || earth === water || earth === fire);
+    let allJobs = data.classes.filter(c => c.crystal < 5).map(c => c.name);
+    let wind, water, fire, earth;
+    [wind, water, fire, earth] = shuffle(allJobs).slice(0, 4);
     bot.sendMessage({
         to: userID,
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth
@@ -562,11 +542,16 @@ function purechaos(user, userID) {
 }
 
 function forbidden(user, userID) {
+    let forbiddenWind = windJobs();
+    forbiddenWind.push(getClassesByNames(["Time Mage"]));
+    let forbiddenWater = getClassesByNames(["Red Mage", "Summoner", "Berserker", "Mystic Knight", "Beastmaster", "Geomancer", "Ninja"]);
+    let forbiddenFire = getClassesByNames([ "Bard", "Ranger", "Dancer" ]).concat(earthJobs());
+    let forbiddenEarth = data.classes.filter(c => c.crystal === 5);
     let jobs = [
-        forbiddenWind[getIncInt(0, forbiddenWind.length - 1)],
-        forbiddenWater[getIncInt(0, forbiddenWater.length - 1)],
-        forbiddenFire[getIncInt(0, forbiddenFire.length - 1)],
-        forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)]
+        forbiddenWind[getIncInt(0, forbiddenWind.length - 1)].name,
+        forbiddenWater[getIncInt(0, forbiddenWater.length - 1)].name,
+        forbiddenFire[getIncInt(0, forbiddenFire.length - 1)].name,
+        forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)].name
     ];
     let index = getIncInt(0, jobs.length - 2);
     let voidJob = jobs[index];
@@ -811,14 +796,23 @@ function getIncInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function intersect(a, b) {
-    let t;
-    if (b.length > a.length) {
-        t = b;
-        b = a;
-        a = t;
-    } // indexOf to loop over shorter
-    return a.filter(e => b.indexOf(e) > -1).filter((e, i, c) => c.indexOf(e) === i);  // extra step to remove duplicates
+function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+
+    // Pick a remaining element...
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+
+        // And swap it with the current element.
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+    }
+
+    return array;
 }
 
 function forbiddenRisk(user, userID, channelID, message, event) {
