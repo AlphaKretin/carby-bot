@@ -896,7 +896,7 @@ let aliases = {
 
 function enemySearch(userID, query, att) {
     if (query.trim().toLowerCase() in aliases) {
-        query = aliases[query.trim().toLowerCase()];
+        query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
     let matches = data.monsters.filter(enemy => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); //new array which is all enemies with name including message
     if (matches.length < 1) {
