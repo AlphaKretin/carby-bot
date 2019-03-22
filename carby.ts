@@ -1,25 +1,20 @@
-"use strict";
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const Discord = __importStar(require("discord.io"));
-const fs = __importStar(require("fs"));
-const job_1 = require("./job");
+import * as Discord from "discord.io";
+import * as fs from "fs";
+import { Job } from "./job";
+
 const auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
+
 if (!auth.token) {
     console.error("Bot token not found at auth.json.token!");
     process.exit();
 }
+
 const bot = new Discord.Client({
     autorun: false,
     token: auth.token
 });
-let data = {
+
+let data: { [key: string]: any } = {
     classes: [],
     jobs: {
         "316052390442958860": ["Mime", "Mime", "Mime", "Mime"]
@@ -31,14 +26,14 @@ let data = {
         victims: -1
     }
 };
-function loadData(filename, key) {
+
+function loadData(filename: string, key: string): Promise<void> {
     return new Promise((resolve, reject) => {
         console.log("Loading " + filename + "...");
         fs.readFile(filename, "utf8", (err, file) => {
             if (err) {
                 reject(err);
-            }
-            else {
+            } else {
                 data[key] = JSON.parse(file);
                 resolve();
             }
@@ -49,31 +44,42 @@ const dataFile = "data.json";
 const jobFile = "jobs.json";
 const monsterFile = "monsterdata.json";
 const classFile = "classes.json";
-const proms = [
+const proms: Array<Promise<void>> = [
     loadData(dataFile, "stats"),
     loadData(jobFile, "jobs"),
     loadData(monsterFile, "monsters"),
     loadData(classFile, "classes").then(() => {
-        data.classes.forEach((job, index) => {
-            data.classes[index] = new job_1.Job(job);
+        data.classes.forEach((job: Job, index: number) => {
+            data.classes[index] = new Job(job);
         });
     })
 ];
-Promise.all(proms).then(() => {
-    bot.connect();
-}, err => {
-    console.error("Error loading data files!");
-    console.error(err);
-});
+Promise.all(proms).then(
+    () => {
+        bot.connect();
+    },
+    err => {
+        console.error("Error loading data files!");
+        console.error(err);
+    }
+);
+
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.username, bot.id);
 });
+
 bot.on("disconnect", err => {
     console.error("Bot disconnected with below error! Reconnecting...");
     console.error(err);
     bot.connect();
 });
-const commands = [
+
+interface ICommand {
+    func: (user: string, userID: string, channelID: string, message: string, event: any) => void;
+    names: string[];
+    chk?: (user: string, userID: string, channelID?: string, message?: string, event?: any) => boolean;
+}
+const commands: ICommand[] = [
     {
         func: mcalc,
         names: ["mcalc"]
@@ -155,7 +161,7 @@ const commands = [
         names: ["forbidden"]
     },
     {
-        chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1,
+        chk: (_: any, userID: string) => auth.owners && auth.owners.indexOf(userID) > -1,
         func: purify,
         names: ["purify"]
     },
@@ -181,21 +187,25 @@ const commands = [
         names: ["class"]
     }
 ];
-const responses = {
+
+const responses: { [key: string]: string } = {
     badfaq: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687",
     badfiesta: "The worst fiesta ever happened here: https://www.twitch.tv/dragondarchsda/v/48967944",
-    badmod: "`No balance, at all` -mod author http://kyrosiris.com/changes_overview.txt " +
+    badmod:
+        "`No balance, at all` -mod author http://kyrosiris.com/changes_overview.txt " +
         "https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)",
     crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     dance: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif",
     equipharps: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif",
     gaia: "THAT HIPPIE SHIT AIN'T MAGIC http://i.imgur.com/JkwTg5O.png",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",
-    help: "I have a lot of commands, too many to list in this Discord PM." +
+    help:
+        "I have a lot of commands, too many to list in this Discord PM." +
         " Check this readme: https://tinyurl.com/ybh7lrz2",
     iainuki: "That's a good ability! http://gfycat.com/TenseArtisticCobra",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
-    numbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
+    numbers:
+        "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
         "Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n" +
         "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n" +
         "2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n" +
@@ -211,7 +221,8 @@ const responses = {
     quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ",
     quicksave: "Hang on while I do some **ENCOUNTER MANIPULATION**",
     rocksfall: "...and *NED* dies? sure, why not https://clips.twitch.tv/ProductiveSavoryHorseradishSoBayed",
-    runthenumbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
+    runthenumbers:
+        "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
         "Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n" +
         "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n" +
         "2. Proceed with the game until the Barrier Tower. Grind there for Reflect Rings.\n" +
@@ -228,8 +239,11 @@ const responses = {
     yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png",
     zeninage: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif"
 };
+
 const prefixes = [".", "!"];
-const queries = {};
+
+const queries: any = {};
+
 // reads incoming messages for commands and redirects to functions to handle them
 bot.on("message", (user, userID, channelID, message, event) => {
     const lowMes = message.toLowerCase();
@@ -269,31 +283,40 @@ bot.on("message", (user, userID, channelID, message, event) => {
         }
     }
 });
-const mcalcTable = {
+
+// .mcalc
+interface IMCalc {
+    args: string[];
+    calc: (nums: number[]) => string;
+}
+const mcalcTable: { [name: string]: IMCalc } = {
     cannon: {
         args: ["Level"],
-        calc: (nums) => {
+        calc: (nums: number[]) => {
             const m = Math.floor((nums[0] * nums[0]) / 256 + 4);
             let nextLevel = Math.ceil(256 * (m + 1 - 4));
             nextLevel = Math.ceil(Math.sqrt(nextLevel));
-            return ("At level " +
+            return (
+                "At level " +
                 nums[0] +
                 ", your Cannoneer M is " +
                 m +
                 ". To reach the next M, you need to reach level " +
                 nextLevel +
-                ".");
+                "."
+            );
         }
     },
     fists: {
         args: ["Level", "Strength"],
-        calc: (nums) => {
+        calc: (nums: any[]) => {
             const level = nums[0];
             const str = nums[1];
             const m = Math.floor((level * str) / 256 + 2);
             const nextLevel = Math.ceil((256 * (m + 1 - 2)) / str);
             const pow = level * 2 + 3;
-            return ("At Level " +
+            return (
+                "At Level " +
                 level +
                 ", with " +
                 str +
@@ -303,12 +326,13 @@ const mcalcTable = {
                 pow +
                 " attack power). To reach the next M, you need to reach level " +
                 nextLevel +
-                ".");
+                "."
+            );
         }
     },
     knife: {
         args: ["Level", "Strength", "Agility"],
-        calc: (nums) => {
+        calc: (nums: any[]) => {
             const level = nums[0];
             const str = nums[1];
             const agil = nums[2];
@@ -332,7 +356,8 @@ const mcalcTable = {
             ns = Math.ceil(ns / agil);
             m += 2;
             if (bonus === 0) {
-                return ("At Level " +
+                return (
+                    "At Level " +
                     level +
                     ", with " +
                     str +
@@ -344,12 +369,13 @@ const mcalcTable = {
                     n +
                     " (Bonus Agility M gained at level " +
                     ns +
-                    ").");
-            }
-            else {
+                    ")."
+                );
+            } else {
                 // if bonus = 1
                 m = m + 1;
-                return ("At Level " +
+                return (
+                    "At Level " +
                     level +
                     ", with " +
                     str +
@@ -361,16 +387,18 @@ const mcalcTable = {
                     n +
                     " (Bonus Agility M **LOST** at level " +
                     ns +
-                    ").");
+                    ")."
+                );
             }
         }
     },
     magic: {
         args: ["Level", "Magic"],
-        calc: (nums) => {
+        calc: (nums: number[]) => {
             const m = Math.floor((nums[0] * nums[1]) / 256 + 4);
             const nextLevel = Math.ceil((256 * (m + 1 - 4)) / nums[1]);
-            return ("At Level " +
+            return (
+                "At Level " +
                 nums[0] +
                 ", with " +
                 nums[1] +
@@ -378,15 +406,17 @@ const mcalcTable = {
                 m +
                 ". To reach the next M, you need to reach level " +
                 nextLevel +
-                "");
+                ""
+            );
         }
     },
     physical: {
         args: ["Level", "Strength"],
-        calc: (nums) => {
+        calc: (nums: number[]) => {
             const m = Math.floor((nums[0] * nums[1]) / 128 + 2);
             const nextLevel = Math.ceil((128 * (m + 1 - 2)) / nums[1]);
-            return ("At Level " +
+            return (
+                "At Level " +
                 nums[0] +
                 ", with " +
                 nums[1] +
@@ -394,12 +424,14 @@ const mcalcTable = {
                 m +
                 ". To reach the next M, you need to reach level " +
                 nextLevel +
-                "");
+                ""
+            );
         }
     },
+
     chicken: {
         args: ["Level", "Strength", "Agility"],
-        calc: (nums) => {
+        calc: (nums: any[]) => {
             const level = nums[0];
             const str = nums[1];
             const agil = nums[2];
@@ -408,7 +440,8 @@ const mcalcTable = {
             const n = Math.ceil((128 * (m + 1)) / str);
             const ns = Math.ceil((128 * (bonus + 1)) / agil);
             m += bonus + 2;
-            return ("At Level " +
+            return (
+                "At Level " +
                 level +
                 ", with " +
                 str +
@@ -420,12 +453,13 @@ const mcalcTable = {
                 n +
                 " for Strength and " +
                 ns +
-                " for Agility.");
+                " for Agility."
+            );
         }
     },
     rune: {
         args: ["Level", "Strength", "Magic"],
-        calc: (nums) => {
+        calc: (nums: any[]) => {
             const level = nums[0];
             const str = nums[1];
             const mag = nums[2];
@@ -434,7 +468,8 @@ const mcalcTable = {
             const n = Math.ceil((128 * (m + 1)) / str);
             const ns = Math.ceil((128 * (bonus + 1)) / mag);
             m += bonus + 2;
-            return ("At Level " +
+            return (
+                "At Level " +
                 level +
                 ", with " +
                 str +
@@ -446,30 +481,33 @@ const mcalcTable = {
                 n +
                 " for Strength and " +
                 ns +
-                " for Magic.");
+                " for Magic."
+            );
         }
     }
 };
-function mcalc(user, userID, channelID, message) {
+
+function mcalc(user: any, userID: any, channelID: string, message: string) {
     const args = message.toLowerCase().split(/ +/);
     args.slice(1); // remove command name
-    const strs = args.filter((i) => isNaN(parseInt(i, 10))); // extracts strings
+    const strs = args.filter((i: string) => isNaN(parseInt(i, 10))); // extracts strings
     let type;
     if (strs.length < 1) {
         bot.sendMessage({
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
+            message:
+                "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
                 Object.keys(mcalcTable).join(", ") +
                 "`",
             to: channelID
         });
         return;
-    }
-    else {
+    } else {
         type = strs[0].toLowerCase();
     }
     if (!(type in mcalcTable)) {
         bot.sendMessage({
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
+            message:
+                "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
                 Object.keys(mcalcTable).join(", ") +
                 "`",
             to: channelID
@@ -477,7 +515,7 @@ function mcalc(user, userID, channelID, message) {
         return;
     }
     const mtype = mcalcTable[type];
-    const nums = args.map((i) => parseInt(i, 10)).filter((i) => !isNaN(i)); // extracts numbers
+    const nums = args.map((i: string) => parseInt(i, 10)).filter((i: number) => !isNaN(i)); // extracts numbers
     if (nums.length < mtype.args.length) {
         bot.sendMessage({
             message: "Sorry, I need more numbers! Arguments for `" + type + "`: " + mtype.args.join(", "),
@@ -490,8 +528,9 @@ function mcalc(user, userID, channelID, message) {
         to: channelID
     });
 }
+
 // .almagest
-function almagest(user, userID, channelID, message) {
+function almagest(user: any, userID: any, channelID: string, message: string) {
     const args = message.toLowerCase().split(/ +/);
     let vit = parseInt(args[1], 10);
     const hps = [
@@ -599,16 +638,23 @@ function almagest(user, userID, channelID, message) {
     if (isNaN(vit) || vit > 99) {
         args.slice(1);
         const query = args.join("");
-        const result = data.classes.find((c) => c.name
-            .toLowerCase()
-            .replace(/ +/g, "")
-            .includes(query));
+        const result = data.classes.find(
+            (c: {
+                name: {
+                    toLowerCase: () => { replace: (arg0: RegExp, arg1: string) => { includes: (arg0: any) => void } };
+                };
+            }) =>
+                c.name
+                    .toLowerCase()
+                    .replace(/ +/g, "")
+                    .includes(query)
+        );
         if (result && args.length > 1) {
             vit = result.vit;
-        }
-        else {
+        } else {
             bot.sendMessage({
-                message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. " +
+                message:
+                    "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. " +
                     "Good luck! (Only 720 to 740 damage if you have Shell! Yay!)",
                 to: channelID
             });
@@ -629,11 +675,11 @@ function almagest(user, userID, channelID, message) {
     }
     const finalHP = Math.floor((hps[level] * (vit + 32)) / 32);
     const finalBuffHP = Math.floor((hps[buffLevel] * (vit + 32)) / 32);
-    let out = "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest";
+    let out =
+        "At " + vit + " vitality, you will need to be level " + level + " (" + finalHP + " HP) to survive Almagest";
     if (level === buffLevel) {
         out += " with a safe buffer.";
-    }
-    else {
+    } else {
         out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
     }
     bot.sendMessage({
@@ -641,17 +687,20 @@ function almagest(user, userID, channelID, message) {
         to: channelID
     });
 }
+
 // DIY fiestas
-function getClassesByNames(names) {
-    const classes = [];
-    names.forEach((n) => classes.push(data.classes.find((c) => c.name === n)));
+function getClassesByNames(names: string[]) {
+    const classes: Job[] = [];
+    names.forEach((n: any) => classes.push(data.classes.find((c: { name: any }) => c.name === n)));
     return classes;
 }
-const windJobs = () => data.classes.filter((c) => c.crystal === 1);
-const waterJobs = () => data.classes.filter((c) => c.crystal === 2);
-const fireJobs = () => data.classes.filter((c) => c.crystal === 3);
-const earthJobs = () => data.classes.filter((c) => c.crystal === 4);
-function normal(user, userID) {
+
+const windJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 1);
+const waterJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 2);
+const fireJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 3);
+const earthJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 4);
+
+function normal(user: any, userID: string) {
     const wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
     const water = waterJobs()[getIncInt(0, waterJobs.length - 1)].name;
     const fire = fireJobs()[getIncInt(0, fireJobs.length - 1)].name;
@@ -661,16 +710,24 @@ function normal(user, userID) {
         to: userID
     });
 }
-function random(user, userID) {
+
+function random(user: any, userID: string) {
     const classes = [windJobs()[getIncInt(0, windJobs.length - 1)].name];
-    const randWater = data.classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name));
+    const randWater = data.classes.filter(
+        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name)
+    );
     classes.push(randWater[getIncInt(0, randWater.length - 1)].name);
-    const randFire = data.classes.filter((c) => c.crystal > 0 && c.crystal < 4 && !classes.includes(c.name));
+    const randFire = data.classes.filter(
+        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 4 && !classes.includes(c.name)
+    );
     classes.push(randFire[getIncInt(0, randFire.length - 1)].name);
-    const randEarth = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name));
+    const randEarth = data.classes.filter(
+        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name)
+    );
     classes.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
     bot.sendMessage({
-        message: "Wind Job: " +
+        message:
+            "Wind Job: " +
             classes[0] +
             "\nWater Job: " +
             classes[1] +
@@ -681,36 +738,39 @@ function random(user, userID) {
         to: userID
     });
 }
-function sevenFifty(user, userID) {
-    const mageWind = windJobs().filter((c) => c.is750);
+
+function sevenFifty(user: any, userID: string) {
+    const mageWind = windJobs().filter((c: { is750: any }) => c.is750);
     const wind = mageWind[getIncInt(0, mageWind.length - 1)].name;
-    const mageWater = waterJobs().filter((c) => c.is750);
+    const mageWater = waterJobs().filter((c: { is750: any }) => c.is750);
     const water = mageWater[getIncInt(0, mageWater.length - 1)].name;
-    const mageFire = fireJobs().filter((c) => c.is750);
+    const mageFire = fireJobs().filter((c: { is750: any }) => c.is750);
     const fire = mageFire[getIncInt(0, mageFire.length - 1)].name;
-    const mageEarth = earthJobs().filter((c) => c.is750);
+    const mageEarth = earthJobs().filter((c: { is750: any }) => c.is750);
     const earth = mageEarth[getIncInt(0, mageEarth.length - 1)].name;
     bot.sendMessage({
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
         to: userID
     });
 }
-function noSevenFifty(user, userID) {
-    const noWind = windJobs().filter((c) => !c.is750);
+
+function noSevenFifty(user: any, userID: string) {
+    const noWind = windJobs().filter((c: { is750: any }) => !c.is750);
     const wind = noWind[getIncInt(0, noWind.length - 1)].name;
-    const noWater = waterJobs().filter((c) => !c.is750);
+    const noWater = waterJobs().filter((c: { is750: any }) => !c.is750);
     const water = noWater[getIncInt(0, noWater.length - 1)].name;
-    const noFire = fireJobs().filter((c) => !c.is750);
+    const noFire = fireJobs().filter((c: { is750: any }) => !c.is750);
     const fire = noFire[getIncInt(0, noFire.length - 1)].name;
-    const noEarth = earthJobs().filter((c) => !c.is750);
+    const noEarth = earthJobs().filter((c: { is750: any }) => !c.is750);
     const earth = noEarth[getIncInt(0, noEarth.length - 1)].name;
     bot.sendMessage({
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
         to: userID
     });
 }
-function chaos(user, userID) {
-    const allJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5);
+
+function chaos(user: any, userID: string) {
+    const allJobs = data.classes.filter((c: { crystal: number }) => c.crystal > 0 && c.crystal < 5);
     const wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const water = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
@@ -720,8 +780,11 @@ function chaos(user, userID) {
         to: userID
     });
 }
-function chaosNoSevenFifty(user, userID) {
-    const noJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !c.is750);
+
+function chaosNoSevenFifty(user: any, userID: string) {
+    const noJobs = data.classes.filter(
+        (c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && !c.is750
+    );
     const wind = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const water = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
@@ -731,8 +794,11 @@ function chaosNoSevenFifty(user, userID) {
         to: userID
     });
 }
-function chaosSevenFifty(user, userID) {
-    const magJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && c.is750);
+
+function chaosSevenFifty(user: any, userID: string) {
+    const magJobs = data.classes.filter(
+        (c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && c.is750
+    );
     const wind = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const water = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
@@ -742,19 +808,21 @@ function chaosSevenFifty(user, userID) {
         to: userID
     });
 }
-function purechaos(user, userID) {
-    const allJobs = data.classes.filter((c) => c.crystal < 5).map((c) => c.name);
-    let wind;
-    let water;
-    let fire;
-    let earth;
+
+function purechaos(user: any, userID: string) {
+    const allJobs = data.classes.filter((c: { crystal: number }) => c.crystal < 5).map((c: { name: any }) => c.name);
+    let wind: string;
+    let water: string;
+    let fire: string;
+    let earth: string;
     [wind, water, fire, earth] = shuffle(allJobs).slice(0, 4);
     bot.sendMessage({
         message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
         to: userID
     });
 }
-function forbidden(user, userID) {
+
+function forbidden(user: any, userID: string) {
     const forbiddenWind = windJobs();
     forbiddenWind.push(getClassesByNames(["Time Mage"]));
     const forbiddenWater = getClassesByNames([
@@ -767,7 +835,7 @@ function forbidden(user, userID) {
         "Ninja"
     ]);
     const forbiddenFire = getClassesByNames(["Bard", "Ranger", "Dancer"]).concat(earthJobs());
-    const forbiddenEarth = data.classes.filter((c) => c.crystal === 5);
+    const forbiddenEarth = data.classes.filter((c: { crystal: number }) => c.crystal === 5);
     const forbJobs = [
         forbiddenWind[getIncInt(0, forbiddenWind.length - 1)].name,
         forbiddenWater[getIncInt(0, forbiddenWater.length - 1)].name,
@@ -778,7 +846,8 @@ function forbidden(user, userID) {
     const voidJob = forbJobs[index];
     forbJobs[index] = "~~" + forbJobs[index] + "~~";
     bot.sendMessage({
-        message: "Wind Job: " +
+        message:
+            "Wind Job: " +
             forbJobs[0] +
             "\nWater Job: " +
             forbJobs[1] +
@@ -791,6 +860,7 @@ function forbidden(user, userID) {
         to: userID
     });
 }
+
 // .dd
 const ddLines = [
     "I suggest using **ENCOUNTER MANIPULATION**",
@@ -837,7 +907,8 @@ const ddLines = [
     "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\*",
     "I have a really really dumb strategy! <:yayclod:362777481838592010>"
 ];
-function dd(user, userID, channelID, message) {
+
+function dd(user: any, userID: any, channelID: string, message: string) {
     const args = message.toLowerCase().split(/ +/);
     let index = parseInt(args[1], 10);
     if (args.length < 2) {
@@ -846,8 +917,7 @@ function dd(user, userID, channelID, message) {
             message: ddLines[index] + " (#" + (index + 1) + ")",
             to: channelID
         });
-    }
-    else if (isNaN(index)) {
+    } else if (isNaN(index)) {
         const matches = ddLines.filter(l => l.toLowerCase().includes(args.slice(1).join(" ")));
         if (matches.length > 0) {
             const i = getIncInt(0, matches.length - 1);
@@ -855,30 +925,28 @@ function dd(user, userID, channelID, message) {
                 message: matches[i] + " (#" + (ddLines.indexOf(matches[i]) + 1) + ")",
                 to: channelID
             });
-        }
-        else {
+        } else {
             bot.sendMessage({
                 message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible.",
                 to: channelID
             });
         }
-    }
-    else if (index > ddLines.length || index < 1) {
+    } else if (index > ddLines.length || index < 1) {
         index = getIncInt(0, ddLines.length - 1);
         bot.sendMessage({
             message: "Oh my god, the quote wand missed!\n" + ddLines[index] + " (#" + (index + 1) + ")",
             to: channelID
         });
-    }
-    else {
+    } else {
         bot.sendMessage({
             message: ddLines[index - 1] + " (#" + index + ")",
             to: channelID
         });
     }
 }
+
 // speedtrap
-function trapped(user, userID, channelID) {
+function trapped(user: any, userID: string, channelID: string) {
     data.stats.victims++;
     if (userID === "90507312564805632") {
         data.stats.kinuVictims++;
@@ -893,9 +961,11 @@ function trapped(user, userID, channelID) {
         }
     });
 }
-function victim(user, userID, channelID) {
+
+function victim(user: any, userID: string, channelID: string) {
     bot.sendMessage({
-        message: "<@" +
+        message:
+            "<@" +
             userID +
             ">: Dr. Clapperclaw's Deadly Speed Trap has snared " +
             data.stats.victims +
@@ -905,13 +975,13 @@ function victim(user, userID, channelID) {
         to: channelID
     });
 }
-function breakRod(user, userID, channelID, message) {
+
+function breakRod(user: any, userID: any, channelID: string, message: string) {
     const args = message.toLowerCase().split(/ +/);
     const index = parseInt(args[1], 10);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100) {
         data.stats.rodsBroken++;
-    }
-    else {
+    } else {
         data.stats.rodsBroken += index;
     }
     bot.sendMessage({
@@ -924,14 +994,17 @@ function breakRod(user, userID, channelID, message) {
         }
     });
 }
-function broken(user, userID, channelID) {
+
+function broken(user: any, userID: any, channelID: string) {
     bot.sendMessage({
         message: "You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all.",
         to: channelID
     });
 }
+
 // goofy shit
-function countdown(user, userID, channelID) {
+
+function countdown(user: any, userID: any, channelID: string) {
     const fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
     const now = new Date().getTime();
     const distance = fiestaDate - now;
@@ -942,25 +1015,29 @@ function countdown(user, userID, channelID) {
     bot.sendMessage({
         // message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours,
         // " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
-        message: "The Run has Begun! What are you waiting for? Get in here and make fun of DD! " +
+        message:
+            "The Run has Begun! What are you waiting for? Get in here and make fun of DD! " +
             "https://www.twitch.tv/rpglimitbreak",
         to: channelID
     });
 }
-function zerky(user, userID, channelID) {
+
+function zerky(user: string, userID: string, channelID: string) {
     bot.sendMessage({
         message: "http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png",
         to: channelID
     });
 }
+
 // job DB
-function jobs(user, userID, channelID, message, event) {
+function jobs(user: any, userID: string, channelID: string, message: string, event: any) {
     const args = message.split(/ +/);
     // expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str),
     // 3: water job (str), 4: fire job (str), 5: earth job (str)
     if (args.length < 2 || args.length > 6) {
         bot.sendMessage({
-            message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
+            message:
+                "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
                 "Please ensure you provide jobs when registering. Please delimit with spaces, " +
                 "and keep two-word jobs to one word.",
             to: channelID
@@ -970,7 +1047,8 @@ function jobs(user, userID, channelID, message, event) {
     if (args[1].toLowerCase() === "register") {
         if (args.length < 3) {
             bot.sendMessage({
-                message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
+                message:
+                    "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
                     "Please ensure you provide jobs when registering. " +
                     "Please delimit with spaces, and keep two-word jobs to one word.",
                 to: channelID
@@ -988,31 +1066,29 @@ function jobs(user, userID, channelID, message, event) {
             message: "Got it, <@" + userID + ">. Your jobs (" + curJobs.join("/") + ") are registered.",
             to: channelID
         });
-    }
-    else if (args[1].toLowerCase() === "lookup") {
+    } else if (args[1].toLowerCase() === "lookup") {
         let mentioned;
         if (event.d.mentions.length > 0) {
             mentioned = event.d.mentions[0].id;
-        }
-        else if (args.length > 2) {
+        } else if (args.length > 2) {
             // try lookup by name
             const uName = args
                 .slice(2)
                 .join(" ")
                 .toLowerCase();
-            const matches = Object.values(bot.users).filter(u => u.username && u.username.toLowerCase().includes(uName));
+            const matches = Object.values(bot.users).filter(
+                u => u.username && u.username.toLowerCase().includes(uName)
+            );
             if (matches.length > 0) {
                 mentioned = matches[0].id;
-            }
-            else {
+            } else {
                 bot.sendMessage({
                     message: "Sorry, I can't find that user! Have you tried using an @mention?",
                     to: channelID
                 });
                 return;
             }
-        }
-        else {
+        } else {
             mentioned = userID;
         }
         const curJobs = data.jobs[mentioned];
@@ -1022,73 +1098,88 @@ function jobs(user, userID, channelID, message, event) {
                 message: "I don't have jobs on file for " + name + ", sorry!",
                 to: channelID
             });
-        }
-        else {
+        } else {
             bot.sendMessage({
                 message: "I have " + name + "'s jobs as: " + curJobs.join("/") + ".",
                 to: channelID
             });
         }
-    }
-    else {
+    } else {
         bot.sendMessage({
-            message: "Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. " +
+            message:
+                "Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. " +
                 "Please ensure you provide jobs when registering. " +
                 "Please delimit with spaces, and keep two-word jobs to one word.",
             to: channelID
         });
     }
 }
+
 // misc functions
-function getIncInt(min, max) {
+function getIncInt(min: number, max: number) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-function shuffle(array) {
+
+function shuffle(array: any[]) {
     let currentIndex = array.length;
     let temporaryValue;
     let randomIndex;
+
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
         // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
+
         // And swap it with the current element.
         temporaryValue = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
+
     return array;
 }
-function forbiddenRisk(user, userID, channelID, message, event) {
-    bot.addToRole({
-        roleID: "451768175152070657",
-        serverID: "315364487882342401",
-        userID
-    }, err => {
-        if (err) {
-            console.error(err);
+
+function forbiddenRisk(user: any, userID: string, channelID: any, message: any, event: any) {
+    bot.addToRole(
+        {
+            roleID: "451768175152070657",
+            serverID: "315364487882342401",
+            userID
+        },
+        err => {
+            if (err) {
+                console.error(err);
+            }
         }
-    });
-    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));
+    );
+    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e =>
+        console.error(e)
+    );
 }
-function forbiddenLite(user, userID, channelID, message, event) {
-    bot.addToRole({
-        roleID: "451874821245108225",
-        serverID: "315364487882342401",
-        userID
-    }, err => {
-        if (err) {
-            console.error(err);
+
+function forbiddenLite(user: any, userID: string, channelID: any, message: any, event: any) {
+    bot.addToRole(
+        {
+            roleID: "451874821245108225",
+            serverID: "315364487882342401",
+            userID
+        },
+        err => {
+            if (err) {
+                console.error(err);
+            }
         }
-    });
+    );
     bot.addReaction({
         channelID,
         messageID: event.d.id,
         reaction: "forbidden:451764608202571816"
     });
 }
+
 function purify() {
     data = {
         kinuVictims: 0,
@@ -1096,8 +1187,9 @@ function purify() {
         victims: 0
     };
 }
+
 // attributes
-function attributes(user, userID) {
+function attributes(user: any, userID: string) {
     if (data.monsters.length > 0) {
         bot.sendMessage({
             message: "Available attributes for use with `.info`:\n`" + Object.keys(data.monsters[0]).join(", ") + "`.",
@@ -1105,7 +1197,8 @@ function attributes(user, userID) {
         });
     }
 }
-function enemyInfo(userID, enemyData, att) {
+
+function enemyInfo(userID: string, enemyData: { [x: string]: any; name: string }, att?: string) {
     let out = "__Data for " + enemyData.name + "__:\n";
     if (att && att in enemyData) {
         switch (att) {
@@ -1115,8 +1208,7 @@ function enemyInfo(userID, enemyData, att) {
             default:
                 out += JSON.stringify(enemyData[att], null, 4);
         }
-    }
-    else {
+    } else {
         if (att) {
             console.error("enemyInfo called with invalid attribute " + att);
         }
@@ -1127,29 +1219,31 @@ function enemyInfo(userID, enemyData, att) {
         to: userID
     });
 }
+
 // monster data query
-const aliases = {
+const aliases: { [alias: string]: string } = {
     meatdeath: "Exdeath (Exdeath's Castle)",
     meatgamesh: "Gilgamesh (Exdeath's Castle)",
     rugwizard: "Omniscient",
     shipgamesh: "Gilgamesh (Ship)",
     treedeath: "Exdeath (Final)"
 };
-function enemySearch(userID, query, att) {
+
+function enemySearch(userID: string, query: string, att?: string) {
     if (query.trim().toLowerCase() in aliases) {
         query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
-    const matches = data.monsters.filter((enemy) => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); // new array which is all enemies with name including message
+    const matches = data.monsters.filter(
+        (enemy: any) => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)
+    ); // new array which is all enemies with name including message
     if (matches.length < 1) {
         bot.sendMessage({
             message: "Sorry, I couldn't find any enemies with that name!",
             to: userID
         });
-    }
-    else if (matches.length === 1) {
+    } else if (matches.length === 1) {
         enemyInfo(userID, matches[0], att);
-    }
-    else {
+    } else {
         let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
         let i = 1; // lists from 1-n for humans even tho arrays start at 0
         for (const match of matches) {
@@ -1167,7 +1261,8 @@ function enemySearch(userID, query, att) {
         });
     }
 }
-function enemyClarify(user, userID, channelID, message) {
+
+function enemyClarify(user: string, userID: string, channelID: string, message: string) {
     const input = parseInt(message, 10);
     if (isNaN(input) || !(input - 1 in queries[userID].list)) {
         // if user didn't type a number or the number wasn't listed (-1 to convert from 1-start to 0-start)
@@ -1175,17 +1270,18 @@ function enemyClarify(user, userID, channelID, message) {
             message: "Sorry, that wasn't the number of a result I had saved. Please try searching again.",
             to: userID
         });
-    }
-    else {
+    } else {
         enemyInfo(userID, queries[userID].list[input - 1], queries[userID].att);
     }
     delete queries[userID]; // remove element from object
 }
-function info(user, userID, channelID, message) {
+
+function info(user: any, userID: string, channelID: any, message: string) {
     const args = message.toLowerCase().split(/ +/);
     if (args.length < 2) {
         bot.sendMessage({
-            message: "Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\n" +
+            message:
+                "Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\n" +
                 "You can see a list of valid attributes with `.attributes`.\nSpecifying an attribute is optional.\n" +
                 "Enemy name can be RPGe or Advance translation.",
             to: userID
@@ -1197,18 +1293,19 @@ function info(user, userID, channelID, message) {
         const att = args[1];
         const query = args.slice(2).join(" ");
         enemySearch(userID, query, att);
-    }
-    else {
+    } else {
         const query = args.slice(1).join(" ");
         enemySearch(userID, query);
     }
 }
+
 // discord doesn't like this, will revisit
 // let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
 // let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
 // let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
 const numEmoji = ["0", "1", "2", "3", "4", "5", "6", "7"];
-const addReaction = (channelID, event, reaction) => {
+
+const addReaction = (channelID: any, event: any, reaction: any) => {
     return new Promise((resolve, reject) => {
         bot.addReaction({
             channelID,
@@ -1217,7 +1314,8 @@ const addReaction = (channelID, event, reaction) => {
         });
     });
 };
-const addMultReactions = (channelID, event, reactions) => {
+
+const addMultReactions = (channelID: any, event: any, reactions: any[] | string[]) => {
     return new Promise(async (resolve, reject) => {
         let i = 0;
         let errs = 0;
@@ -1225,25 +1323,27 @@ const addMultReactions = (channelID, event, reactions) => {
             await addReaction(channelID, event, reactions[i])
                 .then(() => i++)
                 .catch(err => {
-                if (!(err.response && err.response.retry_after)) {
-                    // if the error wasn't a rate limit
-                    errs++;
-                    if (errs > reactions.length) {
-                        i = -1;
-                        reject(err);
+                    if (!(err.response && err.response.retry_after)) {
+                        // if the error wasn't a rate limit
+                        errs++;
+                        if (errs > reactions.length) {
+                            i = -1;
+                            reject(err);
+                        }
                     }
-                }
-            });
+                });
         }
         resolve();
     });
 };
-function randcolour(user, userID, channelID, message, event) {
+
+function randcolour(user: any, userID: any, channelID: any, message: any, event: any) {
     const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
     const emoji = colours.map(i => numEmoji[i]);
     addMultReactions(channelID, event, emoji).catch(e => console.error(e));
 }
-function deathByMaths(user, userID, channelID, message) {
+
+function deathByMaths(user: any, userID: any, channelID: string, message: string) {
     const args = message
         .toLowerCase()
         .split(/ +/)
@@ -1256,9 +1356,8 @@ function deathByMaths(user, userID, channelID, message) {
             message: "Sorry, I need the level of an enemy!",
             to: channelID
         });
-    }
-    else {
-        const sparks = {
+    } else {
+        const sparks: { [level: number]: number } = {
             2: -1,
             3: -1,
             4: -1,
@@ -1275,25 +1374,23 @@ function deathByMaths(user, userID, channelID, message) {
             level = Math.floor(level / 2);
             s++;
         }
-        let out = "To get a level " +
+        let out =
+            "To get a level " +
             oLevel +
             " enemy's level divisible by the following numbers, it will take this many Dark Sparks:\n";
         out += Object.keys(sparks)
             .map(k => {
-            const key = parseInt(k, 10);
-            if (sparks[key] > 1) {
-                return "**Level " + key + "**: " + sparks[key] + " Dark Sparks";
-            }
-            else if (sparks[key] === 1) {
-                return "**Level " + key + "**: " + sparks[key] + " Dark Spark";
-            }
-            else if (sparks[key] === 0) {
-                return "**Level " + key + "**: Already there!";
-            }
-            else {
-                return "**Level " + key + "**: Will never reach";
-            }
-        })
+                const key = parseInt(k, 10);
+                if (sparks[key] > 1) {
+                    return "**Level " + key + "**: " + sparks[key] + " Dark Sparks";
+                } else if (sparks[key] === 1) {
+                    return "**Level " + key + "**: " + sparks[key] + " Dark Spark";
+                } else if (sparks[key] === 0) {
+                    return "**Level " + key + "**: Already there!";
+                } else {
+                    return "**Level " + key + "**: Will never reach";
+                }
+            })
             .join("\n");
         bot.sendMessage({
             message: out,
@@ -1301,21 +1398,33 @@ function deathByMaths(user, userID, channelID, message) {
         });
     }
 }
-function jobData(user, userID, channelID, message) {
+
+function jobData(
+    user: any,
+    userID: any,
+    channelID: string,
+    message: {
+        split: (arg0: RegExp) => { slice: (arg0: number) => { join: (arg0: string) => { toLowerCase: () => void } } };
+    }
+) {
     const query = message
         .split(/ +/)
         .slice(1)
         .join("")
         .toLowerCase();
-    const result = data.classes.find((c) => c.name
-        .toLowerCase()
-        .replace(/ +/g, "")
-        .includes(query));
+    const result = data.classes.find(
+        (c: {
+            name: { toLowerCase: () => { replace: (arg0: RegExp, arg1: string) => { includes: (arg0: any) => void } } };
+        }) =>
+            c.name
+                .toLowerCase()
+                .replace(/ +/g, "")
+                .includes(query)
+    );
     let out;
     if (result) {
         out = result.profile;
-    }
-    else {
+    } else {
         out = "Sorry, I can't find a class with that name!";
     }
     bot.sendMessage({
@@ -1323,4 +1432,3 @@ function jobData(user, userID, channelID, message) {
         to: channelID
     });
 }
-//# sourceMappingURL=carby.js.map
