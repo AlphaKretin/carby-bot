@@ -1,6 +1,7 @@
 import * as Eris from "eris";
-import * as fs from "fs";
+import * as fs from "mz/fs";
 import { Job } from "./job";
+import { Monster } from "./monster";
 
 const auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
 
@@ -11,54 +12,47 @@ if (!auth.token) {
 
 const bot = new Eris.Client(auth.token);
 
-let data: { [key: string]: any } = {
-    classes: [],
-    jobs: {
-        "316052390442958860": ["Mime", "Mime", "Mime", "Mime"]
-    },
-    monsters: [],
-    stats: {
-        kinuVictims: -1,
-        rodsBroken: -1,
-        victims: -1
-    }
+const classes: Job[] = [];
+let jobList: {
+    [userID: string]: string[];
+} = {
+    "316052390442958860": ["Mime", "Mime", "Mime", "Mime"]
 };
-
-function loadData(filename: string, key: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-        console.log("Loading " + filename + "...");
-        fs.readFile(filename, "utf8", (err, file) => {
-            if (err) {
-                reject(err);
-            } else {
-                data[key] = JSON.parse(file);
-                resolve();
-            }
-        });
-    });
+const monsters: Monster[] = [];
+interface IMiscStats {
+    victims: number;
+    kinuVictims: number;
+    rodsBroken: number;
 }
+let stats: IMiscStats = {
+    kinuVictims: -1,
+    rodsBroken: -1,
+    victims: -1
+};
 const dataFile = "data.json";
-const jobFile = "jobs.json";
-const monsterFile = "monsterdata.json";
-const classFile = "classes.json";
-const proms: Array<Promise<void>> = [
-    loadData(dataFile, "stats"),
-    loadData(jobFile, "jobs"),
-    loadData(monsterFile, "monsters"),
-    loadData(classFile, "classes").then(() => {
-        data.classes.forEach((job: Job, index: number) => {
-            data.classes[index] = new Job(job);
-        });
+const proms: Array<Promise<void>> = [];
+proms.push(
+    fs.readFile(dataFile, "utf8").then(file => {
+        stats = JSON.parse(file);
     })
-];
-Promise.all(proms).then(
-    () => {
-        bot.connect();
-    },
-    err => {
-        console.error("Error loading data files!");
-        console.error(err);
-    }
+);
+const jobFile = "jobs.json";
+proms.push(
+    fs.readFile(jobFile, "utf8").then(file => {
+        jobList = JSON.parse(file);
+    })
+);
+const monsterFile = "monsterdata.json";
+proms.push(
+    fs.readFile(monsterFile, "utf8").then(file => {
+        monsters.push(new Monster(JSON.parse(file)));
+    })
+);
+const classFile = "classes.json";
+proms.push(
+    fs.readFile(classFile, "utf8").then(file => {
+        classes.push(new Job(JSON.parse(file)));
+    })
 );
 
 bot.on("ready", () => {
@@ -166,8 +160,28 @@ const commands: ICommand[] = [
         names: ["attributes"]
     },
     {
-        func: info,
-        names: ["info"]
+        func: info("profile"),
+        names: ["info", "enemy"]
+    },
+    {
+        func: info("ai"),
+        names: ["ai"]
+    },
+    {
+        func: info("loot"),
+        names: ["loot"]
+    },
+    {
+        func: info("stats"),
+        names: ["stat"]
+    },
+    {
+        func: info("weak"),
+        names: ["weak"]
+    },
+    {
+        func: info("ability"),
+        names: ["abilit"]
     },
     {
         func: randcolour,
@@ -237,7 +251,12 @@ const responses: { [key: string]: string } = {
 
 const prefixes = [".", "!"];
 
-const queries: any = {};
+const queries: {
+    [userID: string]: {
+        list: Monster[];
+        type: string;
+    };
+} = {};
 
 // reads incoming messages for commands and redirects to functions to handle them
 bot.on("message", async (msg: Eris.Message) => {
@@ -480,8 +499,10 @@ const mcalcTable: { [name: string]: IMCalc } = {
 };
 
 async function mcalc(msg: Eris.Message) {
-    const args = msg.content.toLowerCase().split(/ +/);
-    args.slice(1); // remove command name
+    const args = msg.content
+        .toLowerCase()
+        .split(/ +/)
+        .slice(1); // remove command name
     const strs = args.filter((i: string) => isNaN(parseInt(i, 10))); // extracts strings
     let type;
     if (strs.length < 1) {
@@ -513,125 +534,120 @@ async function mcalc(msg: Eris.Message) {
     await msg.channel.createMessage(mtype.calc(nums));
 }
 
+const hps = [
+    0,
+    20,
+    25,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    120,
+    140,
+    160,
+    180,
+    200,
+    220,
+    240,
+    260,
+    280,
+    300,
+    320,
+    340,
+    360,
+    380,
+    400,
+    420,
+    440,
+    460,
+    480,
+    500,
+    530,
+    560,
+    590,
+    620,
+    650,
+    690,
+    730,
+    770,
+    810,
+    850,
+    900,
+    950,
+    1000,
+    1050,
+    1100,
+    1160,
+    1220,
+    1280,
+    1340,
+    1400,
+    1460,
+    1520,
+    1580,
+    1640,
+    1700,
+    1760,
+    1820,
+    1880,
+    1940,
+    2000,
+    2050,
+    2100,
+    2150,
+    2200,
+    2250,
+    2300,
+    2350,
+    2400,
+    2450,
+    2500,
+    2550,
+    2600,
+    2650,
+    2700,
+    2750,
+    2800,
+    2850,
+    2900,
+    2950,
+    3000,
+    3050,
+    3100,
+    3150,
+    3200,
+    3250,
+    3300,
+    3350,
+    3400,
+    3450,
+    3500,
+    3550,
+    3600,
+    3650,
+    3700,
+    3750,
+    3800,
+    3850,
+    3900,
+    3950
+];
+
 // .almagest
 async function almagest(msg: Eris.Message) {
     const args = msg.content.toLowerCase().split(/ +/);
     let vit = parseInt(args[1], 10);
-    const hps = [
-        0,
-        20,
-        25,
-        30,
-        40,
-        50,
-        60,
-        70,
-        80,
-        90,
-        100,
-        120,
-        140,
-        160,
-        180,
-        200,
-        220,
-        240,
-        260,
-        280,
-        300,
-        320,
-        340,
-        360,
-        380,
-        400,
-        420,
-        440,
-        460,
-        480,
-        500,
-        530,
-        560,
-        590,
-        620,
-        650,
-        690,
-        730,
-        770,
-        810,
-        850,
-        900,
-        950,
-        1000,
-        1050,
-        1100,
-        1160,
-        1220,
-        1280,
-        1340,
-        1400,
-        1460,
-        1520,
-        1580,
-        1640,
-        1700,
-        1760,
-        1820,
-        1880,
-        1940,
-        2000,
-        2050,
-        2100,
-        2150,
-        2200,
-        2250,
-        2300,
-        2350,
-        2400,
-        2450,
-        2500,
-        2550,
-        2600,
-        2650,
-        2700,
-        2750,
-        2800,
-        2850,
-        2900,
-        2950,
-        3000,
-        3050,
-        3100,
-        3150,
-        3200,
-        3250,
-        3300,
-        3350,
-        3400,
-        3450,
-        3500,
-        3550,
-        3600,
-        3650,
-        3700,
-        3750,
-        3800,
-        3850,
-        3900,
-        3950
-    ];
     if (isNaN(vit) || vit > 99) {
-        args.slice(1);
-        const query = args.join("");
-        const result = data.classes.find(
-            (c: {
-                name: {
-                    toLowerCase: () => { replace: (arg0: RegExp, arg1: string) => { includes: (arg0: any) => void } };
-                };
-            }) =>
-                c.name
-                    .toLowerCase()
-                    .replace(/ +/g, "")
-                    .includes(query)
+        const query = args.slice(1).join("");
+        const result = classes.find((c: Job) =>
+            c.name
+                .toLowerCase()
+                .replace(/ +/g, "")
+                .includes(query)
         );
         if (result && args.length > 1) {
             vit = result.vit;
@@ -669,15 +685,20 @@ async function almagest(msg: Eris.Message) {
 
 // DIY fiestas
 function getClassesByNames(names: string[]) {
-    const classes: Job[] = [];
-    names.forEach((n: any) => classes.push(data.classes.find((c: { name: any }) => c.name === n)));
-    return classes;
+    const out: Job[] = [];
+    for (const name of names) {
+        const job = classes.find((c: Job) => c.name === name);
+        if (job) {
+            out.push(job);
+        }
+    }
+    return out;
 }
 
-const windJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 1);
-const waterJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 2);
-const fireJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 3);
-const earthJobs = () => data.classes.filter((c: { crystal: number }) => c.crystal === 4);
+const windJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 1);
+const waterJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 2);
+const fireJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 3);
+const earthJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 4);
 
 async function normal(msg: Eris.Message) {
     const wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
@@ -691,29 +712,16 @@ async function normal(msg: Eris.Message) {
 }
 
 async function random(msg: Eris.Message) {
-    const classes = [windJobs()[getIncInt(0, windJobs.length - 1)].name];
-    const randWater = data.classes.filter(
-        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name)
-    );
-    classes.push(randWater[getIncInt(0, randWater.length - 1)].name);
-    const randFire = data.classes.filter(
-        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 4 && !classes.includes(c.name)
-    );
-    classes.push(randFire[getIncInt(0, randFire.length - 1)].name);
-    const randEarth = data.classes.filter(
-        (c: { crystal: number; name: any }) => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name)
-    );
-    classes.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
+    const out = [windJobs()[getIncInt(0, windJobs.length - 1)].name];
+    const randWater = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 3 && !out.includes(c.name));
+    out.push(randWater[getIncInt(0, randWater.length - 1)].name);
+    const randFire = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 4 && !out.includes(c.name));
+    out.push(randFire[getIncInt(0, randFire.length - 1)].name);
+    const randEarth = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 5 && !out.includes(c.name));
+    out.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
     const chan = await msg.author.getDMChannel();
     await chan.createMessage(
-        "Wind Job: " +
-            classes[0] +
-            "\nWater Job: " +
-            classes[1] +
-            "\nFire Job: " +
-            classes[2] +
-            "\nEarth Job: " +
-            classes[3]
+        "Wind Job: " + out[0] + "\nWater Job: " + out[1] + "\nFire Job: " + out[2] + "\nEarth Job: " + out[3]
     );
 }
 
@@ -748,7 +756,7 @@ async function noSevenFifty(msg: Eris.Message) {
 }
 
 async function chaos(msg: Eris.Message) {
-    const allJobs = data.classes.filter((c: { crystal: number }) => c.crystal > 0 && c.crystal < 5);
+    const allJobs = classes.filter((c: { crystal: number }) => c.crystal > 0 && c.crystal < 5);
     const wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const water = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
@@ -760,9 +768,7 @@ async function chaos(msg: Eris.Message) {
 }
 
 async function chaosNoSevenFifty(msg: Eris.Message) {
-    const noJobs = data.classes.filter(
-        (c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && !c.is750
-    );
+    const noJobs = classes.filter((c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && !c.is750);
     const wind = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const water = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
@@ -774,9 +780,7 @@ async function chaosNoSevenFifty(msg: Eris.Message) {
 }
 
 async function chaosSevenFifty(msg: Eris.Message) {
-    const magJobs = data.classes.filter(
-        (c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && c.is750
-    );
+    const magJobs = classes.filter((c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && c.is750);
     const wind = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const water = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
@@ -788,7 +792,7 @@ async function chaosSevenFifty(msg: Eris.Message) {
 }
 
 async function purechaos(msg: Eris.Message) {
-    const allJobs = data.classes.filter((c: { crystal: number }) => c.crystal < 5).map((c: { name: any }) => c.name);
+    const allJobs = classes.filter((c: { crystal: number }) => c.crystal < 5).map((c: { name: any }) => c.name);
     let wind: string;
     let water: string;
     let fire: string;
@@ -802,7 +806,7 @@ async function purechaos(msg: Eris.Message) {
 
 async function forbidden(msg: Eris.Message) {
     const forbiddenWind = windJobs();
-    forbiddenWind.push(getClassesByNames(["Time Mage"]));
+    forbiddenWind.push(...getClassesByNames(["Time Mage"]));
     const forbiddenWater = getClassesByNames([
         "Red Mage",
         "Summoner",
@@ -813,7 +817,7 @@ async function forbidden(msg: Eris.Message) {
         "Ninja"
     ]);
     const forbiddenFire = getClassesByNames(["Bard", "Ranger", "Dancer"]).concat(earthJobs());
-    const forbiddenEarth = data.classes.filter((c: { crystal: number }) => c.crystal === 5);
+    const forbiddenEarth = classes.filter((c: { crystal: number }) => c.crystal === 5);
     const forbJobs = [
         forbiddenWind[getIncInt(0, forbiddenWind.length - 1)].name,
         forbiddenWater[getIncInt(0, forbiddenWater.length - 1)].name,
@@ -913,12 +917,12 @@ async function dd(msg: Eris.Message) {
 
 // speedtrap
 async function trapped(msg: Eris.Message) {
-    data.stats.victims++;
+    stats.victims++;
     if (msg.author.id === "90507312564805632") {
-        data.stats.kinuVictims++;
+        stats.kinuVictims++;
     }
-    await msg.channel.createMessage("Gotta go fast! Total Victims: " + data.stats.victims);
-    fs.writeFile(dataFile, JSON.stringify(data.stats, null, 4), err => {
+    await msg.channel.createMessage("Gotta go fast! Total Victims: " + stats.victims);
+    fs.writeFile(dataFile, JSON.stringify(stats, null, 4), err => {
         if (err) {
             console.error(err);
         }
@@ -930,9 +934,9 @@ async function victim(msg: Eris.Message) {
         "<@" +
             msg.author.id +
             ">: Dr. Clapperclaw's Deadly Speed Trap has snared " +
-            data.stats.victims +
+            stats.victims +
             " victims! (" +
-            data.stats.kinuVictims +
+            stats.kinuVictims +
             " of them are alcharagia...)"
     );
 }
@@ -941,12 +945,12 @@ async function breakRod(msg: Eris.Message) {
     const args = msg.content.toLowerCase().split(/ +/);
     const index = parseInt(args[1], 10);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100) {
-        data.stats.rodsBroken++;
+        stats.rodsBroken++;
     } else {
-        data.stats.rodsBroken += index;
+        stats.rodsBroken += index;
     }
-    await msg.channel.createMessage("750 blaze rods errday (" + data.stats.rodsBroken + " broken so far!)");
-    fs.writeFile(dataFile, JSON.stringify(data.stats, null, 4), err => {
+    await msg.channel.createMessage("750 blaze rods errday (" + stats.rodsBroken + " broken so far!)");
+    fs.writeFile(dataFile, JSON.stringify(stats, null, 4), err => {
         if (err) {
             console.error(err);
         }
@@ -955,7 +959,7 @@ async function breakRod(msg: Eris.Message) {
 
 async function broken(msg: Eris.Message) {
     await msg.channel.createMessage(
-        "You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all."
+        "You godless heathens have blazed " + stats.rodsBroken + " rods so far. DARE has failed you all."
     );
 }
 
@@ -1004,8 +1008,8 @@ async function jobs(msg: Eris.Message) {
             return;
         }
         const curJobs = args.slice(2);
-        data.jobs[msg.author.id] = curJobs;
-        fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => {
+        jobList[msg.author.id] = curJobs;
+        fs.writeFile(jobFile, JSON.stringify(jobs, null, 4), err => {
             if (err) {
                 console.error(err);
             }
@@ -1014,9 +1018,9 @@ async function jobs(msg: Eris.Message) {
             "Got it, <@" + msg.author.id + ">. Your jobs (" + curJobs.join("/") + ") are registered."
         );
     } else if (args[1].toLowerCase() === "lookup") {
-        let mentioned;
+        let mentioned: Eris.User;
         if (msg.mentions.length > 0) {
-            mentioned = msg.mentions[0].id;
+            mentioned = msg.mentions[0];
         } else if (args.length > 2) {
             // try lookup by name
             const uName = args
@@ -1035,7 +1039,7 @@ async function jobs(msg: Eris.Message) {
         } else {
             mentioned = msg.author;
         }
-        const curJobs = data.jobs[mentioned];
+        const curJobs = jobList[mentioned.id];
         const name = mentioned.username;
         if (!curJobs) {
             await msg.channel.createMessage("I don't have jobs on file for " + name + ", sorry!");
@@ -1099,7 +1103,7 @@ async function forbiddenLite(msg: Eris.Message) {
 }
 
 async function purify() {
-    data = {
+    stats = {
         kinuVictims: 0,
         rodsBroken: 0,
         victims: 0
@@ -1108,32 +1112,47 @@ async function purify() {
 
 // attributes
 async function attributes(msg: Eris.Message) {
-    if (data.monsters.length > 0) {
+    if (monsters.length > 0) {
         const chan = await msg.author.getDMChannel();
-        chan.createMessage(
-            "Available attributes for use with `.info`:\n`" + Object.keys(data.monsters[0]).join(", ") + "`."
+        await chan.createMessage(
+            "The monster database has changed! " +
+                "Instead of looking individual attributes, you use seperate commands for these categories:\n" +
+                "`.info` shows everything but AI\n" +
+                "`.stats` just shows the numbers\n" +
+                "`.weak` shows things like elemental affinities, statuses, and creature types\n" +
+                "`.ability` shows abilities like magic and !Releases\n" +
+                "`.loot` shows drops and !Steals\n" +
+                "`.ai` shows the AI routine"
         );
     }
 }
 
-async function enemyInfo(user: Eris.User, enemyData: { [x: string]: any; name: string }, att?: string) {
-    let out = "__Data for " + enemyData.name + "__:\n";
-    if (att && att in enemyData) {
-        switch (att) {
-            case "ai":
-                out += "```css\n" + enemyData[att].join("\n") + "```";
-                break;
-            default:
-                out += JSON.stringify(enemyData[att], null, 4);
-        }
-    } else {
-        if (att) {
-            console.error("enemyInfo called with invalid attribute " + att);
-        }
-        out += JSON.stringify(enemyData, null, 4);
+async function enemyInfo(user: Eris.User, enemy: Monster, type: string) {
+    let out: string | undefined;
+    switch (type) {
+        case "info":
+            out = enemy.profile;
+            break;
+        case "ai":
+            out = enemy.ai;
+            break;
+        case "stats":
+            out = enemy.stats;
+            break;
+        case "weak":
+            out = enemy.weak;
+            break;
+        case "ability":
+            out = enemy.ability;
+            break;
+        case "loot":
+            out = enemy.loot;
+            break;
     }
-    const chan = await user.getDMChannel();
-    await chan.createMessage(out);
+    if (out) {
+        const chan = await user.getDMChannel();
+        await chan.createMessage(out);
+    }
 }
 
 // monster data query
@@ -1145,18 +1164,18 @@ const aliases: { [alias: string]: string } = {
     treedeath: "Exdeath (Final)"
 };
 
-async function enemySearch(user: Eris.User, query: string, att?: string) {
+async function enemySearch(user: Eris.User, query: string, type: string) {
     if (query.trim().toLowerCase() in aliases) {
         query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
-    const matches = data.monsters.filter(
+    const matches = monsters.filter(
         (enemy: any) => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)
     ); // new array which is all enemies with name including message
     if (matches.length < 1) {
         const chan = await user.getDMChannel();
         await chan.createMessage("Sorry, I couldn't find any enemies with that name!");
     } else if (matches.length === 1) {
-        enemyInfo(user, matches[0], att);
+        enemyInfo(user, matches[0], type);
     } else {
         let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
         let i = 1; // lists from 1-n for humans even tho arrays start at 0
@@ -1166,8 +1185,8 @@ async function enemySearch(user: Eris.User, query: string, att?: string) {
         }
         queries[user.id] = {
             // store data in queries, in the form of its own tiny key-value pair
-            att,
-            list: matches
+            list: matches,
+            type
         };
         const chan = await user.getDMChannel();
         await chan.createMessage(out);
@@ -1181,31 +1200,20 @@ async function enemyClarify(msg: Eris.Message) {
         const chan = await msg.author.getDMChannel();
         await chan.createMessage("Sorry, that wasn't the number of a result I had saved. Please try searching again.");
     } else {
-        enemyInfo(msg.author, queries[msg.author.id].list[input - 1], queries[msg.author.id].att);
+        enemyInfo(msg.author, queries[msg.author.id].list[input - 1], queries[msg.author.id].type);
     }
     delete queries[msg.author.id]; // remove element from object
 }
 
-async function info(msg: Eris.Message) {
-    const args = msg.content.toLowerCase().split(/ +/);
-    if (args.length < 2) {
-        const chan = await msg.author.getDMChannel();
-        await chan.createMessage(
-            "Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\n" +
-                "You can see a list of valid attributes with `.attributes`.\nSpecifying an attribute is optional.\n" +
-                "Enemy name can be RPGe or Advance translation."
-        );
-        return;
-    }
-    // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
-    if (args[1] in data.monsters[0]) {
-        const att = args[1];
-        const query = args.slice(2).join(" ");
-        enemySearch(msg.author, query, att);
-    } else {
-        const query = args.slice(1).join(" ");
-        enemySearch(msg.author, query);
-    }
+function info(type: string) {
+    return async (msg: Eris.Message) => {
+        const query = msg.content
+            .toLowerCase()
+            .split(/ +/)
+            .slice(1)
+            .join(" ");
+        enemySearch(msg.author, query, type);
+    };
 }
 
 async function randcolour(msg: Eris.Message) {
@@ -1272,14 +1280,11 @@ async function jobData(msg: Eris.Message) {
         .slice(1)
         .join("")
         .toLowerCase();
-    const result = data.classes.find(
-        (c: {
-            name: { toLowerCase: () => { replace: (arg0: RegExp, arg1: string) => { includes: (arg0: any) => void } } };
-        }) =>
-            c.name
-                .toLowerCase()
-                .replace(/ +/g, "")
-                .includes(query)
+    const result = classes.find((c: Job) =>
+        c.name
+            .toLowerCase()
+            .replace(/ +/g, "")
+            .includes(query)
     );
     let out;
     if (result) {
@@ -1290,4 +1295,12 @@ async function jobData(msg: Eris.Message) {
     await msg.channel.createMessage(out);
 }
 
-bot.connect();
+Promise.all(proms).then(
+    _ => {
+        bot.connect();
+    },
+    err => {
+        console.error("Error loading data files!");
+        console.error(err);
+    }
+);
