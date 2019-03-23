@@ -25,23 +25,29 @@ interface IMiscStats {
     rodsBroken: number;
 }
 let stats: IMiscStats = {
-    kinuVictims: -1,
-    rodsBroken: -1,
-    victims: -1
+    kinuVictims: 0,
+    rodsBroken: 0,
+    victims: 0
 };
 const dataFile = "data.json";
 const proms: Array<Promise<void>> = [];
-proms.push(
-    fs.readFile(dataFile, "utf8").then(file => {
-        stats = JSON.parse(file);
-    })
-);
+async function loadData() {
+    if (await fs.exists(dataFile)) {
+        await fs.readFile(dataFile, "utf8").then(file => {
+            stats = JSON.parse(file);
+        });
+    }
+}
+proms.push(loadData());
 const jobFile = "jobs.json";
-proms.push(
-    fs.readFile(jobFile, "utf8").then(file => {
-        jobList = JSON.parse(file);
-    })
-);
+async function loadJobs() {
+    if (await fs.exists(jobFile)) {
+        await fs.readFile(jobFile, "utf8").then(file => {
+            jobList = JSON.parse(file);
+        });
+    }
+}
+proms.push(loadJobs());
 const monsterFile = "monsterdata.json";
 proms.push(
     fs.readFile(monsterFile, "utf8").then(file => {
