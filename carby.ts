@@ -265,7 +265,7 @@ const queries: {
 } = {};
 
 // reads incoming messages for commands and redirects to functions to handle them
-bot.on("message", async (msg: Eris.Message) => {
+bot.on("messageCreate", async (msg: Eris.Message) => {
     const lowMes = msg.content.toLowerCase();
     if (!msg.author.bot) {
         for (const cmd of commands) {
