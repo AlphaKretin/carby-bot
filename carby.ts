@@ -169,11 +169,10 @@ const commands: ICommand[] = [
         func: info,
         names: ["info"]
     },
-    // does not work
-    /*{
+    {
         func: randcolour,
-        names: ["color", "colour"],
-    }*/
+        names: ["color", "colour"]
+    },
     {
         func: deathByMaths,
         names: ["math", "deathbymath"] // "maths" handled because it only checks the start
@@ -1209,15 +1208,9 @@ async function info(msg: Eris.Message) {
     }
 }
 
-// discord doesn't like this, will revisit
-// let numEmoji = [ "0️⃣", "1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"];
-// let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
-// let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
-const numEmoji = ["0", "1", "2", "3", "4", "5", "6", "7"];
-
 async function randcolour(msg: Eris.Message) {
     const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
-    const emoji = colours.map(i => numEmoji[i]);
+    const emoji = colours.map(i => `${i}\u20e3`);
     for (const emo of emoji) {
         await msg.addReaction(emo);
     }
