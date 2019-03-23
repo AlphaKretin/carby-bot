@@ -7,7 +7,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const Discord = __importStar(require("discord.io"));
+const Eris = __importStar(require("eris"));
 const fs = __importStar(require("fs"));
 const job_1 = require("./job");
 const auth = JSON.parse(fs.readFileSync("auth.json", "utf8"));
@@ -15,10 +15,7 @@ if (!auth.token) {
     console.error("Bot token not found at auth.json.token!");
     process.exit();
 }
-const bot = new Discord.Client({
-    autorun: false,
-    token: auth.token
-});
+const bot = new Eris.Client(auth.token);
 let data = {
     classes: [],
     jobs: {
@@ -66,12 +63,11 @@ Promise.all(proms).then(() => {
     console.error(err);
 });
 bot.on("ready", () => {
-    console.log("Logged in as %s - %s\n", bot.username, bot.id);
+    console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);
 });
-bot.on("disconnect", err => {
-    console.error("Bot disconnected with below error! Reconnecting...");
-    console.error(err);
-    bot.connect();
+bot.on("disconnect", async () => {
+    console.error("Bot disconnected! Reconnecting...");
+    await bot.connect();
 });
 const commands = [
     {
@@ -155,7 +151,7 @@ const commands = [
         names: ["forbidden"]
     },
     {
-        chk: (_, userID) => auth.owners && auth.owners.indexOf(userID) > -1,
+        chk: (msg) => auth.owners && auth.owners.indexOf(msg.author.id) > -1,
         func: purify,
         names: ["purify"]
     },
@@ -231,15 +227,15 @@ const responses = {
 const prefixes = [".", "!"];
 const queries = {};
 // reads incoming messages for commands and redirects to functions to handle them
-bot.on("message", (user, userID, channelID, message, event) => {
-    const lowMes = message.toLowerCase();
-    if (userID !== bot.id) {
+bot.on("message", async (msg) => {
+    const lowMes = msg.content.toLowerCase();
+    if (!msg.author.bot) {
         for (const cmd of commands) {
-            if (!cmd.chk || cmd.chk(user, userID)) {
+            if (!cmd.chk || cmd.chk(msg)) {
                 for (const name of cmd.names) {
                     for (const pre of prefixes) {
                         if (lowMes.startsWith(pre + name)) {
-                            cmd.func(user, userID, channelID, message, event);
+                            await cmd.func(msg);
                             return;
                         }
                     }
@@ -247,24 +243,21 @@ bot.on("message", (user, userID, channelID, message, event) => {
             }
         }
         if (lowMes.startsWith("zerky!")) {
-            zerky(user, userID, channelID);
+            await zerky(msg);
             return;
         }
         for (const key in responses) {
             if (responses.hasOwnProperty(key)) {
                 for (const pre of prefixes) {
                     if (lowMes.startsWith(pre + key)) {
-                        bot.sendMessage({
-                            message: responses[key],
-                            to: channelID
-                        });
+                        await msg.channel.createMessage(responses[key]);
                         return;
                     }
                 }
             }
         }
-        if (userID in queries) {
-            enemyClarify(user, userID, channelID, message);
+        if (msg.author.id in queries) {
+            await enemyClarify(msg);
             return;
         }
     }
@@ -450,49 +443,37 @@ const mcalcTable = {
         }
     }
 };
-function mcalc(user, userID, channelID, message) {
-    const args = message.toLowerCase().split(/ +/);
+async function mcalc(msg) {
+    const args = msg.content.toLowerCase().split(/ +/);
     args.slice(1); // remove command name
     const strs = args.filter((i) => isNaN(parseInt(i, 10))); // extracts strings
     let type;
     if (strs.length < 1) {
-        bot.sendMessage({
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
-                Object.keys(mcalcTable).join(", ") +
-                "`",
-            to: channelID
-        });
+        await msg.channel.createMessage("Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
+            Object.keys(mcalcTable).join(", ") +
+            "`");
         return;
     }
     else {
         type = strs[0].toLowerCase();
     }
     if (!(type in mcalcTable)) {
-        bot.sendMessage({
-            message: "Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
-                Object.keys(mcalcTable).join(", ") +
-                "`",
-            to: channelID
-        });
+        await msg.channel.createMessage("Sorry, you need to tell me what type of M you're calculating! Valid types: `" +
+            Object.keys(mcalcTable).join(", ") +
+            "`");
         return;
     }
     const mtype = mcalcTable[type];
     const nums = args.map((i) => parseInt(i, 10)).filter((i) => !isNaN(i)); // extracts numbers
     if (nums.length < mtype.args.length) {
-        bot.sendMessage({
-            message: "Sorry, I need more numbers! Arguments for `" + type + "`: " + mtype.args.join(", "),
-            to: channelID
-        });
+        await msg.channel.createMessage("Sorry, I need more numbers! Arguments for `" + type + "`: " + mtype.args.join(", "));
         return;
     }
-    bot.sendMessage({
-        message: mtype.calc(nums),
-        to: channelID
-    });
+    await msg.channel.createMessage(mtype.calc(nums));
 }
 // .almagest
-function almagest(user, userID, channelID, message) {
-    const args = message.toLowerCase().split(/ +/);
+async function almagest(msg) {
+    const args = msg.content.toLowerCase().split(/ +/);
     let vit = parseInt(args[1], 10);
     const hps = [
         0,
@@ -607,11 +588,8 @@ function almagest(user, userID, channelID, message) {
             vit = result.vit;
         }
         else {
-            bot.sendMessage({
-                message: "NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. " +
-                    "Good luck! (Only 720 to 740 damage if you have Shell! Yay!)",
-                to: channelID
-            });
+            await msg.channel.createMessage("NED's Almagest can deal 1620 to 1665 Holy damage and inflict Sap. " +
+                "Good luck! (Only 720 to 740 damage if you have Shell! Yay!)");
             return;
         }
     }
@@ -636,10 +614,7 @@ function almagest(user, userID, channelID, message) {
     else {
         out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
     }
-    bot.sendMessage({
-        message: out,
-        to: channelID
-    });
+    await msg.channel.createMessage(out);
 }
 // DIY fiestas
 function getClassesByNames(names) {
@@ -651,17 +626,15 @@ const windJobs = () => data.classes.filter((c) => c.crystal === 1);
 const waterJobs = () => data.classes.filter((c) => c.crystal === 2);
 const fireJobs = () => data.classes.filter((c) => c.crystal === 3);
 const earthJobs = () => data.classes.filter((c) => c.crystal === 4);
-function normal(user, userID) {
+async function normal(msg) {
     const wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
     const water = waterJobs()[getIncInt(0, waterJobs.length - 1)].name;
     const fire = fireJobs()[getIncInt(0, fireJobs.length - 1)].name;
     const earth = earthJobs()[getIncInt(0, earthJobs.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function random(user, userID) {
+async function random(msg) {
     const classes = [windJobs()[getIncInt(0, windJobs.length - 1)].name];
     const randWater = data.classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !classes.includes(c.name));
     classes.push(randWater[getIncInt(0, randWater.length - 1)].name);
@@ -669,19 +642,17 @@ function random(user, userID) {
     classes.push(randFire[getIncInt(0, randFire.length - 1)].name);
     const randEarth = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !classes.includes(c.name));
     classes.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
-    bot.sendMessage({
-        message: "Wind Job: " +
-            classes[0] +
-            "\nWater Job: " +
-            classes[1] +
-            "\nFire Job: " +
-            classes[2] +
-            "\nEarth Job: " +
-            classes[3],
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " +
+        classes[0] +
+        "\nWater Job: " +
+        classes[1] +
+        "\nFire Job: " +
+        classes[2] +
+        "\nEarth Job: " +
+        classes[3]);
 }
-function sevenFifty(user, userID) {
+async function sevenFifty(msg) {
     const mageWind = windJobs().filter((c) => c.is750);
     const wind = mageWind[getIncInt(0, mageWind.length - 1)].name;
     const mageWater = waterJobs().filter((c) => c.is750);
@@ -690,12 +661,10 @@ function sevenFifty(user, userID) {
     const fire = mageFire[getIncInt(0, mageFire.length - 1)].name;
     const mageEarth = earthJobs().filter((c) => c.is750);
     const earth = mageEarth[getIncInt(0, mageEarth.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function noSevenFifty(user, userID) {
+async function noSevenFifty(msg) {
     const noWind = windJobs().filter((c) => !c.is750);
     const wind = noWind[getIncInt(0, noWind.length - 1)].name;
     const noWater = waterJobs().filter((c) => !c.is750);
@@ -704,57 +673,47 @@ function noSevenFifty(user, userID) {
     const fire = noFire[getIncInt(0, noFire.length - 1)].name;
     const noEarth = earthJobs().filter((c) => !c.is750);
     const earth = noEarth[getIncInt(0, noEarth.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function chaos(user, userID) {
+async function chaos(msg) {
     const allJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5);
     const wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const water = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const earth = allJobs[getIncInt(0, allJobs.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function chaosNoSevenFifty(user, userID) {
+async function chaosNoSevenFifty(msg) {
     const noJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !c.is750);
     const wind = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const water = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const earth = noJobs[getIncInt(0, noJobs.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function chaosSevenFifty(user, userID) {
+async function chaosSevenFifty(msg) {
     const magJobs = data.classes.filter((c) => c.crystal > 0 && c.crystal < 5 && c.is750);
     const wind = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const water = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const earth = magJobs[getIncInt(0, magJobs.length - 1)].name;
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function purechaos(user, userID) {
+async function purechaos(msg) {
     const allJobs = data.classes.filter((c) => c.crystal < 5).map((c) => c.name);
     let wind;
     let water;
     let fire;
     let earth;
     [wind, water, fire, earth] = shuffle(allJobs).slice(0, 4);
-    bot.sendMessage({
-        message: "Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
-function forbidden(user, userID) {
+async function forbidden(msg) {
     const forbiddenWind = windJobs();
     forbiddenWind.push(getClassesByNames(["Time Mage"]));
     const forbiddenWater = getClassesByNames([
@@ -777,19 +736,17 @@ function forbidden(user, userID) {
     const index = getIncInt(0, forbJobs.length - 2);
     const voidJob = forbJobs[index];
     forbJobs[index] = "~~" + forbJobs[index] + "~~";
-    bot.sendMessage({
-        message: "Wind Job: " +
-            forbJobs[0] +
-            "\nWater Job: " +
-            forbJobs[1] +
-            "\nFire Job: " +
-            forbJobs[2] +
-            "\nEarth Job: " +
-            forbJobs[3] +
-            "\nLost to the void: " +
-            voidJob,
-        to: userID
-    });
+    const chan = await msg.author.getDMChannel();
+    await chan.createMessage("Wind Job: " +
+        forbJobs[0] +
+        "\nWater Job: " +
+        forbJobs[1] +
+        "\nFire Job: " +
+        forbJobs[2] +
+        "\nEarth Job: " +
+        forbJobs[3] +
+        "\nLost to the void: " +
+        voidJob);
 }
 // .dd
 const ddLines = [
@@ -837,76 +794,55 @@ const ddLines = [
     "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\*",
     "I have a really really dumb strategy! <:yayclod:362777481838592010>"
 ];
-function dd(user, userID, channelID, message) {
-    const args = message.toLowerCase().split(/ +/);
+async function dd(msg) {
+    const args = msg.content.toLowerCase().split(/ +/);
     let index = parseInt(args[1], 10);
     if (args.length < 2) {
         index = getIncInt(0, ddLines.length - 1);
-        bot.sendMessage({
-            message: ddLines[index] + " (#" + (index + 1) + ")",
-            to: channelID
-        });
+        await msg.channel.createMessage(ddLines[index] + " (#" + (index + 1) + ")");
     }
     else if (isNaN(index)) {
         const matches = ddLines.filter(l => l.toLowerCase().includes(args.slice(1).join(" ")));
         if (matches.length > 0) {
             const i = getIncInt(0, matches.length - 1);
-            bot.sendMessage({
-                message: matches[i] + " (#" + (ddLines.indexOf(matches[i]) + 1) + ")",
-                to: channelID
-            });
+            await msg.channel.createMessage(matches[i] + " (#" + (ddLines.indexOf(matches[i]) + 1) + ")");
         }
         else {
-            bot.sendMessage({
-                message: "No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible.",
-                to: channelID
-            });
+            await msg.channel.createMessage("No, I have to let that quote burn, I ran the numbers, doing it with letters is impossible.");
         }
     }
     else if (index > ddLines.length || index < 1) {
         index = getIncInt(0, ddLines.length - 1);
-        bot.sendMessage({
-            message: "Oh my god, the quote wand missed!\n" + ddLines[index] + " (#" + (index + 1) + ")",
-            to: channelID
-        });
+        await msg.channel.createMessage("Oh my god, the quote wand missed!\n" + ddLines[index] + " (#" + (index + 1) + ")");
     }
     else {
-        bot.sendMessage({
-            message: ddLines[index - 1] + " (#" + index + ")",
-            to: channelID
-        });
+        await msg.channel.createMessage(ddLines[index - 1] + " (#" + index + ")");
     }
 }
 // speedtrap
-function trapped(user, userID, channelID) {
+async function trapped(msg) {
     data.stats.victims++;
-    if (userID === "90507312564805632") {
+    if (msg.author.id === "90507312564805632") {
         data.stats.kinuVictims++;
     }
-    bot.sendMessage({
-        message: "Gotta go fast! Total Victims: " + data.stats.victims,
-        to: channelID
-    });
+    await msg.channel.createMessage("Gotta go fast! Total Victims: " + data.stats.victims);
     fs.writeFile(dataFile, JSON.stringify(data.stats, null, 4), err => {
         if (err) {
             console.error(err);
         }
     });
 }
-function victim(user, userID, channelID) {
-    bot.sendMessage({
-        message: "<@" +
-            userID +
-            ">: Dr. Clapperclaw's Deadly Speed Trap has snared " +
-            data.stats.victims +
-            " victims! (" +
-            data.stats.kinuVictims +
-            " of them are alcharagia...)",
-        to: channelID
-    });
+async function victim(msg) {
+    await msg.channel.createMessage("<@" +
+        msg.author.id +
+        ">: Dr. Clapperclaw's Deadly Speed Trap has snared " +
+        data.stats.victims +
+        " victims! (" +
+        data.stats.kinuVictims +
+        " of them are alcharagia...)");
 }
-function breakRod(user, userID, channelID, message) {
-    const args = message.toLowerCase().split(/ +/);
+async function breakRod(msg) {
+    const args = msg.content.toLowerCase().split(/ +/);
     const index = parseInt(args[1], 10);
     if (isNaN(index) || args.length === 1 || index < 0 || index > 100) {
         data.stats.rodsBroken++;
@@ -914,24 +850,18 @@ function breakRod(user, userID, channelID, message) {
     else {
         data.stats.rodsBroken += index;
     }
-    bot.sendMessage({
-        message: "750 blaze rods errday (" + data.stats.rodsBroken + " broken so far!)",
-        to: channelID
-    });
+    await msg.channel.createMessage("750 blaze rods errday (" + data.stats.rodsBroken + " broken so far!)");
     fs.writeFile(dataFile, JSON.stringify(data.stats, null, 4), err => {
         if (err) {
             console.error(err);
         }
     });
 }
-function broken(user, userID, channelID) {
-    bot.sendMessage({
-        message: "You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all.",
-        to: channelID
-    });
+async function broken(msg) {
+    await msg.channel.createMessage("You godless heathens have blazed " + data.stats.rodsBroken + " rods so far. DARE has failed you all.");
 }
 // goofy shit
-function countdown(user, userID, channelID) {
+async function countdown(msg) {
     const fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
     const now = new Date().getTime();
     const distance = fiestaDate - now;
@@ -939,60 +869,46 @@ function countdown(user, userID, channelID) {
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    bot.sendMessage({
-        // message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours,
-        // " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
-        message: "The Run has Begun! What are you waiting for? Get in here and make fun of DD! " +
-            "https://www.twitch.tv/rpglimitbreak",
-        to: channelID
-    });
+    await msg.channel.createMessage(
+    // message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours,
+    // " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
+    "The Run has Begun! What are you waiting for? Get in here and make fun of DD! " +
+        "https://www.twitch.tv/rpglimitbreak");
 }
-function zerky(user, userID, channelID) {
-    bot.sendMessage({
-        message: "http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png",
-        to: channelID
-    });
+async function zerky(msg) {
+    await msg.channel.createMessage("http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png");
 }
 // job DB
-function jobs(user, userID, channelID, message, event) {
-    const args = message.split(/ +/);
+async function jobs(msg) {
+    const args = msg.content.split(/ +/);
     // expected args - 0: ".jobs", 1: "lookup" or "register", 2: wind job or @mention (str),
     // 3: water job (str), 4: fire job (str), 5: earth job (str)
     if (args.length < 2 || args.length > 6) {
-        bot.sendMessage({
-            message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
-                "Please ensure you provide jobs when registering. Please delimit with spaces, " +
-                "and keep two-word jobs to one word.",
-            to: channelID
-        });
+        await msg.channel.createMessage("Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
+            "Please ensure you provide jobs when registering. Please delimit with spaces, " +
+            "and keep two-word jobs to one word.");
         return;
     }
     if (args[1].toLowerCase() === "register") {
         if (args.length < 3) {
-            bot.sendMessage({
-                message: "Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
-                    "Please ensure you provide jobs when registering. " +
-                    "Please delimit with spaces, and keep two-word jobs to one word.",
-                to: channelID
-            });
+            await msg.channel.createMessage("Acceptable syntax: `.jobs lookup [user]` or `.jobs register <wind> <water> <fire> <earth>`. " +
+                "Please ensure you provide jobs when registering. " +
+                "Please delimit with spaces, and keep two-word jobs to one word.");
             return;
         }
         const curJobs = args.slice(2);
-        data.jobs[userID] = curJobs;
+        data.jobs[msg.author.id] = curJobs;
         fs.writeFile(jobFile, JSON.stringify(data.jobs, null, 4), err => {
             if (err) {
                 console.error(err);
             }
         });
-        bot.sendMessage({
-            message: "Got it, <@" + userID + ">. Your jobs (" + curJobs.join("/") + ") are registered.",
-            to: channelID
-        });
+        await msg.channel.createMessage("Got it, <@" + msg.author.id + ">. Your jobs (" + curJobs.join("/") + ") are registered.");
     }
     else if (args[1].toLowerCase() === "lookup") {
         let mentioned;
-        if (event.d.mentions.length > 0) {
-            mentioned = event.d.mentions[0].id;
+        if (msg.mentions.length > 0) {
+            mentioned = msg.mentions[0].id;
         }
         else if (args.length > 2) {
             // try lookup by name
@@ -1002,41 +918,29 @@ function jobs(user, userID, channelID, message, event) {
                 .toLowerCase();
             const matches = Object.values(bot.users).filter(u => u.username && u.username.toLowerCase().includes(uName));
             if (matches.length > 0) {
-                mentioned = matches[0].id;
+                mentioned = matches[0];
             }
             else {
-                bot.sendMessage({
-                    message: "Sorry, I can't find that user! Have you tried using an @mention?",
-                    to: channelID
-                });
+                await msg.channel.createMessage("Sorry, I can't find that user! Have you tried using an @mention?");
                 return;
             }
         }
         else {
-            mentioned = userID;
+            mentioned = msg.author;
         }
         const curJobs = data.jobs[mentioned];
-        const name = mentioned in bot.users ? bot.users[mentioned].username : "that user";
+        const name = mentioned.username;
         if (!curJobs) {
-            bot.sendMessage({
-                message: "I don't have jobs on file for " + name + ", sorry!",
-                to: channelID
-            });
+            await msg.channel.createMessage("I don't have jobs on file for " + name + ", sorry!");
         }
         else {
-            bot.sendMessage({
-                message: "I have " + name + "'s jobs as: " + curJobs.join("/") + ".",
-                to: channelID
-            });
+            await msg.channel.createMessage("I have " + name + "'s jobs as: " + curJobs.join("/") + ".");
         }
     }
     else {
-        bot.sendMessage({
-            message: "Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. " +
-                "Please ensure you provide jobs when registering. " +
-                "Please delimit with spaces, and keep two-word jobs to one word.",
-            to: channelID
-        });
+        await msg.channel.createMessage("Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. " +
+            "Please ensure you provide jobs when registering. " +
+            "Please delimit with spaces, and keep two-word jobs to one word.");
     }
 }
 // misc functions
@@ -1061,35 +965,27 @@ function shuffle(array) {
     }
     return array;
 }
-function forbiddenRisk(user, userID, channelID, message, event) {
-    bot.addToRole({
-        roleID: "451768175152070657",
-        serverID: "315364487882342401",
-        userID
-    }, err => {
-        if (err) {
-            console.error(err);
-        }
-    });
-    addMultReactions(channelID, event, ["forbidden:451764608202571816", "black101:326153094868238338"]).catch(e => console.error(e));
+async function forbiddenRisk(msg) {
+    if (msg.member) {
+        await msg.member.addRole("451768175152070657");
+        await msg.addReaction("forbidden:451764608202571816");
+        await msg.addReaction("black101:326153094868238338");
+    }
+    else {
+        await msg.channel.createMessage("Sorry, I can only add you to a role in the server!");
+    }
 }
-function forbiddenLite(user, userID, channelID, message, event) {
-    bot.addToRole({
-        roleID: "451874821245108225",
-        serverID: "315364487882342401",
-        userID
-    }, err => {
-        if (err) {
-            console.error(err);
-        }
-    });
-    bot.addReaction({
-        channelID,
-        messageID: event.d.id,
-        reaction: "forbidden:451764608202571816"
-    });
+async function forbiddenLite(msg) {
+    if (msg.member) {
+        await msg.member.addRole("451874821245108225");
+        await msg.addReaction("forbidden:451764608202571816");
+        await msg.addReaction("black101:326153094868238338");
+    }
+    else {
+        await msg.channel.createMessage("Sorry, I can only add you to a role in the server!");
+    }
 }
-function purify() {
+async function purify() {
     data = {
         kinuVictims: 0,
         rodsBroken: 0,
@@ -1097,15 +993,13 @@ function purify() {
     };
 }
 // attributes
-function attributes(user, userID) {
+async function attributes(msg) {
     if (data.monsters.length > 0) {
-        bot.sendMessage({
-            message: "Available attributes for use with `.info`:\n`" + Object.keys(data.monsters[0]).join(", ") + "`.",
-            to: userID
-        });
+        const chan = await msg.author.getDMChannel();
+        chan.createMessage("Available attributes for use with `.info`:\n`" + Object.keys(data.monsters[0]).join(", ") + "`.");
     }
 }
-function enemyInfo(userID, enemyData, att) {
+async function enemyInfo(user, enemyData, att) {
     let out = "__Data for " + enemyData.name + "__:\n";
     if (att && att in enemyData) {
         switch (att) {
@@ -1122,10 +1016,8 @@ function enemyInfo(userID, enemyData, att) {
         }
         out += JSON.stringify(enemyData, null, 4);
     }
-    bot.sendMessage({
-        message: out,
-        to: userID
-    });
+    const chan = await user.getDMChannel();
+    await chan.createMessage(out);
 }
 // monster data query
 const aliases = {
@@ -1135,19 +1027,17 @@ const aliases = {
     shipgamesh: "Gilgamesh (Ship)",
     treedeath: "Exdeath (Final)"
 };
-function enemySearch(userID, query, att) {
+async function enemySearch(user, query, att) {
     if (query.trim().toLowerCase() in aliases) {
         query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
     const matches = data.monsters.filter((enemy) => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)); // new array which is all enemies with name including message
     if (matches.length < 1) {
-        bot.sendMessage({
-            message: "Sorry, I couldn't find any enemies with that name!",
-            to: userID
-        });
+        const chan = await user.getDMChannel();
+        await chan.createMessage("Sorry, I couldn't find any enemies with that name!");
     }
     else if (matches.length === 1) {
-        enemyInfo(userID, matches[0], att);
+        enemyInfo(user, matches[0], att);
     }
     else {
         let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
@@ -1156,51 +1046,45 @@ function enemySearch(userID, query, att) {
             out += i + ". " + match.name + "\n";
             i++;
         }
-        queries[userID] = {
+        queries[user.id] = {
             // store data in queries, in the form of its own tiny key-value pair
             att,
             list: matches
         };
-        bot.sendMessage({
-            message: out,
-            to: userID
-        });
+        const chan = await user.getDMChannel();
+        await chan.createMessage(out);
     }
 }
-function enemyClarify(user, userID, channelID, message) {
-    const input = parseInt(message, 10);
-    if (isNaN(input) || !(input - 1 in queries[userID].list)) {
+async function enemyClarify(msg) {
+    const input = parseInt(msg.content, 10);
+    if (isNaN(input) || !(input - 1 in queries[msg.author.id].list)) {
         // if user didn't type a number or the number wasn't listed (-1 to convert from 1-start to 0-start)
-        bot.sendMessage({
-            message: "Sorry, that wasn't the number of a result I had saved. Please try searching again.",
-            to: userID
-        });
+        const chan = await msg.author.getDMChannel();
+        await chan.createMessage("Sorry, that wasn't the number of a result I had saved. Please try searching again.");
     }
     else {
-        enemyInfo(userID, queries[userID].list[input - 1], queries[userID].att);
+        enemyInfo(msg.author, queries[msg.author.id].list[input - 1], queries[msg.author.id].att);
     }
-    delete queries[userID]; // remove element from object
+    delete queries[msg.author.id]; // remove element from object
 }
-function info(user, userID, channelID, message) {
-    const args = message.toLowerCase().split(/ +/);
+async function info(msg) {
+    const args = msg.content.toLowerCase().split(/ +/);
     if (args.length < 2) {
-        bot.sendMessage({
-            message: "Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\n" +
-                "You can see a list of valid attributes with `.attributes`.\nSpecifying an attribute is optional.\n" +
-                "Enemy name can be RPGe or Advance translation.",
-            to: userID
-        });
+        const chan = await msg.author.getDMChannel();
+        await chan.createMessage("Sorry, I didn't understand your query. Correct syntax: `.info attribute enemy_name`.\n" +
+            "You can see a list of valid attributes with `.attributes`.\nSpecifying an attribute is optional.\n" +
+            "Enemy name can be RPGe or Advance translation.");
         return;
     }
     // expected args - 0: ".info", 1: query (str), 2..: monster name (str)
     if (args[1] in data.monsters[0]) {
         const att = args[1];
         const query = args.slice(2).join(" ");
-        enemySearch(userID, query, att);
+        enemySearch(msg.author, query, att);
     }
     else {
         const query = args.slice(1).join(" ");
-        enemySearch(userID, query);
+        enemySearch(msg.author, query);
     }
 }
 // discord doesn't like this, will revisit
@@ -1208,43 +1092,15 @@ function info(user, userID, channelID, message) {
 // let numEmoji = [ ":zero:", ":one:", ":two:", ":three:", ":four:", ":five:", ":six:", ":seven:"];
 // let numEmoji = [ ":0:", ":1:", ":2:", ":3:", ":4:", ":5:", ":6:", ":7:"];
 const numEmoji = ["0", "1", "2", "3", "4", "5", "6", "7"];
-const addReaction = (channelID, event, reaction) => {
-    return new Promise((resolve, reject) => {
-        bot.addReaction({
-            channelID,
-            messageID: event.d.id,
-            reaction
-        });
-    });
-};
-const addMultReactions = (channelID, event, reactions) => {
-    return new Promise(async (resolve, reject) => {
-        let i = 0;
-        let errs = 0;
-        while (i in reactions) {
-            await addReaction(channelID, event, reactions[i])
-                .then(() => i++)
-                .catch(err => {
-                if (!(err.response && err.response.retry_after)) {
-                    // if the error wasn't a rate limit
-                    errs++;
-                    if (errs > reactions.length) {
-                        i = -1;
-                        reject(err);
-                    }
-                }
-            });
-        }
-        resolve();
-    });
-};
-function randcolour(user, userID, channelID, message, event) {
+async function randcolour(msg) {
     const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
     const emoji = colours.map(i => numEmoji[i]);
-    addMultReactions(channelID, event, emoji).catch(e => console.error(e));
+    for (const emo of emoji) {
+        await msg.addReaction(emo);
+    }
 }
-function deathByMaths(user, userID, channelID, message) {
-    const args = message
+async function deathByMaths(msg) {
+    const args = msg.content
         .toLowerCase()
         .split(/ +/)
         .slice(1);
@@ -1252,10 +1108,7 @@ function deathByMaths(user, userID, channelID, message) {
     const oLevel = level;
     if (isNaN(level)) {
         // later make it search enemy name
-        bot.sendMessage({
-            message: "Sorry, I need the level of an enemy!",
-            to: channelID
-        });
+        await msg.channel.createMessage("Sorry, I need the level of an enemy!");
     }
     else {
         const sparks = {
@@ -1295,14 +1148,11 @@ function deathByMaths(user, userID, channelID, message) {
             }
         })
             .join("\n");
-        bot.sendMessage({
-            message: out,
-            to: channelID
-        });
+        await msg.channel.createMessage(out);
     }
 }
-function jobData(user, userID, channelID, message) {
-    const query = message
+async function jobData(msg) {
+    const query = msg.content
         .split(/ +/)
         .slice(1)
         .join("")
@@ -1318,9 +1168,7 @@ function jobData(user, userID, channelID, message) {
     else {
         out = "Sorry, I can't find a class with that name!";
     }
-    bot.sendMessage({
-        message: out,
-        to: channelID
-    });
+    await msg.channel.createMessage(out);
 }
+bot.connect();
 //# sourceMappingURL=carby.js.map
