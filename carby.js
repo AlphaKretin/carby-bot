@@ -908,8 +908,8 @@ async function jobs(msg) {
         }
         const curJobs = args.slice(2);
         jobList[msg.author.id] = curJobs;
-        await fs.writeFile(jobFile, JSON.stringify(jobs, null, 4));
-        await msg.channel.createMessage("Got it, <@" + msg.author.id + ">. Your jobs (" + curJobs.join("/") + ") are registered.");
+        await fs.writeFile(jobFile, JSON.stringify(jobList, null, 4));
+        await msg.channel.createMessage("Got it, " + msg.author.username + ". Your jobs (" + curJobs.join("/") + ") are registered.");
     }
     else if (args[1].toLowerCase() === "lookup") {
         let mentioned;
@@ -922,9 +922,9 @@ async function jobs(msg) {
                 .slice(2)
                 .join(" ")
                 .toLowerCase();
-            const matches = Object.values(bot.users).filter(u => u.username && u.username.toLowerCase().includes(uName));
-            if (matches.length > 0) {
-                mentioned = matches[0];
+            const user = bot.users.find(u => u.username.toLowerCase().includes(uName));
+            if (user) {
+                mentioned = user;
             }
             else {
                 await msg.channel.createMessage("Sorry, I can't find that user! Have you tried using an @mention?");
@@ -944,7 +944,7 @@ async function jobs(msg) {
         }
     }
     else {
-        await msg.channel.createMessage("Acceptable syntax: `.jobs lookup @mention` or `.jobs register <wind> <water> <fire> <earth>`. " +
+        await msg.channel.createMessage("Acceptable syntax: `.jobs lookup username` or `.jobs register <wind> <water> <fire> <earth>`. " +
             "Please ensure you provide jobs when registering. " +
             "Please delimit with spaces, and keep two-word jobs to one word.");
     }
