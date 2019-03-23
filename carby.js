@@ -842,16 +842,10 @@ async function trapped(msg) {
         stats.kinuVictims++;
     }
     await msg.channel.createMessage("Gotta go fast! Total Victims: " + stats.victims);
-    fs.writeFile(dataFile, JSON.stringify(stats, null, 4), err => {
-        if (err) {
-            console.error(err);
-        }
-    });
+    await fs.writeFile(dataFile, JSON.stringify(stats, null, 4));
 }
 async function victim(msg) {
-    await msg.channel.createMessage("<@" +
-        msg.author.id +
-        ">: Dr. Clapperclaw's Deadly Speed Trap has snared " +
+    await msg.channel.createMessage("Dr. Clapperclaw's Deadly Speed Trap has snared " +
         stats.victims +
         " victims! (" +
         stats.kinuVictims +
@@ -867,11 +861,7 @@ async function breakRod(msg) {
         stats.rodsBroken += index;
     }
     await msg.channel.createMessage("750 blaze rods errday (" + stats.rodsBroken + " broken so far!)");
-    fs.writeFile(dataFile, JSON.stringify(stats, null, 4), err => {
-        if (err) {
-            console.error(err);
-        }
-    });
+    await fs.writeFile(dataFile, JSON.stringify(stats, null, 4));
 }
 async function broken(msg) {
     await msg.channel.createMessage("You godless heathens have blazed " + stats.rodsBroken + " rods so far. DARE has failed you all.");
@@ -914,11 +904,7 @@ async function jobs(msg) {
         }
         const curJobs = args.slice(2);
         jobList[msg.author.id] = curJobs;
-        fs.writeFile(jobFile, JSON.stringify(jobs, null, 4), err => {
-            if (err) {
-                console.error(err);
-            }
-        });
+        await fs.writeFile(jobFile, JSON.stringify(jobs, null, 4));
         await msg.channel.createMessage("Got it, <@" + msg.author.id + ">. Your jobs (" + curJobs.join("/") + ") are registered.");
     }
     else if (args[1].toLowerCase() === "lookup") {
