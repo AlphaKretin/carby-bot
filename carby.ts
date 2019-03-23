@@ -332,7 +332,7 @@ const mcalcTable: { [name: string]: IMCalc } = {
     },
     chicken: {
         args: ["Level", "Strength", "Agility"],
-        calc: (nums: any[]) => {
+        calc: (nums: number[]) => {
             const level = nums[0];
             const str = nums[1];
             const agil = nums[2];
@@ -360,7 +360,7 @@ const mcalcTable: { [name: string]: IMCalc } = {
     },
     fists: {
         args: ["Level", "Strength"],
-        calc: (nums: any[]) => {
+        calc: (nums: number[]) => {
             const level = nums[0];
             const str = nums[1];
             const m = Math.floor((level * str) / 256 + 2);
@@ -383,7 +383,7 @@ const mcalcTable: { [name: string]: IMCalc } = {
     },
     knife: {
         args: ["Level", "Strength", "Agility"],
-        calc: (nums: any[]) => {
+        calc: (nums: number[]) => {
             const level = nums[0];
             const str = nums[1];
             const agil = nums[2];
@@ -481,7 +481,7 @@ const mcalcTable: { [name: string]: IMCalc } = {
     },
     rune: {
         args: ["Level", "Strength", "Magic"],
-        calc: (nums: any[]) => {
+        calc: (nums: number[]) => {
             const level = nums[0];
             const str = nums[1];
             const mag = nums[2];
