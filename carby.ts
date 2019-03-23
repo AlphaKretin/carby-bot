@@ -1226,7 +1226,17 @@ function info(type: string) {
 
 async function randcolour(msg: Eris.Message) {
     const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
-    const emoji = colours.map(i => `${i}\u20e3`);
+    const emoji: string[] = [];
+    for (const color of colours) {
+        const emo = color + "\u20e3";
+        if (emoji.indexOf(emo) === -1) {
+            emoji.push(emo);
+        } else if (emoji.indexOf("◀") === -1) {
+            emoji.push("◀");
+        } else {
+            emoji.push("➕");
+        }
+    }
     for (const emo of emoji) {
         await msg.addReaction(emo);
     }
