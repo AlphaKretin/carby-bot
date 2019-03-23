@@ -48,11 +48,17 @@ async function loadJobs() {
 proms.push(loadJobs());
 const monsterFile = "monsterdata.json";
 proms.push(fs.readFile(monsterFile, "utf8").then(file => {
-    monsters.push(new monster_1.Monster(JSON.parse(file)));
+    const list = JSON.parse(file);
+    for (const monster of list) {
+        monsters.push(new monster_1.Monster(monster));
+    }
 }));
 const classFile = "classes.json";
 proms.push(fs.readFile(classFile, "utf8").then(file => {
-    classes.push(new job_1.Job(JSON.parse(file)));
+    const list = JSON.parse(file);
+    for (const job of list) {
+        classes.push(new job_1.Job(job));
+    }
 }));
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);

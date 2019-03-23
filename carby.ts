@@ -51,13 +51,19 @@ proms.push(loadJobs());
 const monsterFile = "monsterdata.json";
 proms.push(
     fs.readFile(monsterFile, "utf8").then(file => {
-        monsters.push(new Monster(JSON.parse(file)));
+        const list = JSON.parse(file);
+        for (const monster of list) {
+            monsters.push(new Monster(monster));
+        }
     })
 );
 const classFile = "classes.json";
 proms.push(
     fs.readFile(classFile, "utf8").then(file => {
-        classes.push(new Job(JSON.parse(file)));
+        const list = JSON.parse(file);
+        for (const job of list) {
+            classes.push(new Job(job));
+        }
     })
 );
 
