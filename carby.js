@@ -868,18 +868,22 @@ async function broken(msg) {
 }
 // goofy shit
 async function countdown(msg) {
-    const fiestaDate = new Date("June 17, 2018 13:00:00").getTime();
-    const now = new Date().getTime();
+    const fiestaDate = Date.UTC(2019, 5, 0, 15, 0, 0); // 0 is Jan, so 5 is June
+    const now = Date.now();
     const distance = fiestaDate - now;
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    await msg.channel.createMessage(
-    // message: "FJF 2018's The Run officially starts in " + days + " days, " + hours + " hours,
-    // " + minutes + " minutes, and " + seconds + " seconds! (The Fiesta proper starts whenever The Run ends.)"
-    "The Run has Begun! What are you waiting for? Get in here and make fun of DD! " +
-        "https://www.twitch.tv/rpglimitbreak");
+    await msg.channel.createMessage("Preregistration starts in " +
+        days +
+        " days, " +
+        hours +
+        " hours, " +
+        minutes +
+        " minutes, and " +
+        seconds +
+        " seconds!");
 }
 async function zerky(msg) {
     await msg.channel.createMessage("http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png");
