@@ -330,6 +330,34 @@ const mcalcTable: { [name: string]: IMCalc } = {
             );
         }
     },
+    chicken: {
+        args: ["Level", "Strength", "Agility"],
+        calc: (nums: any[]) => {
+            const level = nums[0];
+            const str = nums[1];
+            const agil = nums[2];
+            let m = Math.floor((level * str) / 128);
+            const bonus = Math.floor((level * agil) / 128);
+            const n = Math.ceil((128 * (m + 1)) / str);
+            const ns = Math.ceil((128 * (bonus + 1)) / agil);
+            m += bonus + 2;
+            return (
+                "At Level " +
+                level +
+                ", with " +
+                str +
+                " Strength and " +
+                agil +
+                " Agility, your Chicken Knife M is " +
+                m +
+                ". To reach the next M, you need to reach level " +
+                n +
+                " for Strength and " +
+                ns +
+                " for Agility."
+            );
+        }
+    },
     fists: {
         args: ["Level", "Strength"],
         calc: (nums: any[]) => {
@@ -448,35 +476,6 @@ const mcalcTable: { [name: string]: IMCalc } = {
                 ". To reach the next M, you need to reach level " +
                 nextLevel +
                 ""
-            );
-        }
-    },
-
-    chicken: {
-        args: ["Level", "Strength", "Agility"],
-        calc: (nums: any[]) => {
-            const level = nums[0];
-            const str = nums[1];
-            const agil = nums[2];
-            let m = Math.floor((level * str) / 128);
-            const bonus = Math.floor((level * agil) / 128);
-            const n = Math.ceil((128 * (m + 1)) / str);
-            const ns = Math.ceil((128 * (bonus + 1)) / agil);
-            m += bonus + 2;
-            return (
-                "At Level " +
-                level +
-                ", with " +
-                str +
-                " Strength and " +
-                agil +
-                " Agility, your Chicken Knife M is " +
-                m +
-                ". To reach the next M, you need to reach level " +
-                n +
-                " for Strength and " +
-                ns +
-                " for Agility."
             );
         }
     },
@@ -707,10 +706,10 @@ function getClassesByNames(names: string[]) {
     return out;
 }
 
-const windJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 1);
-const waterJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 2);
-const fireJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 3);
-const earthJobs = () => classes.filter((c: { crystal: number }) => c.crystal === 4);
+const windJobs = () => classes.filter((c: Job) => c.crystal === 1);
+const waterJobs = () => classes.filter((c: Job) => c.crystal === 2);
+const fireJobs = () => classes.filter((c: Job) => c.crystal === 3);
+const earthJobs = () => classes.filter((c: Job) => c.crystal === 4);
 
 async function normal(msg: Eris.Message) {
     const wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
@@ -738,13 +737,13 @@ async function random(msg: Eris.Message) {
 }
 
 async function sevenFifty(msg: Eris.Message) {
-    const mageWind = windJobs().filter((c: { is750: any }) => c.is750);
+    const mageWind = windJobs().filter((c: Job) => c.is750);
     const wind = mageWind[getIncInt(0, mageWind.length - 1)].name;
-    const mageWater = waterJobs().filter((c: { is750: any }) => c.is750);
+    const mageWater = waterJobs().filter((c: Job) => c.is750);
     const water = mageWater[getIncInt(0, mageWater.length - 1)].name;
-    const mageFire = fireJobs().filter((c: { is750: any }) => c.is750);
+    const mageFire = fireJobs().filter((c: Job) => c.is750);
     const fire = mageFire[getIncInt(0, mageFire.length - 1)].name;
-    const mageEarth = earthJobs().filter((c: { is750: any }) => c.is750);
+    const mageEarth = earthJobs().filter((c: Job) => c.is750);
     const earth = mageEarth[getIncInt(0, mageEarth.length - 1)].name;
     const chan = await msg.author.getDMChannel();
     await chan.createMessage(
@@ -753,13 +752,13 @@ async function sevenFifty(msg: Eris.Message) {
 }
 
 async function noSevenFifty(msg: Eris.Message) {
-    const noWind = windJobs().filter((c: { is750: any }) => !c.is750);
+    const noWind = windJobs().filter((c: Job) => !c.is750);
     const wind = noWind[getIncInt(0, noWind.length - 1)].name;
-    const noWater = waterJobs().filter((c: { is750: any }) => !c.is750);
+    const noWater = waterJobs().filter((c: Job) => !c.is750);
     const water = noWater[getIncInt(0, noWater.length - 1)].name;
-    const noFire = fireJobs().filter((c: { is750: any }) => !c.is750);
+    const noFire = fireJobs().filter((c: Job) => !c.is750);
     const fire = noFire[getIncInt(0, noFire.length - 1)].name;
-    const noEarth = earthJobs().filter((c: { is750: any }) => !c.is750);
+    const noEarth = earthJobs().filter((c: Job) => !c.is750);
     const earth = noEarth[getIncInt(0, noEarth.length - 1)].name;
     const chan = await msg.author.getDMChannel();
     await chan.createMessage(
@@ -768,7 +767,7 @@ async function noSevenFifty(msg: Eris.Message) {
 }
 
 async function chaos(msg: Eris.Message) {
-    const allJobs = classes.filter((c: { crystal: number }) => c.crystal > 0 && c.crystal < 5);
+    const allJobs = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 5);
     const wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const water = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
@@ -780,7 +779,7 @@ async function chaos(msg: Eris.Message) {
 }
 
 async function chaosNoSevenFifty(msg: Eris.Message) {
-    const noJobs = classes.filter((c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && !c.is750);
+    const noJobs = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 5 && !c.is750);
     const wind = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const water = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
@@ -792,7 +791,7 @@ async function chaosNoSevenFifty(msg: Eris.Message) {
 }
 
 async function chaosSevenFifty(msg: Eris.Message) {
-    const magJobs = classes.filter((c: { crystal: number; is750: any }) => c.crystal > 0 && c.crystal < 5 && c.is750);
+    const magJobs = classes.filter((c: Job) => c.crystal > 0 && c.crystal < 5 && c.is750);
     const wind = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const water = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
@@ -804,7 +803,7 @@ async function chaosSevenFifty(msg: Eris.Message) {
 }
 
 async function purechaos(msg: Eris.Message) {
-    const allJobs = classes.filter((c: { crystal: number }) => c.crystal < 5).map((c: { name: any }) => c.name);
+    const allJobs = classes.filter((c: Job) => c.crystal < 5).map((c: Job) => c.name);
     let wind: string;
     let water: string;
     let fire: string;
@@ -829,7 +828,7 @@ async function forbidden(msg: Eris.Message) {
         "Ninja"
     ]);
     const forbiddenFire = getClassesByNames(["Bard", "Ranger", "Dancer"]).concat(earthJobs());
-    const forbiddenEarth = classes.filter((c: { crystal: number }) => c.crystal === 5);
+    const forbiddenEarth = classes.filter((c: Job) => c.crystal === 5);
     const forbJobs = [
         forbiddenWind[getIncInt(0, forbiddenWind.length - 1)].name,
         forbiddenWater[getIncInt(0, forbiddenWater.length - 1)].name,
