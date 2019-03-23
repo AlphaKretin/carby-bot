@@ -1131,7 +1131,7 @@ async function attributes(msg: Eris.Message) {
 async function enemyInfo(user: Eris.User, enemy: Monster, type: string) {
     let out: string | undefined;
     switch (type) {
-        case "info":
+        case "profile":
             out = enemy.profile;
             break;
         case "ai":
@@ -1170,7 +1170,7 @@ async function enemySearch(user: Eris.User, query: string, type: string) {
         query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
     const matches = monsters.filter(
-        (enemy: any) => enemy.name.toLowerCase().includes(query) || enemy.rpge_name.toLowerCase().includes(query)
+        (enemy: Monster) => enemy.name.toLowerCase().includes(query) || enemy.rpgeName.toLowerCase().includes(query)
     ); // new array which is all enemies with name including message
     if (matches.length < 1) {
         const chan = await user.getDMChannel();
@@ -1190,7 +1190,15 @@ async function enemySearch(user: Eris.User, query: string, type: string) {
             type
         };
         const chan = await user.getDMChannel();
-        await chan.createMessage(out);
+        try {
+            await chan.createMessage(out);
+        } catch (e) {
+            await chan.createMessage(
+                "There was some sort of error sending you a list of monsters with names that matched." +
+                    " This can mean the message was too long. Did you search something too short?" +
+                    " Try again with more of the name."
+            );
+        }
     }
 }
 

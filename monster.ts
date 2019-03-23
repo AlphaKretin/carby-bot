@@ -121,7 +121,7 @@ export class Monster {
     private statsProfile(): string {
         let out = "**Level**: " + this.level + " **EXP**: " + this.exp + " **Gil**: " + this.gil + "\n";
         out += "**HP**: " + this.hp + " **MP**: " + this.mp + " **Speed**: " + this.speed + "\n";
-        out += `**Attack**: ${this.atk} (${this.atkM} M) **Magic Power**: ${this.magPower} + " (" + ${this.magM} M)\n`;
+        out += `**Attack**: ${this.atk} (${this.atkM} M) **Magic Power**: ${this.magPower} (${this.magM} M)\n`;
         out += `**Defense**: ${this.def} (${this.evade} Evade) **Magic Defense**: ${this.magDef} (${
             this.magEvade
         } Evade)`;
@@ -160,8 +160,11 @@ export class Monster {
     }
 
     private abilityProfile(): string {
-        let out = "**Specialty**: *" + this.specialty.name + "* (" + this.specialty.effects + ")\n";
-        out += "**Catch**: " + this.catch + "**Control**: " + this.control.join(", ");
+        let out = "**Specialty**: " + this.specialty.name;
+        if (this.specialty.effects.length > 0) {
+            out += " (" + this.specialty.effects.join(", ") + ")";
+        }
+        out += "\n**Catch**: " + this.catch + " **Control**: " + this.control.join(", ");
         const extras: string[] = [];
         if (this.spells.length > 0) {
             extras.push("**Spells**: " + this.spells.join(", "));
