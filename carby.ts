@@ -270,6 +270,10 @@ const queries: {
     };
 } = {};
 
+bot.on("error", (err: Error) => {
+    console.dir(err);
+});
+
 // reads incoming messages for commands and redirects to functions to handle them
 bot.on("messageCreate", async (msg: Eris.Message) => {
     const lowMes = msg.content.toLowerCase();

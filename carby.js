@@ -243,6 +243,9 @@ const responses = {
 };
 const prefixes = [".", "!"];
 const queries = {};
+bot.on("error", (err) => {
+    console.dir(err);
+});
 // reads incoming messages for commands and redirects to functions to handle them
 bot.on("messageCreate", async (msg) => {
     const lowMes = msg.content.toLowerCase();
