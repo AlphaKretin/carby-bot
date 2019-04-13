@@ -653,15 +653,20 @@ const waterJobs = () => classes.filter((c) => c.crystal === 2);
 const fireJobs = () => classes.filter((c) => c.crystal === 3);
 const earthJobs = () => classes.filter((c) => c.crystal === 4);
 async function normal(msg) {
-    const wind = windJobs()[getIncInt(0, windJobs.length - 1)].name;
-    const water = waterJobs()[getIncInt(0, waterJobs.length - 1)].name;
-    const fire = fireJobs()[getIncInt(0, fireJobs.length - 1)].name;
-    const earth = earthJobs()[getIncInt(0, earthJobs.length - 1)].name;
+    const winJobs = windJobs();
+    const wind = winJobs[getIncInt(0, winJobs.length - 1)].name;
+    const watJobs = waterJobs();
+    const water = watJobs[getIncInt(0, watJobs.length - 1)].name;
+    const firJobs = fireJobs();
+    const fire = firJobs[getIncInt(0, firJobs.length - 1)].name;
+    const earJobs = earthJobs();
+    const earth = earJobs[getIncInt(0, earJobs.length - 1)].name;
     const chan = await msg.author.getDMChannel();
     await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
 async function random(msg) {
-    const out = [windJobs()[getIncInt(0, windJobs.length - 1)].name];
+    const winJobs = windJobs();
+    const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
     const randWater = classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !out.includes(c.name));
     out.push(randWater[getIncInt(0, randWater.length - 1)].name);
     const randFire = classes.filter((c) => c.crystal > 0 && c.crystal < 4 && !out.includes(c.name));
