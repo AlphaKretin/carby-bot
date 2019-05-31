@@ -50,7 +50,7 @@ This displays the current state of a countdown until the next relevant date, be 
 
 This generates a random set of three 0-7 numbers, used for FFV Advance's menu colour option, and reacts to your message with them. Because reactions have to be unique, duplicate numbers are represented with ◀ and ➕.
 
-## Fun Stat Tracking:
+## Fun Stat Tracking
 
 These commands keep track of various fun stats about our playthroughs. People donate based on these totals, so keep them coming and keep them honest!
 
@@ -92,7 +92,7 @@ This adds you to a role designating that you braved `#regForbidden #BERSERKERRIS
 
 This adds you to a role designating that you braved `#regForbidden`, without Berserker Risk, in 2018 when it was new and unknown.
 
-## DIY Fiesta:
+## DIY Fiesta
 
 **Usage**: `.runtype[+modifier]`
 
@@ -190,7 +190,7 @@ This provides an enemy's elemental and status affinities, including weakness, re
 
 This provides information about an enemy's abilities, such as their known Magic, Blue Magic you can learn from them, and what happens when you !Control or !Catch them.
 
-## Silly nonsense:
+## Silly nonsense
 
 ### .dd
 
