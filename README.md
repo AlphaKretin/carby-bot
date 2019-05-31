@@ -12,7 +12,7 @@ See also the section on the enemy database.
 
 **Usage**: `.mcalc type stat [stat stat]`
 
-This calculates attack multipliers, or "M", and the next level at which it will increase, based on your stats. If you're not sure what M is, check out [this primer](https://forums.somethingawful.com/showthread.php?threadid=3889977&userid=0&perpage=40&pagenumber=4# post495448811) I wrote about it.
+This calculates attack multipliers, or "M", and the next level at which it will increase, based on your stats. If you're not sure what M is, check out [this primer](https://forums.somethingawful.com/showthread.php?threadid=3889977&userid=0&perpage=40&pagenumber=4#post495448811) I wrote about it.
 
 If you just enter `.mcalc` or otherwise invalid input, Carby will guide you through the process. Carby accepts the following M types, with required stats in the order listed.
 
@@ -57,7 +57,7 @@ These commands keep track of various fun stats about our playthroughs. People do
 ### .trapped
 
 This registers that you fell in the speed trap, an obstacle pictured below.
-[!speed trap](http://i.imgur.com/887zUa3.png)
+![speed trap](http://i.imgur.com/887zUa3.png)
 
 ### .victims
 
