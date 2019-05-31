@@ -111,11 +111,11 @@ At each crystal, the Job you are assigned will come from any crystals you alread
 
 ### .750
 
-You will only be assigned magical jobs, namely . This is to be turned into a modifier at a later date, and does not support the other modifiers.
+You will only be assigned magical jobs, namely White Mage, Black Mage, Blue Mage, Time Mage, Summoner, Red Mage, Geomancer, Bard, Chemist and Dancer. This is to be turned into a modifier at a later date, and does not support the other modifiers.
 
 ### .no750
 
-You will only be assigned physical jobs, namely . This is to be turned into a modifier at a later date, and does not support the other modifiers.
+You will only be assigned physical jobs, namely Thief, Monk, Knight, Mystic Knight, Berserker, Ninja, Beastmaster, Raner, Samurai and Dragoon. This is to be turned into a modifier at a later date, and does not support the other modifiers.
 
 ### .chaos
 
