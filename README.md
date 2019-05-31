@@ -121,11 +121,11 @@ You will only be assigned physical jobs, namely . This is to be turned into a mo
 
 You can be assigned any normal job at any crystal, with duplicates allowed.
 
-### .chaosno750
+### .chaos750
 
 A combination of `.chaos` and `.750` rules. Will be obsolete when 750 becomes a modifier, and does not support the other modifiers.
 
-### .chaos750
+### .chaosno750
 
 A combination of `.chaos` and `.no750` rules. Will be obsolete when no750 becomes a modifier, and does not support the other modifiers.
 
