@@ -86,11 +86,11 @@ This keeps track of what Jobs people have been assigned, for reference when aski
 
 ### .forbiddenRisk
 
-This adds you to a role designating that you braved `# regForbidden # BERSERKERRISK` in 2018 when it was new and unknown.
+This adds you to a role designating that you braved `#regForbidden #BERSERKERRISK` in 2018 when it was new and unknown.
 
 ### .forbiddenLite
 
-This adds you to a role designating that you braved `# regForbidden`, without Berserker Risk, in 2018 when it was new and unknown.
+This adds you to a role designating that you braved `#regForbidden`, without Berserker Risk, in 2018 when it was new and unknown.
 
 ## DIY Fiesta:
 
