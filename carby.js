@@ -192,7 +192,11 @@ const commands = [
     {
         func: jobData,
         names: ["class"]
-    }
+    },
+	{
+		func: advance,
+		names: ["advance", "advanced"]
+	}
 ];
 const responses = {
     badfaq: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687",
@@ -653,7 +657,55 @@ const waterJobs = () => classes.filter((c) => c.crystal === 2);
 const fireJobs = () => classes.filter((c) => c.crystal === 3);
 const earthJobs = () => classes.filter((c) => c.crystal === 4);
 async function normal(msg) {
-    const winJobs = windJobs();
+    if (msg.content.includes("+forbidden")) {
+	const winJobs = windJobs();
+    const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
+    const watJobs = waterJobs();
+    out.push(watJobs[getIncInt(0, watJobs.length - 1)].name);
+    const firJobs = fireJobs();
+    out.push(firJobs[getIncInt(0, firJobs.length - 1)].name);
+    const earJobs = earthJobs();
+    out.push(earJobs[getIncInt(0, earJobs.length - 1)].name);
+	const index = getIncInt(0, out.length - 1);
+	const voidJob = out[index];
+    out[index] = "~~" + out[index] + "~~";
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nLost to the void: " +
+        voidJob);
+	} else if (msg.content.includes("+fifthjob")) {
+	const winJobs = windJobs();
+    const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
+    const watJobs = waterJobs();
+    out.push(watJobs[getIncInt(0, watJobs.length - 1)].name);
+    const firJobs = fireJobs();
+    out.push(firJobs[getIncInt(0, firJobs.length - 1)].name);
+    const earJobs = earthJobs();
+    out.push(earJobs[getIncInt(0, earJobs.length - 1)].name);	
+	const kriJobs = classes.filter((c) => c.crystal === 4 && !out.includes(c.name))
+	out.push(kriJobs[getIncInt(0, kriJobs.length - 1)].name);
+	await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nKrile replaces Earth Job with: " +
+        out[4]);
+	} else if (msg.content.includes("+natural")) {
+		// const chan = await msg.author.getDMChannel();
+		await msg.channel.createMessage("🖕");	
+	} else {
+	const winJobs = windJobs();
     const wind = winJobs[getIncInt(0, winJobs.length - 1)].name;
     const watJobs = waterJobs();
     const water = watJobs[getIncInt(0, watJobs.length - 1)].name;
@@ -661,10 +713,59 @@ async function normal(msg) {
     const fire = firJobs[getIncInt(0, firJobs.length - 1)].name;
     const earJobs = earthJobs();
     const earth = earJobs[getIncInt(0, earJobs.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+	}
 }
 async function random(msg) {
+	if (msg.content.includes("+forbidden")) {
+		const winJobs = windJobs();
+    const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
+    const randWater = classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !out.includes(c.name));
+    out.push(randWater[getIncInt(0, randWater.length - 1)].name);
+    const randFire = classes.filter((c) => c.crystal > 0 && c.crystal < 4 && !out.includes(c.name));
+    out.push(randFire[getIncInt(0, randFire.length - 1)].name);
+    const randEarth = classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !out.includes(c.name));
+    out.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
+	const index = getIncInt(0, out.length - 2);
+    const voidJob = out[index];
+    out[index] = "~~" + out[index] + "~~";
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nLost to the void: " +
+        voidJob);
+	} else if (msg.content.includes("+fifthjob")) {
+		const winJobs = windJobs();
+    const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
+    const randWater = classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !out.includes(c.name));
+    out.push(randWater[getIncInt(0, randWater.length - 1)].name);
+    const randFire = classes.filter((c) => c.crystal > 0 && c.crystal < 4 && !out.includes(c.name));
+    out.push(randFire[getIncInt(0, randFire.length - 1)].name);
+    const randEarth = classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !out.includes(c.name));
+    out.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
+	out.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
+    // const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nKrile replaces Earth Job with: " +
+        out[4]);	
+	} else if (msg.content.includes("+natural")) {
+		// const chan = await msg.author.getDMChannel();
+		await msg.channel.createMessage("🖕");	
+	} else {
     const winJobs = windJobs();
     const out = [winJobs[getIncInt(0, winJobs.length - 1)].name];
     const randWater = classes.filter((c) => c.crystal > 0 && c.crystal < 3 && !out.includes(c.name));
@@ -673,8 +774,9 @@ async function random(msg) {
     out.push(randFire[getIncInt(0, randFire.length - 1)].name);
     const randEarth = classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !out.includes(c.name));
     out.push(randEarth[getIncInt(0, randEarth.length - 1)].name);
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + out[0] + "\nWater Job: " + out[1] + "\nFire Job: " + out[2] + "\nEarth Job: " + out[3]);
+    // const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + out[0] + "\nWater Job: " + out[1] + "\nFire Job: " + out[2] + "\nEarth Job: " + out[3]);
+	}
 }
 async function sevenFifty(msg) {
     const mageWind = windJobs().filter((c) => c.is750);
@@ -685,8 +787,8 @@ async function sevenFifty(msg) {
     const fire = mageFire[getIncInt(0, mageFire.length - 1)].name;
     const mageEarth = earthJobs().filter((c) => c.is750);
     const earth = mageEarth[getIncInt(0, mageEarth.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
 async function noSevenFifty(msg) {
     const noWind = windJobs().filter((c) => !c.is750);
@@ -697,17 +799,59 @@ async function noSevenFifty(msg) {
     const fire = noFire[getIncInt(0, noFire.length - 1)].name;
     const noEarth = earthJobs().filter((c) => !c.is750);
     const earth = noEarth[getIncInt(0, noEarth.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
 async function chaos(msg) {
-    const allJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5);
+    if (msg.content.includes("+forbidden")) {
+	const allJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5);
+    const out = [allJobs[getIncInt(0, allJobs.length - 1)].name];
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+	const index = getIncInt(0, out.length - 1);
+	const voidJob = out[index];
+    out[index] = "~~" + out[index] + "~~";
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nLost to the void: " +
+        voidJob);
+	} else if (msg.content.includes("+fifthjob")) {
+	const allJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5);
+    const out = [allJobs[getIncInt(0, allJobs.length - 1)].name];
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+    out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+	out.push(allJobs[getIncInt(0, allJobs.length - 1)].name);
+	await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nKrile replaces Earth Job with: " +
+        out[4]);
+	} else if (msg.content.includes("+natural")) {
+		// const chan = await msg.author.getDMChannel();
+		await msg.channel.createMessage("🖕");	
+	} else { 
+	const allJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5);
     const wind = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const water = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const fire = allJobs[getIncInt(0, allJobs.length - 1)].name;
     const earth = allJobs[getIncInt(0, allJobs.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+	}
 }
 async function chaosNoSevenFifty(msg) {
     const noJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5 && !c.is750);
@@ -715,8 +859,8 @@ async function chaosNoSevenFifty(msg) {
     const water = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const fire = noJobs[getIncInt(0, noJobs.length - 1)].name;
     const earth = noJobs[getIncInt(0, noJobs.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
 async function chaosSevenFifty(msg) {
     const magJobs = classes.filter((c) => c.crystal > 0 && c.crystal < 5 && c.is750);
@@ -724,18 +868,53 @@ async function chaosSevenFifty(msg) {
     const water = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const fire = magJobs[getIncInt(0, magJobs.length - 1)].name;
     const earth = magJobs[getIncInt(0, magJobs.length - 1)].name;
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
 }
 async function purechaos(msg) {
-    const allJobs = classes.filter((c) => c.crystal < 5).map((c) => c.name);
+        if (msg.content.includes("+forbidden")) {
+	const allJobs = classes.filter((c) => c.crystal < 5).map((c) => c.name);
+    let out = shuffle(allJobs).slice(0,4);
+	const index = getIncInt(0, out.length - 1);
+	const voidJob = out[index];
+    out[index] = "~~" + out[index] + "~~";
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nLost to the void: " +
+        voidJob);
+	} else if (msg.content.includes("+fifthjob")) {
+	const allJobs = classes.filter((c) => c.crystal < 5).map((c) => c.name);
+    let out = shuffle(allJobs).slice(0,5);
+	await msg.channel.createMessage("Wind Job: " +
+        out[0] +
+        "\nWater Job: " +
+        out[1] +
+        "\nFire Job: " +
+        out[2] +
+        "\nEarth Job: " +
+        out[3] +
+        "\nKrile replaces Earth Job with: " +
+        out[4]);
+	} else if (msg.content.includes("+natural")) {
+		// const chan = await msg.author.getDMChannel();
+		await msg.channel.createMessage("🖕");	
+	} else { 	
+	const allJobs = classes.filter((c) => c.crystal < 5).map((c) => c.name);
     let wind;
     let water;
     let fire;
     let earth;
     [wind, water, fire, earth] = shuffle(allJobs).slice(0, 4);
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " + wind + "\nWater Job: " + water + "\nFire Job: " + fire + "\nEarth Job: " + earth);
+	}
 }
 async function forbidden(msg) {
     const forbiddenWind = windJobs();
@@ -760,8 +939,8 @@ async function forbidden(msg) {
     const index = getIncInt(0, forbJobs.length - 2);
     const voidJob = forbJobs[index];
     forbJobs[index] = "~~" + forbJobs[index] + "~~";
-    const chan = await msg.author.getDMChannel();
-    await chan.createMessage("Wind Job: " +
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
         forbJobs[0] +
         "\nWater Job: " +
         forbJobs[1] +
@@ -771,6 +950,39 @@ async function forbidden(msg) {
         forbJobs[3] +
         "\nLost to the void: " +
         voidJob);
+}
+async function advance(msg) {
+    const forbiddenWind = windJobs();
+    forbiddenWind.push(...getClassesByNames(["Time Mage"]));
+    const forbiddenWater = getClassesByNames([
+        "Red Mage",
+        "Summoner",
+        "Berserker",
+        "Mystic Knight",
+        "Beastmaster",
+        "Geomancer",
+        "Ninja"
+    ]);
+    const forbiddenFire = getClassesByNames(["Bard", "Ranger", "Dancer"]).concat(earthJobs());
+    const forbiddenEarth = classes.filter((c) => c.crystal === 5);
+    const forbJobs = [
+        forbiddenWind[getIncInt(0, forbiddenWind.length - 1)].name,
+        forbiddenWater[getIncInt(0, forbiddenWater.length - 1)].name,
+        forbiddenFire[getIncInt(0, forbiddenFire.length - 1)].name,
+        forbiddenEarth[getIncInt(0, forbiddenEarth.length - 1)].name
+    ];
+    //const index = getIncInt(0, forbJobs.length - 2);
+    //const voidJob = forbJobs[index];
+    //forbJobs[index] = "~~" + forbJobs[index] + "~~";
+    //const chan = await msg.author.getDMChannel();
+    await msg.channel.createMessage("Wind Job: " +
+        forbJobs[0] +
+        "\nWater Job: " +
+        forbJobs[1] +
+        "\nFire Job: " +
+        forbJobs[2] +
+        "\nEarth Job: " +
+        forbJobs[3]);
 }
 // .dd
 const ddLines = [
