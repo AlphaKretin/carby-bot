@@ -32,7 +32,7 @@ This recites how much HP you need to survive the final boss' powerful Almagest a
 
 ### .math
 
-**Usage**: `.maths level`
+**Usage**: `.math level`
 
 This calculates how many times you'll need to cast the Blue Magic Dark Spark on an enemy of a given level, halving their level rounding down, to make it a multiple of 2, 3, 4 or 5 for the various Level X Blue Magic spells.
 
