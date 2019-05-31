@@ -11,6 +11,7 @@ See also the section on the enemy database.
 ### .mcalc
 
 **Usage**: `.mcalc type stat [stat stat]`
+
 This calculates attack multipliers, or "M", and the next level at which it will increase, based on your stats. If you're not sure what M is, check out [this primer](https://forums.somethingawful.com/showthread.php?threadid=3889977&userid=0&perpage=40&pagenumber=4# post495448811) I wrote about it.
 
 If you just enter `.mcalc` or otherwise invalid input, Carby will guide you through the process. Carby accepts the following M types, with required stats in the order listed.
@@ -26,16 +27,19 @@ If you just enter `.mcalc` or otherwise invalid input, Carby will guide you thro
 ### .almagest
 
 **Usage**: `.almagest [stamina|Job]`
+
 This recites how much HP you need to survive the final boss' powerful Almagest attack. If you include a Stamina value, or the name of a job class, Carby will calculate the Level you need to have that much HP.
 
 ### .math
 
 **Usage**: `.maths level`
+
 This calculates how many times you'll need to cast the Blue Magic Dark Spark on an enemy of a given level, halving their level rounding down, to make it a multiple of 2, 3, 4 or 5 for the various Level X Blue Magic spells.
 
 ### .class
 
 **Usage**: `.class name`
+
 This recites information about a Job class, such as its base stats and learned abilities. The name `.class` is chosen over `.job` to avoid conflicts with `.jobs`.
 
 ### .timer
@@ -62,6 +66,7 @@ This recites the number of people who have fallen in the speed trap.
 ### .break
 
 **Usage**: `.break [number]`
+
 This registers that you broke some rods. This means equipping a Rod weapon, pressing up on the Item menu in-battle to check your equipment, then click the Rod twice while it's equipped to use it. This casts a high-level spell of that element and destroys it, a useful crutch in the early game. You can include a number to register breaking multiple in one fight, or to save up a play session worth.
 
 ### .broken
@@ -71,6 +76,7 @@ This recites the number of rods people have broken.
 ### .jobs
 
 **Usage**: `.jobs register job job job job`, `.jobs lookup [@User]`
+
 This keeps track of what Jobs people have been assigned, for reference when asking for advice etc. When registering, Carby accepts any 4 strings seperated by spaces. People have a trend of using emoji, so a table of likely meanings is below. When looking up a user, Carby will try to find them if you just type their name, but you might have to @mention them. If you don't include a user, it will recite your own registered jobs.
 
 | Job Name   | Emoji |
@@ -89,6 +95,7 @@ This adds you to a role designating that you braved `# regForbidden`, without Be
 ## DIY Fiesta:
 
 **Usage**: `.runtype[+modifier]`
+
 These commands all generate a Four Job Fiesta Job set according to the chosen rules. They support the following additional modifiers after a `+` (e.g. `.normal+forbidden`):
 
 -   `+forbidden`: A random Job will be "lost to the void". After you enter the final dungeon, you can no longer use it or its abilities.
@@ -150,31 +157,37 @@ This provides help for the other commands in this category.
 ### .info
 
 **Usage**: `.info name`
+
 This provides the whole profile of an enemy's data, except the AI routines.
 
 ### .ai
 
 **Usage**: `.ai name`
+
 This provides an enemy's AI script, as documented in the [FFV Algorithms guide](http://www.kyrosiris.com/ff5algorithm.html).
 
 ### .loot
 
 **Usage**: `.loot name`
+
 This provides an enemy's item drops and steals.
 
 ### .stats
 
 **Usage**: `.stats name`
+
 This provides an enemy's basic stats like Level, Strength, etc.
 
 ### .weak
 
 **Usage**: `.weak name`
+
 This provides an enemy's elemental and status affinities, including weakness, resistance, immunty, absorption, and initial statuses.
 
 ### .ability
 
 **Usage**: `.ability name`
+
 This provides information about an enemy's abilities, such as their known Magic, Blue Magic you can learn from them, and what happens when you !Control or !Catch them.
 
 ## Silly nonsense:
@@ -182,6 +195,7 @@ This provides information about an enemy's abilities, such as their known Magic,
 ### .dd
 
 **Usage**: `.dd [number|search]`
+
 Recites a random quote from a certain speedrunner's runs of FFV. Include a number to get the quote with that number, or a phrase to get a quote that includes that phrase.
 
 ### Other
