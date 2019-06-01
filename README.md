@@ -84,13 +84,21 @@ This keeps track of what Jobs people have been assigned, for reference when aski
 | Knight     | ⚔🛡    |
 | Black Mage | ⚫    |
 
-### .forbiddenRisk
+### .forbiddenrisk
 
 This adds you to a role designating that you braved `#regForbidden #BERSERKERRISK` in 2018 when it was new and unknown.
 
-### .forbiddenLite
+### .forbiddenlite
 
 This adds you to a role designating that you braved `#regForbidden`, without Berserker Risk, in 2018 when it was new and unknown.
+
+### .winnerrisk
+
+This adds you to a role designating that you braved `#regWinner #BERSERKERRISK` in 2019 when it was new and unknown.
+
+### .winnerlite
+
+This adds you to a role designating that you braved `#regWinner`, without Berserker Risk, in 2019 when it was new and unknown.
 
 ## DIY Fiesta
 
