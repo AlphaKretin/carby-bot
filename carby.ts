@@ -750,8 +750,9 @@ async function combine(msg: Eris.Message) {
         await msg.channel.createMessage(out);
     } else {
         await msg.channel.createMessage(
-            "Sorry, I don't have a combination for that item. " +
-                "Make sure you're using the GBA name, and I don't need the shot!"
+            "Sorry, I don't have a combination for that item or name.\n" +
+                "If you're asking about an item, make sure you're using the GBA name, and I don't need the shot!\n" +
+                'If you\'re looking up a name, I don\'t need "Shot", "Burst" or "Cannon", just the first bit!'
         );
     }
 }

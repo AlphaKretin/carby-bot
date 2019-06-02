@@ -38,9 +38,9 @@ This calculates how many times you'll need to cast the Blue Magic Dark Spark on 
 
 ### !combine
 
-**Usage**: `!combine item`
+**Usage**: `!combine item|name`
 
-This recites the effects of the mixes made with the Cannoneer's !Combine ability, when used with the given item. Thanks to Aerdan for assembling this data.
+This recites the effects of the mixes made with the Cannoneer's !Combine ability. Carby can find a combination from either the main ingredient, or the name of the attack. Thanks to Aerdan for assembling this data.
 
 ### .class
 
