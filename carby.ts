@@ -37,7 +37,7 @@ interface ICannonMix {
     cannon?: string;
     burst?: string;
 }
-let combines: { [item: string]: ICannonMix };
+const combines: ICannonMix[] = [];
 const dataFile = "data.json";
 const proms: Array<Promise<void>> = [];
 async function loadData() {
@@ -76,14 +76,14 @@ proms.push(
     })
 );
 const combFile = "combine.json";
-async function loadCombs() {
-    if (await fs.exists(combFile)) {
-        await fs.readFile(combFile, "utf8").then(file => {
-            combines = JSON.parse(file);
-        });
-    }
-}
-proms.push(loadCombs());
+proms.push(
+    fs.readFile(combFile, "utf8").then(file => {
+        const list = JSON.parse(file);
+        for (const comb of list) {
+            combines.push(comb);
+        }
+    })
+);
 
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);
@@ -733,12 +733,16 @@ async function almagest(msg: Eris.Message) {
     await msg.channel.createMessage(out);
 }
 
+function clean(s: string): string {
+    return s.toLowerCase().replace(/\s+/g, "");
+}
+
 async function combine(msg: Eris.Message) {
     const args = msg.content.toLowerCase().split(/\s+/);
     args.shift();
     const combName = args.join("");
-    if (combName in combines) {
-        const comb = combines[combName];
+    const comb = combines.find(c => clean(c.name) === combName || clean(c.item) === combName);
+    if (comb) {
         let out = "Combine shot with __" + comb.item + "__ for";
         if (comb.text) {
             out += ` **${comb.name} Shot**, **${comb.name} Burst**, **${comb.name} Cannon**\n${comb.text}`;

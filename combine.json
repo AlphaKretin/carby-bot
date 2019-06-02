@@ -1,170 +1,86 @@
-{
-    "darkmatter": {
+[
+    {
         "name": "Chaos",
         "item": "Dark Matter",
         "shot": "Deals damage; may inflict Confuse.",
         "burst": "Deals damage; may inflict Poison.",
         "cannon": "Deals damage; may inflict Death."
     },
-    "ash": {
+    {
         "name": "Dark",
         "item": "Ash",
         "text": "Deals damage; inflicts Darkness."
     },
-    "herococktail": {
+    {
         "name": "Divine",
         "item": "Hero Cocktail",
         "text": "Deals Holy damage."
     },
-    "dragonfang": {
+    {
         "name": "Dragon",
         "item": "Dragon Fang",
         "text": "Deals damage; Dragon foes are hit harder."
     },
-    "flamescroll": {
+    {
         "name": "Flame",
         "item": "Flame Scroll",
         "text": "Deals Fire damage."
     },
-    "fumashuriken": {
+    {
         "name": "Killer",
         "item": "Fuma Shuriken",
         "text": "Deals damage; Humanoid foes are hit harder."
     },
-    "mallet": {
+    {
         "name": "Mini",
         "item": "Mallet",
         "text": "Deals damage; may inflict Mini."
     },
-    "goldneedle": {
+    {
         "name": "Needle",
         "item": "Gold Needle",
         "shot": "Deals 1000 damage.",
         "burst": "Deals 2000 damage.",
         "cannon": "Deals 3000 damage."
     },
-    "shuriken": {
+    {
         "name": "Normal",
         "item": "Shuriken",
         "text": "Deals damage."
     },
-    "powerdrink": {
+    {
         "name": "Power",
         "item": "Power Drink",
         "text": "Deals damage; may inflict Berserk."
     },
-    "goliathtonic": {
+    {
         "name": "Quake",
         "item": "Goliath Tonic",
         "text": "Deals Earth damage."
     },
-    "speedshake": {
+    {
         "name": "Silver",
         "item": "Speed Shake",
         "text": "Deals damage; may inflict Old."
     },
-    "turtleshell": {
+    {
         "name": "Slow",
         "item": "Turtle Shell",
         "text": "Deals damage; may inflict Slow."
     },
-    "lightningscroll": {
+    {
         "name": "Spark",
         "item": "Lightning Scroll",
         "text": "Deals Thunder damage."
     },
-    "irondraft": {
+    {
         "name": "Vulner",
         "item": "Iron Draft",
         "text": "Deals damage; reduces defenses by 75%."
     },
-    "waterscroll": {
-        "name": "Water",
-        "item": "Water Scroll",
-        "text": "Deals Water damage."
-    },
-    "chaos": {
-        "name": "Chaos",
-        "item": "Dark Matter",
-        "shot": "Deals damage; may inflict Confuse.",
-        "burst": "Deals damage; may inflict Poison.",
-        "cannon": "Deals damage; may inflict Death."
-    },
-    "dark": {
-        "name": "Dark",
-        "item": "Ash",
-        "text": "Deals damage; inflicts Darkness."
-    },
-    "divine": {
-        "name": "Divine",
-        "item": "Hero Cocktail",
-        "text": "Deals Holy damage."
-    },
-    "dragon": {
-        "name": "Dragon",
-        "item": "Dragon Fang",
-        "text": "Deals damage; Dragon foes are hit harder."
-    },
-    "flame": {
-        "name": "Flame",
-        "item": "Flame Scroll",
-        "text": "Deals Fire damage."
-    },
-    "killer": {
-        "name": "Killer",
-        "item": "Fuma Shuriken",
-        "text": "Deals damage; Humanoid foes are hit harder."
-    },
-    "mini": {
-        "name": "Mini",
-        "item": "Mallet",
-        "text": "Deals damage; may inflict Mini."
-    },
-    "needle": {
-        "name": "Needle",
-        "item": "Gold Needle",
-        "shot": "Deals 1000 damage.",
-        "burst": "Deals 2000 damage.",
-        "cannon": "Deals 3000 damage."
-    },
-    "normal": {
-        "name": "Normal",
-        "item": "Shuriken",
-        "text": "Deals damage."
-    },
-    "power": {
-        "name": "Power",
-        "item": "Power Drink",
-        "text": "Deals damage; may inflict Berserk."
-    },
-    "quake": {
-        "name": "Quake",
-        "item": "Goliath Tonic",
-        "text": "Deals Earth damage."
-    },
-    "silver": {
-        "name": "Silver",
-        "item": "Speed Shake",
-        "text": "Deals damage; may inflict Old."
-    },
-    "slow": {
-        "name": "Slow",
-        "item": "Turtle Shell",
-        "text": "Deals damage; may inflict Slow."
-    },
-    "spark": {
-        "name": "Spark",
-        "item": "Lightning Scroll",
-        "text": "Deals Thunder damage."
-    },
-    "vulner": {
-        "name": "Vulner",
-        "item": "Iron Draft",
-        "text": "Deals damage; reduces defenses by 75%."
-    },
-    "water": {
+    {
         "name": "Water",
         "item": "Water Scroll",
         "text": "Deals Water damage."
     }
-}
+]

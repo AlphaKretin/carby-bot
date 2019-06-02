@@ -27,7 +27,7 @@ let stats = {
     rodsBroken: 0,
     victims: 0
 };
-let combines;
+const combines = [];
 const dataFile = "data.json";
 const proms = [];
 async function loadData() {
@@ -62,14 +62,12 @@ proms.push(fs.readFile(classFile, "utf8").then(file => {
     }
 }));
 const combFile = "combine.json";
-async function loadCombs() {
-    if (await fs.exists(combFile)) {
-        await fs.readFile(combFile, "utf8").then(file => {
-            combines = JSON.parse(file);
-        });
+proms.push(fs.readFile(combFile, "utf8").then(file => {
+    const list = JSON.parse(file);
+    for (const comb of list) {
+        combines.push(comb);
     }
-}
-proms.push(loadCombs());
+}));
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);
 });
@@ -663,12 +661,15 @@ async function almagest(msg) {
     }
     await msg.channel.createMessage(out);
 }
+function clean(s) {
+    return s.toLowerCase().replace(/\s+/g, "");
+}
 async function combine(msg) {
     const args = msg.content.toLowerCase().split(/\s+/);
     args.shift();
     const combName = args.join("");
-    if (combName in combines) {
-        const comb = combines[combName];
+    const comb = combines.find(c => clean(c.name) === combName || clean(c.item) === combName);
+    if (comb) {
         let out = "Combine shot with __" + comb.item + "__ for";
         if (comb.text) {
             out += ` **${comb.name} Shot**, **${comb.name} Burst**, **${comb.name} Cannon**\n${comb.text}`;
