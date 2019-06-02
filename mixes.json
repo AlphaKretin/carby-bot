@@ -101,10 +101,7 @@
         "name": "Dud Potion",
         "snes": "Failure",
         "desc": "75% chance to cause HP Leak, 25% chance to reduce target's HP to single digits",
-        "mixes":
-        [
-            ["Turtle Shell", "Elixir"]
-        ]
+        "mixes": [["Turtle Shell", "Elixir"]]
     },
     {
         "name": "Dragon Kiss",
@@ -153,19 +150,13 @@
     {
         "name": "Resist Lightning",
         "desc": "Increases Lightning-type damage resistance",
-        "mixes":
-        [
-            ["Phoenix Down", "Eyedrop"]
-        ]
+        "mixes": [["Phoenix Down", "Eyedrop"]]
     },
     {
         "name": "Dragon Shielding",
         "snes": "Dragon Shield",
         "desc": "Increases Ice-, Fire-, and Lightning-type damage resistance",
-        "mixes":
-        [
-            ["Ether", "Dragon Fang"]
-        ]
+        "mixes": [["Ether", "Dragon Fang"]]
     },
     {
         "name": "Dragon Defense",
@@ -183,10 +174,7 @@
         "name": "Lifeshield",
         "snes": "Life Shield",
         "desc": "Raises Instant Death resistance",
-        "mixes":
-        [
-            ["Phoenix Down", "Holy Water"]
-        ]
+        "mixes": [["Phoenix Down", "Holy Water"]]
     },
     {
         "name": "Blessed Kiss",
@@ -209,10 +197,7 @@
     {
         "name": "Elemental Power",
         "desc": "Raises elemental magic by 50%",
-        "mixes":
-        [
-            ["Holy Water", "Eyedrop"]
-        ]
+        "mixes": [["Holy Water", "Eyedrop"]]
     },
     {
         "name": "Protect Potion",
@@ -241,10 +226,7 @@
     {
         "name": "Dark Ether",
         "desc": "Drains enemy's MP to 1/4 of current value",
-        "mixes":
-        [
-            ["Ether", "Dark Matter"]
-        ]
+        "mixes": [["Ether", "Dark Matter"]]
     },
     {
         "name": "Lamia Kiss",
@@ -262,10 +244,7 @@
         "name": "Turtle Soup",
         "snes": "Split Shell",
         "desc": "Decreases DEF and M.DEF by 50% of current value",
-        "mixes":
-        [
-            ["Turtle Shell", "Antidote"]
-        ]
+        "mixes": [["Turtle Shell", "Antidote"]]
     },
     {
         "name": "Dark Gas",
@@ -287,10 +266,7 @@
         "name": "Antilixir",
         "snes": "Dark Elixir",
         "desc": "Drains enemy's HP to single digits (unless target is Heavy)",
-        "mixes":
-        [
-            ["Elixir", "Dark Matter"]
-        ]
+        "mixes": [["Elixir", "Dark Matter"]]
     },
     {
         "name": "Death Potion",
@@ -318,10 +294,7 @@
         "name": "TNT",
         "snes": "Explosive",
         "desc": "Deals fire damage equal to user's current HP, kills user",
-        "mixes":
-        [
-            ["Turtle Shell", "Dark Matter"]
-        ]
+        "mixes": [["Turtle Shell", "Dark Matter"]]
     },
     {
         "name": "Poison",
@@ -332,10 +305,7 @@
         "name": "Dud Potion",
         "snes": "Failure",
         "desc": "Deals damage based on current HP, and causes Confuse status",
-        "mixes":
-        [
-            ["Turtle Shell", "Dragon Fang"]
-        ]
+        "mixes": [["Turtle Shell", "Dragon Fang"]]
     },
     {
         "name": "Poison Breath",
@@ -345,26 +315,17 @@
     {
         "name": "Dragon Breath",
         "desc": "Deals Fire-, Lightning-, and Ice-type damage equal to max HP",
-        "mixes":
-        [
-            ["Dragon Fang", "Dragon Fang"]
-        ]
+        "mixes": [["Dragon Fang", "Dragon Fang"]]
     },
     {
         "name": "Dark Breath",
         "desc": "Deals damage equal to max HP - current HP",
-        "mixes":
-        [
-            ["Dragon Fang", "Dark Matter"]
-        ]
+        "mixes": [["Dragon Fang", "Dark Matter"]]
     },
     {
         "name": "Shadowflare",
         "snes": "Shadow Flare",
         "desc": "Deals massive non-elemental damage, and causes HP Leak",
-        "mixes":
-        [
-            ["Dark Matter", "Dark Matter"]
-        ]
+        "mixes": [["Dark Matter", "Dark Matter"]]
     }
 ]

@@ -36,6 +36,12 @@ This recites how much HP you need to survive the final boss' powerful Almagest a
 
 This calculates how many times you'll need to cast the Blue Magic Dark Spark on an enemy of a given level, halving their level rounding down, to make it a multiple of 2, 3, 4 or 5 for the various Level X Blue Magic spells.
 
+### !mix
+
+**Usage**: `!mix to name`, `!mix from ingredient [+ ingredient]`
+
+This recites the effects and ingredients of the mixes made with the Chemist's !Mix ability. Use `!mix to` to look up a mix by the name of the result, and get its effects and all of its possible ingredient sets, `!mix from ingredient + ingredient` to look up a mix by the two ingredients you're using, with the same information, or `!mix from ingredient` with just one ingredient to get a list of all the mixes you can make with that ingredient, with the other ingredients you'll need for each mix.
+
 ### !combine
 
 **Usage**: `!combine item|name`

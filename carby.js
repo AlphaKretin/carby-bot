@@ -28,6 +28,7 @@ let stats = {
     victims: 0
 };
 const combines = [];
+const mixes = [];
 const dataFile = "data.json";
 const proms = [];
 async function loadData() {
@@ -66,6 +67,13 @@ proms.push(fs.readFile(combFile, "utf8").then(file => {
     const list = JSON.parse(file);
     for (const comb of list) {
         combines.push(comb);
+    }
+}));
+const mixFile = "mixes.json";
+proms.push(fs.readFile(mixFile, "utf8").then(file => {
+    const list = JSON.parse(file);
+    for (const curMix of list) {
+        mixes.push(curMix);
     }
 }));
 bot.on("ready", () => {
@@ -216,6 +224,10 @@ const commands = [
     {
         func: combine,
         names: ["combine", "cannon"]
+    },
+    {
+        func: mix,
+        names: ["mix", "chem", "drug"]
     }
 ];
 const responses = {
@@ -683,6 +695,88 @@ async function combine(msg) {
         await msg.channel.createMessage("Sorry, I don't have a combination for that item or name.\n" +
             "If you're asking about an item, make sure you're using the GBA name, and I don't need the shot!\n" +
             'If you\'re looking up a name, I don\'t need "Shot", "Burst" or "Cannon", just the first bit!');
+    }
+}
+async function mix(msg) {
+    const args = msg.content.toLowerCase().split(/\s+/);
+    args.shift();
+    const mode = args.shift();
+    const query = args.join("");
+    if (!mode || !(mode === "to" || mode === "from")) {
+        await msg.channel.createMessage("Sorry, I need to know which direction to search!\n" +
+            "Type `!mix from` to specify ingredients, or `!mix to` to specify the mix.");
+        return;
+    }
+    if (mode === "to") {
+        const curMix = mixes.find(m => clean(m.name) === query || (!!m.snes && clean(m.snes) === query));
+        if (curMix) {
+            const out = "__**" +
+                curMix.name +
+                "**__\nEffects: " +
+                curMix.desc +
+                "\n" +
+                "Ingredients: " +
+                curMix.mixes.map(m => m.join(" + ")).join(", ");
+            await msg.channel.createMessage(out);
+        }
+        else {
+            await msg.channel.createMessage("Sorry, I couldn't find a mix with that name!");
+        }
+    }
+    else {
+        // if mode === "from"
+        const ingredients = query.split("+").slice(0, 2);
+        if (ingredients.length === 1) {
+            // filter for mixes including the ingredient
+            const curMixes = mixes.filter(m => !!m.mixes.find(i => i.map(clean).includes(ingredients[0])));
+            // find proper case name of ingredient
+            const ing = curMixes[0].mixes
+                .find(m => m.map(clean).includes(ingredients[0]))
+                .find(k => clean(k) === ingredients[0]);
+            if (curMixes.length > 0) {
+                let out = "Mixing with __" + ing + "__:\n";
+                out += curMixes
+                    .map(m => m.name +
+                    " (" +
+                    m.mixes
+                        .filter(i => i.includes(ing))
+                        .map(i => {
+                        if (i[0] === i[1]) {
+                            return i[0];
+                        }
+                        return i.find(n => n !== ing);
+                    })
+                        .join("/") +
+                    ")")
+                    .join("\n");
+                await msg.channel.createMessage(out);
+            }
+            else {
+                await msg.channel.createMessage("Sorry, I couldn't find a mix using that ingredient!");
+            }
+        }
+        else {
+            const quer1 = ingredients[0];
+            const quer2 = ingredients[1];
+            const curMix = mixes.find(m => !!m.mixes.find(i => {
+                const ing1 = clean(i[0]);
+                const ing2 = clean(i[1]);
+                return (ing1 === quer1 && ing2 === quer2) || (ing2 === quer1 && ing1 === quer2);
+            }));
+            if (curMix) {
+                const out = "__**" +
+                    curMix.name +
+                    "**__\nEffects: " +
+                    curMix.desc +
+                    "\n" +
+                    "Ingredients: " +
+                    curMix.mixes.map(m => m.join(" + ")).join(", ");
+                await msg.channel.createMessage(out);
+            }
+            else {
+                await msg.channel.createMessage("Sorry, I couldn't find a mix with those two ingredients!");
+            }
+        }
     }
 }
 // DIY fiestas
