@@ -138,11 +138,11 @@ const commands = [
     },
     {
         func: forbiddenRisk,
-        names: ["forbiddenrisk"]
+        names: ["winnerrisk"]
     },
     {
         func: forbiddenLite,
-        names: ["forbiddenlite"]
+        names: ["winnerlite"]
     },
     {
         func: forbidden,
@@ -1100,22 +1100,14 @@ async function broken(msg) {
 }
 // goofy shit
 async function countdown(msg) {
-    const fiestaDate = Date.UTC(2019, 5, 0, 15, 0, 0); // 0 is Jan, so 5 is June
+    const fiestaDate = Date.UTC(2019, 5, 19, 4, 0, 0); // 0 is Jan, so 5 is June
     const now = Date.now();
     const distance = fiestaDate - now;
     const days = Math.floor(distance / (1000 * 60 * 60 * 24));
     const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
     const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
     const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    await msg.channel.createMessage("Preregistration starts in " +
-        days +
-        " days, " +
-        hours +
-        " hours, " +
-        minutes +
-        " minutes, and " +
-        seconds +
-        " seconds!");
+    await msg.channel.createMessage("Fiesta starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds!");
 }
 async function zerky(msg) {
     await msg.channel.createMessage("http://www.soldoutcomic.com/Etc/Sketchdump/ThreeOrMoreDeathStillWorryZerky.png");
@@ -1205,8 +1197,8 @@ function shuffle(array) {
 }
 async function forbiddenRisk(msg) {
     if (msg.member) {
-        await msg.member.addRole("451768175152070657");
-        await msg.addReaction("forbidden:451764608202571816");
+        await msg.member.addRole("584065205760163840");
+        await msg.addReaction("🏆");
         await msg.addReaction("black101:326153094868238338");
     }
     else {
@@ -1215,9 +1207,9 @@ async function forbiddenRisk(msg) {
 }
 async function forbiddenLite(msg) {
     if (msg.member) {
-        await msg.member.addRole("451874821245108225");
-        await msg.addReaction("forbidden:451764608202571816");
-        await msg.addReaction("black101:326153094868238338");
+        await msg.member.addRole("584065250144550913");
+        await msg.addReaction("🏆");
+        // await msg.addReaction("black101:326153094868238338");
     }
     else {
         await msg.channel.createMessage("Sorry, I can only add you to a role in the server!");
