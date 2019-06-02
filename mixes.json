@@ -1,0 +1,506 @@
+[
+    {
+        "name": "Potion", 
+        "desc": "Heals 90 HP",
+        "mixes":
+        [
+            ["Potion", "Potion"],
+            ["Potion", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Hi-Potion",
+        "desc": "Heals 900 HP",
+        "mixes":
+        [
+            ["Hi-Potion", "Hi-Potion"],
+            ["Hi-Potion", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Ether",
+        "desc": "Restores 80 MP",
+        "mixes":
+        [
+            ["Ether", "Ether"],
+            ["Potion", "Turtle Shell"],
+            ["Ether", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Elixir",
+        "desc": "Completely restores HP and MP",
+        "mixes": 
+        [
+            ["Potion", "Elixir"],
+            ["Hi-Potion", "Elixir"],
+            ["Ether", "Elixir"],
+            ["Elixir", "Elixir"],
+            ["Elixir", "Holy Water"],
+            ["Elixir", "Antidote"],
+            ["Elixir", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Phoenix Down",
+        "desc": "Revives a KO'd party member",
+        "mixes":
+        [
+            ["Phoenix Down", "Phoenix Down"]
+        ]
+    },
+    {
+        "name": "Maiden's Kiss",
+        "desc": "Cures Toad status, heals some HP",
+        "mixes":
+        [
+            ["Hi-Potion", "Maiden's Kiss"]
+        ]
+    },
+    {
+        "name": "Holy Water",
+        "desc": "Cures Zombie status, heals some HP",
+        "mixes":
+        [
+            ["Holy Water", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Antidote",
+        "desc": "Cures Poison status",
+        "mixes":
+        [
+            ["Antidote", "Antidote"]
+        ]
+    },
+    {
+        "name": "Eyedrop",
+        "desc": "Cures Darkness status",
+        "mixes":
+        [
+            ["Eyedrop", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "X-Potion",
+        "desc": "Completely heals HP",
+        "mixes":
+        [
+            ["Ether", "Potion"],
+            ["Ether", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Neutralizer",
+        "snes": "Neutralize",
+        "desc": "Cures Poison status, heals some HP",
+        "mixes":
+        [
+            ["Antidote", "Potion"],
+            ["Antidote", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Kiss of Life",
+        "desc": "Revives one KO'd party member with half HP and full MP",
+        "mixes":
+        [
+            ["Phoenix Down", "Maiden's Kiss"]
+        ]
+    },
+    {
+        "name": "Reincarnate",
+        "snes": "Reincarnation",
+        "desc": "Revives one KO'd party member to full HP",
+        "mixes":
+        [
+            ["Phoenix Down", "Ether"]
+            ["Phoenix Down", "Elixir"]
+        ]
+    },
+    {
+        "name": "Resurrection",
+        "desc": "Revives one KO'd party member to full HP and MP",
+        "mixes":
+        [
+            ["Phoenix Down", "Potion"],
+            ["Phoenix Down", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Triple Ether",
+        "snes": "Ether Dry",
+        "desc": "Restores MP with triple the power of a normal Ether",
+        "mixes":
+        [
+            ["Hi-Potion", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Balm of Gilead",
+        "snes": "Half-Elixir",
+        "desc": "Completely restores MP",
+        "mixes":
+        [
+            ["Hi-Potion", "Ether"]
+        ]
+    },
+    {
+        "name": "Remedy",
+        "snes": "Panacea",
+        "desc": "Cures all negative status ailments",
+        "mixes":
+        [
+            ["Phoenix Down", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Dud Potion",
+        "snes": "Failure",
+        "desc": "Causes Sap and Confusion to the whole party",
+        "mixes":
+        [
+            ["Turtle Shell", "Elixir"],
+            ["Turtle Shell", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Dragon Kiss",
+        "snes": "Dragon's Kiss",
+        "desc": "Gives a target Dragon and Heavy types",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Lifewater",
+        "snes": "Water of Life",
+        "desc": "Casts Regen",
+        "mixes":
+        [
+            ["Potion", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Cure Blindness",
+        "snes": "Cure Blind",
+        "desc": "Cures Darkness status and heals some HP",
+        "mixes":
+        [
+            ["Eyedrop", "Potion"],
+            ["Eyedrop", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Samson's Might",
+        "snes": "Samson Power",
+        "desc": "Raises a party member's level by 10",
+        "mixes":
+        [
+            ["Holy Water", "Antidote"]
+        ]
+    },
+    {
+        "name": "Dragon Power",
+        "desc": "Raises a party member's level by 20", 
+        "mixes":
+        [
+            ["Dragon Fang", "Potion"],
+            ["Dragon Fang", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Resist Poison",
+        "desc": "Increases Poison resistance",
+        "mixes":
+        [
+            ["Ether", "Antidote"]
+        ]
+    },
+    {
+        "name": "Resist Fire",
+        "desc": "Increases Fire-type damage resistance",
+        "mixes":
+        [
+            ["Ether", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Resist Ice",
+        "desc": "Increases Ice-type damage resistance",
+        "mixes":
+        [
+            ["Phoenix Down", "Antidote"]
+        ]
+    },
+    {
+        "name": "Resist Thunder",
+        "desc": "Increases Thunder-type damage resistance",
+        "mixes":
+        [
+            ["Phoenix Down", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Dragon Shielding",
+        "snes": "Dragon Shield",
+        "desc": "Increases Ice-, Fire-, and Thunder-type damage resistance",
+        "mixes":
+        [
+            ["Ether", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Dragon Defense",
+        "snes": "Dragon Armor",
+        "desc": "Grants Reflect, Protect, Shell, and Regen",
+        "mixes":
+        [
+            ["Phoenix Down", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Goliath Tonic",
+        "snes": "Giant Drink",
+        "desc": "Doubles maximum HP (Once per target)",
+        "mixes":
+        [
+            ["Elixir", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Lifeshield",
+        "snes": "Life Shield",
+        "desc": "Raises Death resistance",
+        "mixes":
+        [
+            ["Phoenix Down", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Blessed Kiss",
+        "snes": "Kiss of Blessing",
+        "desc": "Grants Berserk, Haste and Blink status (Bypasses Berserk immunity on SNES)",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Holy Water"]
+        ]
+    },
+    {
+        "name": "Levisalve",
+        "snes": "Levitate",
+        "desc": "Grants Float status",
+        "mixes":
+        [
+            ["Antidote", "Maiden's Kiss"]
+        ]
+    },
+    {
+        "name": "Bacchus's Cider",
+        "snes": "Bacchus' Wine",
+        "desc": "Grants Berserk status",
+        "mixes":
+        [
+            ["Holy Water", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Elemental Power",
+        "desc": "Raises Magic by 50%",
+        "mixes":
+        [
+            ["Holy Water", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Protect Potion",
+        "snes": "Protect Drink",
+        "desc": "Grants Protect and Shell status",
+        "mixes":
+        [
+            ["Turtle Shell", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Hasty-ade",
+        "snes": "Haste Drink",
+        "desc": "Grants Haste status",
+        "mixes":
+        [
+            ["Turtle Shell", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Smelling Salts",
+        "snes": "Restorative",
+        "desc": "Cures Old, Sleep, Paralysis, Confuse, Berserk, and Silence",
+        "mixes":
+        [
+            ["Antidote", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Lilith's Kiss",
+        "desc": "Drain MP from enemy (Reversed if target is Undead)",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Ether"],
+            ["Maiden's Kiss", "Elixir"]
+        ]
+    },
+    {
+        "name": "Dark Ether",
+        "desc": "Drains enemy's MP to 1/4",
+        "mixes":
+        [
+            ["Ether", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Lamia Kiss",
+        "snes": "Lamia's Kiss",
+        "desc": "Causes Confuse status",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Eyedrop"]
+        ]
+    },
+    {
+        "name": "Toad Kiss",
+        "snes": "Toad's Kiss",
+        "desc": "Causes Toad status",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Turtle Soup",
+        "snes": "Split Shell",
+        "desc": "Decreases DEF by 50%",
+        "mixes":
+        [
+            ["Turtle Shell", "Antidote"]
+        ]
+    },
+    {
+        "name": "Dark Gas",
+        "desc": "Causes Darkness status",
+        "mixes":
+        [
+            ["Eyedrop", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Dark Sigh",
+        "desc": "Causes Darkness and Confuse status",
+        "mixes":
+        [
+            ["Eyedrop", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Devil's Juice",
+        "snes": "Dark Potion",
+        "desc": "Deals 666 damage",
+        "mixes":
+        [
+            ["Dark Matter", "Potion"],
+            ["Dark Matter", "Hi-Potion"]
+        ]
+    },
+    {
+        "name": "Antilixir",
+        "snes": "Dark Elixir",
+        "desc": "Drains enemy's HP and MP to single digits (unless target is Heavy)",
+        "mixes":
+        [
+            ["Elixir", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Death Potion",
+        "desc": "Instant Death to enemy",
+        "mixes":
+        [
+            ["Phoenix Down", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Succubus Kiss",
+        "snes": "Drain Kiss",
+        "desc": "Drain HP from enemy (Reverses effect against Undead)",
+        "mixes":
+        [
+            ["Maiden's Kiss", "Turtle Shell"]
+        ]
+    },
+    {
+        "name": "Holy Breath",
+        "desc": "Deals Holy-type damage equal to max HP",
+        "mixes":
+        [
+            ["Holy Water", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Dud Potion",
+        "snes": "Failure",
+        "desc": "Poisons target",
+        "mixes":
+        [
+            ["Holy Water", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "TNT",
+        "snes": "Explosive",
+        "desc": "Deals massive fire damage, kills user",
+        "mixes":
+        [
+            ["Turtle Shell", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Poison",
+        "desc": "Poisons target",
+        "mixes":
+        [
+            ["Antidote", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Poison Breath",
+        "desc": "Poisons target, deals Poison-type damage equal to max HP",
+        "mixes":
+        [
+            ["Antidote", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Dragon Breath",
+        "desc": "Deals Fire-, Thunder-, and Ice-type damage equal to max HP",
+        "mixes":
+        [
+            ["Dragon Fang", "Dragon Fang"]
+        ]
+    },
+    {
+        "name": "Dark Breath",
+        "desc": "Deals damage equal to max HP",
+        "mixes":
+        [
+            ["Dragon Fang", "Dark Matter"]
+        ]
+    },
+    {
+        "name": "Shadowflare",
+        "snes": "Shadow Flare",
+        "desc": "Deals massive non-elemental damage",
+        "mixes":
+        [
+            ["Dark Matter", "Dark Matter"]
+        ]
+    }
+]
