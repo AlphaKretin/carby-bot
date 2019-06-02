@@ -27,6 +27,7 @@ let stats = {
     rodsBroken: 0,
     victims: 0
 };
+let combines;
 const dataFile = "data.json";
 const proms = [];
 async function loadData() {
@@ -60,6 +61,15 @@ proms.push(fs.readFile(classFile, "utf8").then(file => {
         classes.push(new job_1.Job(job));
     }
 }));
+const combFile = "combine.json";
+async function loadCombs() {
+    if (await fs.exists(combFile)) {
+        await fs.readFile(combFile, "utf8").then(file => {
+            combines = JSON.parse(file);
+        });
+    }
+}
+proms.push(loadCombs());
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);
 });
@@ -204,6 +214,10 @@ const commands = [
     {
         func: jobData,
         names: ["class"]
+    },
+    {
+        func: combine,
+        names: ["combine", "cannon"]
     }
 ];
 const responses = {
@@ -615,7 +629,7 @@ async function almagest(msg) {
         const query = args.slice(1).join("");
         const result = classes.find((c) => c.name
             .toLowerCase()
-            .replace(/ +/g, "")
+            .replace(/\s+/g, "")
             .includes(query));
         if (result && args.length > 1) {
             vit = result.vit;
@@ -648,6 +662,26 @@ async function almagest(msg) {
         out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
     }
     await msg.channel.createMessage(out);
+}
+async function combine(msg) {
+    const args = msg.content.toLowerCase().split(/\s+/);
+    args.shift();
+    const combName = args.join("");
+    if (combName in combines) {
+        const comb = combines[combName];
+        let out = "Combine shot with __" + comb.item + "__ for";
+        if (comb.text) {
+            out += ` **${comb.name} Shot**, **${comb.name} Burst**, **${comb.name} Cannon**\n${comb.text}`;
+        }
+        else {
+            out += `:\n**${comb.name} Shot**\n${comb.shot}\n**${comb.name} Burst**\n${comb.burst}\n**${comb.name} Cannon**\n${comb.cannon}`;
+        }
+        await msg.channel.createMessage(out);
+    }
+    else {
+        await msg.channel.createMessage("Sorry, I don't have a combination for that item. " +
+            "Make sure you're using the GBA name, and I don't need the shot!");
+    }
 }
 // DIY fiestas
 var jobSets;
@@ -744,7 +778,7 @@ function diyFiesta(mainMode) {
     return async (msg) => {
         const content = msg.content
             .toLowerCase()
-            .split(/s+/)
+            .split(/\s+/)
             .join(""); // lower-case and remove spaces
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;

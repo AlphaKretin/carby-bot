@@ -36,6 +36,12 @@ This recites how much HP you need to survive the final boss' powerful Almagest a
 
 This calculates how many times you'll need to cast the Blue Magic Dark Spark on an enemy of a given level, halving their level rounding down, to make it a multiple of 2, 3, 4 or 5 for the various Level X Blue Magic spells.
 
+### !combine
+
+**Usage**: `!combine item`
+
+This recites the effects of the mixes made with the Cannoneer's !Combine ability, when used with the given item. Thanks to Aerdan for assembling this data.
+
 ### .class
 
 **Usage**: `.class name`

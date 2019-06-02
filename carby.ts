@@ -29,6 +29,15 @@ let stats: IMiscStats = {
     rodsBroken: 0,
     victims: 0
 };
+interface ICannonMix {
+    name: string;
+    item: string;
+    text?: string;
+    shot?: string;
+    cannon?: string;
+    burst?: string;
+}
+let combines: { [item: string]: ICannonMix };
 const dataFile = "data.json";
 const proms: Array<Promise<void>> = [];
 async function loadData() {
@@ -66,6 +75,15 @@ proms.push(
         }
     })
 );
+const combFile = "combine.json";
+async function loadCombs() {
+    if (await fs.exists(combFile)) {
+        await fs.readFile(combFile, "utf8").then(file => {
+            combines = JSON.parse(file);
+        });
+    }
+}
+proms.push(loadCombs());
 
 bot.on("ready", () => {
     console.log("Logged in as %s - %s\n", bot.user.username, bot.user.id);
@@ -219,6 +237,10 @@ const commands: ICommand[] = [
     {
         func: jobData,
         names: ["class"]
+    },
+    {
+        func: combine,
+        names: ["combine", "cannon"]
     }
 ];
 
@@ -674,7 +696,7 @@ async function almagest(msg: Eris.Message) {
         const result = classes.find((c: Job) =>
             c.name
                 .toLowerCase()
-                .replace(/ +/g, "")
+                .replace(/\s+/g, "")
                 .includes(query)
         );
         if (result && args.length > 1) {
@@ -709,6 +731,29 @@ async function almagest(msg: Eris.Message) {
         out += ", or level " + buffLevel + " (" + finalBuffHP + " HP) to survive Almagest with a safe buffer.";
     }
     await msg.channel.createMessage(out);
+}
+
+async function combine(msg: Eris.Message) {
+    const args = msg.content.toLowerCase().split(/\s+/);
+    args.shift();
+    const combName = args.join("");
+    if (combName in combines) {
+        const comb = combines[combName];
+        let out = "Combine shot with __" + comb.item + "__ for";
+        if (comb.text) {
+            out += ` **${comb.name} Shot**, **${comb.name} Burst**, **${comb.name} Cannon**\n${comb.text}`;
+        } else {
+            out += `:\n**${comb.name} Shot**\n${comb.shot!}\n**${comb.name} Burst**\n${comb.burst!}\n**${
+                comb.name
+            } Cannon**\n${comb.cannon!}`;
+        }
+        await msg.channel.createMessage(out);
+    } else {
+        await msg.channel.createMessage(
+            "Sorry, I don't have a combination for that item. " +
+                "Make sure you're using the GBA name, and I don't need the shot!"
+        );
+    }
 }
 
 // DIY fiestas
@@ -811,7 +856,7 @@ function diyFiesta(mainMode: mainModes) {
     return async (msg: Eris.Message) => {
         const content = msg.content
             .toLowerCase()
-            .split(/s+/)
+            .split(/\s+/)
             .join(""); // lower-case and remove spaces
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
