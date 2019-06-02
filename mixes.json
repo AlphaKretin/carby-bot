@@ -138,7 +138,7 @@
     },
     {
         "name": "Balm of Gilead",
-        "snes": "Half-Elixir",
+        "snes": "Half Elixir",
         "desc": "Completely restores MP",
         "mixes":
         [
@@ -157,11 +157,10 @@
     {
         "name": "Dud Potion",
         "snes": "Failure",
-        "desc": "Causes Sap and Confusion to the whole party",
+        "desc": "75% chance to cause HP Leak, 25% chance to reduce target's HP to single digits",
         "mixes":
         [
-            ["Turtle Shell", "Elixir"],
-            ["Turtle Shell", "Dragon Fang"]
+            ["Turtle Shell", "Elixir"]
         ]
     },
     {
@@ -235,8 +234,8 @@
         ]
     },
     {
-        "name": "Resist Thunder",
-        "desc": "Increases Thunder-type damage resistance",
+        "name": "Resist Lightning",
+        "desc": "Increases Lightning-type damage resistance",
         "mixes":
         [
             ["Phoenix Down", "Eyedrop"]
@@ -245,7 +244,7 @@
     {
         "name": "Dragon Shielding",
         "snes": "Dragon Shield",
-        "desc": "Increases Ice-, Fire-, and Thunder-type damage resistance",
+        "desc": "Increases Ice-, Fire-, and Lightning-type damage resistance",
         "mixes":
         [
             ["Ether", "Dragon Fang"]
@@ -272,7 +271,7 @@
     {
         "name": "Lifeshield",
         "snes": "Life Shield",
-        "desc": "Raises Death resistance",
+        "desc": "Raises Instant Death resistance",
         "mixes":
         [
             ["Phoenix Down", "Holy Water"]
@@ -307,7 +306,7 @@
     },
     {
         "name": "Elemental Power",
-        "desc": "Raises Magic by 50%",
+        "desc": "Raises elemental magic by 50%",
         "mixes":
         [
             ["Holy Water", "Eyedrop"]
@@ -342,6 +341,7 @@
     },
     {
         "name": "Lilith's Kiss",
+        "snes": "Lillith's Kiss",
         "desc": "Drain MP from enemy (Reversed if target is Undead)",
         "mixes":
         [
@@ -351,7 +351,7 @@
     },
     {
         "name": "Dark Ether",
-        "desc": "Drains enemy's MP to 1/4",
+        "desc": "Drains enemy's MP to 1/4 of current value",
         "mixes":
         [
             ["Ether", "Dark Matter"]
@@ -378,7 +378,7 @@
     {
         "name": "Turtle Soup",
         "snes": "Split Shell",
-        "desc": "Decreases DEF by 50%",
+        "desc": "Decreases DEF and M.DEF by 50% of current value",
         "mixes":
         [
             ["Turtle Shell", "Antidote"]
@@ -413,7 +413,7 @@
     {
         "name": "Antilixir",
         "snes": "Dark Elixir",
-        "desc": "Drains enemy's HP and MP to single digits (unless target is Heavy)",
+        "desc": "Drains enemy's HP to single digits (unless target is Heavy)",
         "mixes":
         [
             ["Elixir", "Dark Matter"]
@@ -456,7 +456,7 @@
     {
         "name": "TNT",
         "snes": "Explosive",
-        "desc": "Deals massive fire damage, kills user",
+        "desc": "Deals fire damage equal to user's current HP, kills user",
         "mixes":
         [
             ["Turtle Shell", "Dark Matter"]
@@ -471,6 +471,15 @@
         ]
     },
     {
+        "name": "Dud Potion",
+        "snes": "Failure",
+        "desc": "Deals damage based on current HP, and causes Confuse status",
+        "mixes":
+        [
+            ["Turtle Shell", "Dragon Fang"]
+        ]
+    },
+    {
         "name": "Poison Breath",
         "desc": "Poisons target, deals Poison-type damage equal to max HP",
         "mixes":
@@ -480,7 +489,7 @@
     },
     {
         "name": "Dragon Breath",
-        "desc": "Deals Fire-, Thunder-, and Ice-type damage equal to max HP",
+        "desc": "Deals Fire-, Lightning-, and Ice-type damage equal to max HP",
         "mixes":
         [
             ["Dragon Fang", "Dragon Fang"]
@@ -488,7 +497,7 @@
     },
     {
         "name": "Dark Breath",
-        "desc": "Deals damage equal to max HP",
+        "desc": "Deals damage equal to max HP - current HP",
         "mixes":
         [
             ["Dragon Fang", "Dark Matter"]
@@ -497,7 +506,7 @@
     {
         "name": "Shadowflare",
         "snes": "Shadow Flare",
-        "desc": "Deals massive non-elemental damage",
+        "desc": "Deals massive non-elemental damage, and causes HP Leak",
         "mixes":
         [
             ["Dark Matter", "Dark Matter"]
