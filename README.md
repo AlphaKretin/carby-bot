@@ -108,6 +108,10 @@ These commands all generate a Four Job Fiesta Job set according to the chosen ru
 
 -   `+forbidden`: A random Job will be "lost to the void". After you enter the final dungeon, you can no longer use it or its abilities.
 -   `+fifthjob`: A fifth Job will be assigned to Krile. When she joins your party, you can no longer use your Earth Job and instead use this fifth Job.
+-   `+750`: You will only be assigned magical jobs, namely White Mage, Black Mage, Blue Mage, Time Mage, Summoner, Red Mage, Geomancer, Bard, Chemist and Dancer.
+-   `+no750`: You will only be assigned physical jobs, namely Thief, Monk, Knight, Mystic Knight, Berserker, Ninja, Beastmaster, Raner, Samurai and Dragoon.
+
+You can only use one each out of `+forbidden`/`+fifthjob` and `+750`/`+no750`, but you can use one from each pair.
 
 ### .normal
 
@@ -117,25 +121,9 @@ These are the normal Fiesta rules. At each crystal, the Job you are assigned wil
 
 At each crystal, the Job you are assigned will come from any crystals you already have unlocked, but not future ones.
 
-### .750
-
-You will only be assigned magical jobs, namely White Mage, Black Mage, Blue Mage, Time Mage, Summoner, Red Mage, Geomancer, Bard, Chemist and Dancer. This is to be turned into a modifier at a later date, and does not support the other modifiers.
-
-### .no750
-
-You will only be assigned physical jobs, namely Thief, Monk, Knight, Mystic Knight, Berserker, Ninja, Beastmaster, Raner, Samurai and Dragoon. This is to be turned into a modifier at a later date, and does not support the other modifiers.
-
 ### .chaos
 
 You can be assigned any normal job at any crystal, with duplicates allowed.
-
-### .chaos750
-
-A combination of `.chaos` and `.750` rules. Will be obsolete when 750 becomes a modifier, and does not support the other modifiers.
-
-### .chaosno750
-
-A combination of `.chaos` and `.no750` rules. Will be obsolete when no750 becomes a modifier, and does not support the other modifiers.
 
 ### .purechaos
 
@@ -152,7 +140,23 @@ Jobs are re-arranged in order to fit the 3 bonus GBA version jobs, Gladiator, Or
 
 ### .forbidden
 
-Obsolete combination of `.advance+forbidden`. Your Earth Job cannot be Forbidden.
+This is mostly an obsolete alias for `.advance+forbidden`, with the special stipulation that your Earth Job cannot be Forbidden. It does not support other modifiers.
+
+### .750
+
+This is an obsolete alias for `.normal+750`, and does not support other modifiers.
+
+### .no750
+
+This is an obsolete alias for `.normal+no750`, and does not support other modifiers.
+
+### .chaos750
+
+This is an obsolete alias for `.chaos+750`, and does not support other modifiers.
+
+### .chaosno750
+
+This is an obsolete alias for `.chaos+no750`, and does not support other modifiers.
 
 ## Enemy database
 
