@@ -969,13 +969,11 @@ function diyFiesta(mainMode: mainModes) {
     return async (msg: Eris.Message) => {
         const content = msg.content
             .toLowerCase()
-            .split(/\s+/)
-            .join(""); // lower-case and remove spaces
+            .split(/\s+/); // lower-case
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
-        const flags = content.split("+");
-        flags.shift(); // remove mode name
-        for (const flag of flags) {
+        const flags = content[0].split("+");
+        for (const flag of flags[1]) {
             // only check for change if currently default, so first relevant flag affects
             if (jobSet === jobSets.JOBS_ALL) {
                 switch (flag) {
