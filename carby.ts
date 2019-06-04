@@ -883,6 +883,13 @@ enum extraModes {
     MODE_FIFTH,
     MODE_NATURAL
 }
+enum berserkerRisks {
+    RISK_NONE,
+    RISK_LOW,
+    RISK_MODERATE,
+    RISK_HIGH,
+    RISK_EVERHATE
+}
 
 const windJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 1);
 const waterJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 2);
@@ -890,6 +897,38 @@ const fireJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 3)
 const earthJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 4);
 
 type fiestaGenerator = (allJobs: Job[], fifth: boolean) => string[];
+
+function riskRoll(jobs: Array, riskMode: berserkerRisks) {
+    let risky = 0;
+    let risks = 0;
+    switch (riskMode) {
+        case berserkerRisk.RISK_LOW:
+            risky = 12;
+            risks = 1;
+            break;
+        case berserkerRisk.RISK_MODERATE:
+            risky = 25;
+            risks = 2;
+            break;
+        case berserkerRisk.RISK_HIGH:
+            risky = 50;
+            risks = 3;
+            break;
+        case berserkerRisk.RISK_EVERHATE:
+            return ["Berserker"] * 4;
+            break;
+    }
+    for (let i = 0; i < jobs.length; i++) {
+        if (risks <= 0) {
+            break;
+        }
+        if (getIntInc(0, 100) < risky) {
+            jobs[i] = "Berserker";
+            risks--;
+        }
+    }
+    return jobs;
+}
 
 const fiestaGenerators: { [type in mainModes]: fiestaGenerator } = {
     0: (allJobs, fifth) => {
@@ -970,6 +1009,7 @@ function diyFiesta(mainMode: mainModes) {
         const content = msg.content.toLowerCase().split(/\s+/); // lower-case and split by spaces
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
+        let risk = berserkerRisks.RISK_NONE;
         const flags = content[0].split("+"); // anything after space is user comment
         flags.shift(); // remove, e.g., .normal from .normal+forbidden
         for (const flag of flags) {
@@ -997,6 +1037,23 @@ function diyFiesta(mainMode: mainModes) {
                         break;
                 }
             }
+            if (risk === berserkerRisks.RISK_NONE) {
+                switch (flag) {
+                    case "lowrisk":
+                        risk = berserkerRisks.RISK_LOW;
+                        break;
+                    case "berserkerrisk":
+                    case "risk":
+                        risk = berserkerRisks.RISK_MODERATE;
+                        break;
+                    case "highrisk":
+                        risk = berserkerRisks.RISK_HIGH;
+                        break;
+                    case "blameeverhate":
+                        risk = berserkerRisks.RISK_EVERHATE;
+                        break;
+                }
+            }
         }
         if (extraMode === extraModes.MODE_NATURAL) {
             await msg.channel.createMessage("🖕");
@@ -1016,6 +1073,9 @@ function diyFiesta(mainMode: mainModes) {
             const index = getIncInt(0, fiestaJobs.length - 1);
             forbJob = fiestaJobs[index];
             fiestaJobs[index] = "~~" + forbJob + "~~";
+        }
+        if (risk !== berserkerRisks.RISK_NONE) {
+            fiestaJobs = riskRoll(fiestaJobs, risk);
         }
         let out =
             "Wind Job: " +
