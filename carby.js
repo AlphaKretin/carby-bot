@@ -872,14 +872,11 @@ const fiestaGenerators = {
 };
 function diyFiesta(mainMode) {
     return async (msg) => {
-        const content = msg.content
-            .toLowerCase()
-            .split(/\s+/)
-            .join(""); // lower-case and remove spaces
+        const content = msg.content.toLowerCase().split(/\s+/); // lower-case and split by spaces
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
-        const flags = content.split("+");
-        flags.shift(); // remove mode name
+        const flags = content[0].split("+"); // anything after space is user comment
+        flags.shift(); // remove, e.g., .normal from .normal+forbidden
         for (const flag of flags) {
             // only check for change if currently default, so first relevant flag affects
             if (jobSet === jobSets.JOBS_ALL) {
