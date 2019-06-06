@@ -890,6 +890,10 @@ enum berserkerRisks {
     RISK_HIGH,
     RISK_EVERHATE
 }
+enum spoilers {
+    SHOW_JOBS,
+    HIDE_JOBS
+}
 
 const windJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 1);
 const waterJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 2);
@@ -1010,6 +1014,7 @@ function diyFiesta(mainMode: mainModes) {
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
         let risk = berserkerRisks.RISK_NONE;
+        let spoil = spoilers.SHOW_JOBS;
         const flags = content[0].split("+"); // anything after space is user comment
         flags.shift(); // remove, e.g., .normal from .normal+forbidden
         for (const flag of flags) {
@@ -1054,6 +1059,13 @@ function diyFiesta(mainMode: mainModes) {
                         break;
                 }
             }
+            if (spoil === spoilers.SHOW_JOBS) {
+                switch (flag) {
+                    case "hide":
+                        spoil = spoilers.HIDE_JOBS;
+                        break;
+                }
+            }
         }
         if (extraMode === extraModes.MODE_NATURAL) {
             await msg.channel.createMessage("🖕");
@@ -1076,23 +1088,38 @@ function diyFiesta(mainMode: mainModes) {
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
             forbJob = fiestaJobs[index];
-            fiestaJobs[index] = "~~" + forbJob + "~~";
+            if (spoil === spoilers.SHOW_JOBS) {
+                // if +hide is on, the strikethrough would spoil the voided job
+                fiestaJobs[index] = "~~" + forbJob + "~~";
+            }
         }
+        const bar = spoil === spoilers.HIDE_JOBS ? "|| " : "";
         let out =
             "Wind Job: " +
             fiestaJobs[0] +
             "\nWater Job: " +
+            bar +
             fiestaJobs[1] +
+            bar +
             "\nFire Job: " +
+            bar +
             fiestaJobs[2] +
+            bar +
             "\nEarth Job: " +
-            fiestaJobs[3];
+            bar +
+            fiestaJobs[3] +
+            bar;
         if (extraMode === extraModes.MODE_FIFTH) {
-            out += "\nKrile replaces Earth Job with: " + fiestaJobs[4];
+            out += "\nKrile replaces Earth Job with: " + bar + fiestaJobs[4] + bar;
         } else if (extraMode === extraModes.MODE_FORB) {
-            out += "\nLost to the void: " + forbJob!;
+            out += "\nLost to the void: " + bar + forbJob! + bar;
         }
-        await msg.channel.createMessage(out);
+        if (spoil === spoilers.HIDE_JOBS) {
+            const channel = await msg.author.getDMChannel();
+            await channel.createMessage(out);
+        } else {
+            await msg.channel.createMessage(out);
+        }
     };
 }
 
