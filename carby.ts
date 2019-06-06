@@ -1067,14 +1067,15 @@ function diyFiesta(mainMode: mainModes) {
                     (jobSet === jobSets.JOBS_PHYS && !c.is750))
         );
         let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
+        // risk has to be applied before forbidden so it doesn't replace a banned job or ban a replaced job
+        if (risk !== berserkerRisks.RISK_NONE) {
+            fiestaJobs = riskRoll(fiestaJobs, risk);
+        }
         let forbJob: string;
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
             forbJob = fiestaJobs[index];
             fiestaJobs[index] = "~~" + forbJob + "~~";
-        }
-        if (risk !== berserkerRisks.RISK_NONE) {
-            fiestaJobs = riskRoll(fiestaJobs, risk);
         }
         let out =
             "Wind Job: " +
