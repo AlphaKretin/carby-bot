@@ -902,7 +902,7 @@ const earthJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 4
 
 type fiestaGenerator = (allJobs: Job[], fifth: boolean) => string[];
 
-function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean) {
+function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean, spoil: spoilers) {
     let risky = 0;
     let risks = 0;
     switch (riskMode) {
@@ -925,7 +925,11 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean) 
     }
     if (normal) {
         if (getIncInt(0, 100) < risky) {
-            allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
+	    if (spoil === spoilers.SHOW_JOBS) {
+		allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
+	    } else { // HIDE_JOBS
+		allJobs[1] = `Berserker`;
+	    }
         }
         return allJobs;
     }
@@ -934,8 +938,12 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean) 
             break;
         }
         if (getIncInt(0, 100) < risky) {
-            allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
-            risks--;
+	    if (spoil === spoilers.SHOW_JOBS) {
+		allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
+	    } else {
+		allJobs[i] = `Berserker`;
+	    }
+	    risks--;
         }
     }
     return allJobs;
@@ -1090,7 +1098,7 @@ function diyFiesta(mainMode: mainModes) {
         let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
         // risk has to be applied before forbidden so it doesn't replace a banned job or ban a replaced job
         if (risk !== berserkerRisks.RISK_NONE) {
-            fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL);
+            fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL, spoil);
         }
         let forbJob: string;
         if (extraMode === extraModes.MODE_FORB) {
