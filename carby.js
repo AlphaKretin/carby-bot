@@ -827,10 +827,9 @@ function riskRoll(allJobs, riskMode, normal) {
             risks = 3;
             break;
         case berserkerRisks.RISK_EVERHATE:
-            for (let i = 0; i < allJobs.length; i++) {
-                allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
-            }
-            return allJobs;
+	    risky = 100;
+	    risks = allJobs.length;
+	    break;
     }
     if (normal) {
         if (getIncInt(0, 100) < risky) {
