@@ -1040,6 +1040,7 @@ function diyFiesta(mainMode: mainModes) {
             if (extraMode === extraModes.MODE_NONE) {
                 switch (flag) {
                     case "forbidden":
+                    case "void":
                         extraMode = extraModes.MODE_FORB;
                         break;
                     case "fifthjob":
