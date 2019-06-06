@@ -1059,10 +1059,10 @@ function diyFiesta(mainMode: mainModes) {
                         break;
                 }
             }
-            if (spoiler === spoilers.SHOW_JOBS) {
+            if (spoil === spoilers.SHOW_JOBS) {
                 switch (flag) {
                     case "hide":
-                        spoiler = spoilers.HIDE_JOBS;
+                        spoil = spoilers.HIDE_JOBS;
                         break;
                 }
             }
@@ -1090,27 +1090,29 @@ function diyFiesta(mainMode: mainModes) {
             forbJob = fiestaJobs[index];
             fiestaJobs[index] = "~~" + forbJob + "~~";
         }
+        const bar = spoil === spoilers.HIDE_JOBS ? "|| " : "";
         let out =
             "Wind Job: " +
             fiestaJobs[0] +
             "\nWater Job: " +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + fiestaJobs[1] +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + "\nFire Job: " +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + fiestaJobs[2] +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + "\nEarth Job: " +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + fiestaJobs[3] +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '');
+            bar +
+            fiestaJobs[1] +
+            bar +
+            "\nFire Job: " +
+            bar +
+            fiestaJobs[2] +
+            bar +
+            "\nEarth Job: " +
+            bar +
+            fiestaJobs[3] +
+            bar;
         if (extraMode === extraModes.MODE_FIFTH) {
-            out += "\nKrile replaces Earth Job with: " +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + fiestaJobs[4] +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '');
+            out += "\nKrile replaces Earth Job with: " + bar + fiestaJobs[4] + bar;
         } else if (extraMode === extraModes.MODE_FORB) {
-            out += "\nLost to the void: " + 
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '') + forbJob! +
-            (spoiler == spoilers.HIDE_JOBS ? '|| ' : '');
+            out += "\nLost to the void: " + bar + forbJob! + bar;
         }
-        if (spoiler === spoilers.HIDE_JOBS) {
-            let channel = await msg.author.getDMchannel()
+        if (spoil === spoilers.HIDE_JOBS) {
+            const channel = await msg.author.getDMChannel();
             await channel.createMessage(out);
         } else {
             await msg.channel.createMessage(out);
