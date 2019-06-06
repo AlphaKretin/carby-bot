@@ -793,10 +793,49 @@ var extraModes;
     extraModes[extraModes["MODE_FIFTH"] = 2] = "MODE_FIFTH";
     extraModes[extraModes["MODE_NATURAL"] = 3] = "MODE_NATURAL";
 })(extraModes || (extraModes = {}));
+var berserkerRisks;
+(function (berserkerRisks) {
+    berserkerRisks[berserkerRisks["RISK_NONE"] = 0] = "RISK_NONE";
+    berserkerRisks[berserkerRisks["RISK_LOW"] = 1] = "RISK_LOW";
+    berserkerRisks[berserkerRisks["RISK_MODERATE"] = 2] = "RISK_MODERATE";
+    berserkerRisks[berserkerRisks["RISK_HIGH"] = 3] = "RISK_HIGH";
+    berserkerRisks[berserkerRisks["RISK_EVERHATE"] = 4] = "RISK_EVERHATE";
+})(berserkerRisks || (berserkerRisks = {}));
 const windJobs = (allJobs) => allJobs.filter((c) => c.crystal === 1);
 const waterJobs = (allJobs) => allJobs.filter((c) => c.crystal === 2);
 const fireJobs = (allJobs) => allJobs.filter((c) => c.crystal === 3);
 const earthJobs = (allJobs) => allJobs.filter((c) => c.crystal === 4);
+function riskRoll(allJobs, riskMode) {
+    let risky = 0;
+    let risks = 0;
+    switch (riskMode) {
+        case berserkerRisks.RISK_LOW:
+            risky = 12;
+            risks = 1;
+            break;
+        case berserkerRisks.RISK_MODERATE:
+            risky = 25;
+            risks = 2;
+            break;
+        case berserkerRisks.RISK_HIGH:
+            risky = 50;
+            risks = 3;
+            break;
+        case berserkerRisks.RISK_EVERHATE:
+            // if not fifthjob, then fifth will simply be ignored
+            return ["Berserker", "Berserker", "Berserker", "Berserker", "Berserker"];
+    }
+    for (let i = 0; i < allJobs.length; i++) {
+        if (risks <= 0) {
+            break;
+        }
+        if (getIncInt(0, 100) < risky) {
+            allJobs[i] = "Berserker";
+            risks--;
+        }
+    }
+    return allJobs;
+}
 const fiestaGenerators = {
     0: (allJobs, fifth) => {
         const winJobs = windJobs(allJobs);
@@ -875,6 +914,7 @@ function diyFiesta(mainMode) {
         const content = msg.content.toLowerCase().split(/\s+/); // lower-case and split by spaces
         let jobSet = jobSets.JOBS_ALL;
         let extraMode = extraModes.MODE_NONE;
+        let risk = berserkerRisks.RISK_NONE;
         const flags = content[0].split("+"); // anything after space is user comment
         flags.shift(); // remove, e.g., .normal from .normal+forbidden
         for (const flag of flags) {
@@ -902,6 +942,23 @@ function diyFiesta(mainMode) {
                         break;
                 }
             }
+            if (risk === berserkerRisks.RISK_NONE) {
+                switch (flag) {
+                    case "lowrisk":
+                        risk = berserkerRisks.RISK_LOW;
+                        break;
+                    case "berserkerrisk":
+                    case "risk":
+                        risk = berserkerRisks.RISK_MODERATE;
+                        break;
+                    case "highrisk":
+                        risk = berserkerRisks.RISK_HIGH;
+                        break;
+                    case "blameeverhate":
+                        risk = berserkerRisks.RISK_EVERHATE;
+                        break;
+                }
+            }
         }
         if (extraMode === extraModes.MODE_NATURAL) {
             await msg.channel.createMessage("🖕");
@@ -912,7 +969,11 @@ function diyFiesta(mainMode) {
             (jobSet === jobSets.JOBS_ALL ||
                 (jobSet === jobSets.JOBS_MAGE && c.is750) ||
                 (jobSet === jobSets.JOBS_PHYS && !c.is750)));
-        const fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
+        let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
+        // risk has to be applied before forbidden so it doesn't replace a banned job or ban a replaced job
+        if (risk !== berserkerRisks.RISK_NONE) {
+            fiestaJobs = riskRoll(fiestaJobs, risk);
+        }
         let forbJob;
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
