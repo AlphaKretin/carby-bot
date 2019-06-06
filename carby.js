@@ -810,7 +810,7 @@ const windJobs = (allJobs) => allJobs.filter((c) => c.crystal === 1);
 const waterJobs = (allJobs) => allJobs.filter((c) => c.crystal === 2);
 const fireJobs = (allJobs) => allJobs.filter((c) => c.crystal === 3);
 const earthJobs = (allJobs) => allJobs.filter((c) => c.crystal === 4);
-function riskRoll(allJobs, riskMode) {
+function riskRoll(allJobs, riskMode, normal) {
     let risky = 0;
     let risks = 0;
     switch (riskMode) {
@@ -829,6 +829,12 @@ function riskRoll(allJobs, riskMode) {
         case berserkerRisks.RISK_EVERHATE:
             // if not fifthjob, then fifth will simply be ignored
             return ["Berserker", "Berserker", "Berserker", "Berserker", "Berserker"];
+    }
+    if (normal) {
+        if (getIncInt(0, 100) < risky) {
+            allJobs[1] = "Berserker"; // water only
+        }
+        return allJobs;
     }
     for (let i = 0; i < allJobs.length; i++) {
         if (risks <= 0) {
@@ -985,7 +991,7 @@ function diyFiesta(mainMode) {
         let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
         // risk has to be applied before forbidden so it doesn't replace a banned job or ban a replaced job
         if (risk !== berserkerRisks.RISK_NONE) {
-            fiestaJobs = riskRoll(fiestaJobs, risk);
+            fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL);
         }
         let forbJob;
         if (extraMode === extraModes.MODE_FORB) {
