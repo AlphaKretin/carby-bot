@@ -1028,10 +1028,18 @@ function diyFiesta(mainMode) {
         }
         if (spoil === spoilers.HIDE_JOBS) {
             const channel = await msg.author.getDMChannel();
-            await channel.createMessage(out);
+            const m = await channel.createMessage(out);
+            if (risk === berserkerRisks.RISK_HIGH &&
+                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4) {
+                await m.addReaction("🤣");
+            }
         }
         else {
-            await msg.channel.createMessage(out);
+            const m = await msg.channel.createMessage(out);
+            if (risk === berserkerRisks.RISK_HIGH &&
+                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4) {
+                await m.addReaction("🤣");
+            }
         }
     };
 }
