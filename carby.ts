@@ -915,7 +915,8 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks) {
             risks = 3;
             break;
         case berserkerRisks.RISK_EVERHATE:
-            return ["Berserker", "Berserker", "Berserker", "Berserker"];
+            // if not fifthjob, then fifth will simply be ignored
+            return ["Berserker", "Berserker", "Berserker", "Berserker", "Berserker"];
     }
     for (let i = 0; i < allJobs.length; i++) {
         if (risks <= 0) {
