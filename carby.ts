@@ -919,12 +919,14 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean) 
             risks = 3;
             break;
         case berserkerRisks.RISK_EVERHATE:
-            // if not fifthjob, then fifth will simply be ignored
-            return ["Berserker", "Berserker", "Berserker", "Berserker", "Berserker"];
+            for (let i = 0; i < allJobs.length; i++) {
+                allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
+            }
+            return allJobs;
     }
     if (normal) {
         if (getIncInt(0, 100) < risky) {
-            allJobs[1] = "Berserker"; // water only
+            allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
         }
         return allJobs;
     }
@@ -933,7 +935,7 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean) 
             break;
         }
         if (getIncInt(0, 100) < risky) {
-            allJobs[i] = "Berserker";
+            allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
             risks--;
         }
     }
