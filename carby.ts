@@ -898,36 +898,35 @@ const earthJobs = (allJobs: Job[]) => allJobs.filter((c: Job) => c.crystal === 4
 
 type fiestaGenerator = (allJobs: Job[], fifth: boolean) => string[];
 
-function riskRoll(jobs: Array, riskMode: berserkerRisks) {
+function riskRoll(allJobs: string[], riskMode: berserkerRisks) {
     let risky = 0;
     let risks = 0;
     switch (riskMode) {
-        case berserkerRisk.RISK_LOW:
+        case berserkerRisks.RISK_LOW:
             risky = 12;
             risks = 1;
             break;
-        case berserkerRisk.RISK_MODERATE:
+        case berserkerRisks.RISK_MODERATE:
             risky = 25;
             risks = 2;
             break;
-        case berserkerRisk.RISK_HIGH:
+        case berserkerRisks.RISK_HIGH:
             risky = 50;
             risks = 3;
             break;
-        case berserkerRisk.RISK_EVERHATE:
-            return ["Berserker"] * 4;
-            break;
+        case berserkerRisks.RISK_EVERHATE:
+            return ["Berserker", "Berserker", "Berserker", "Berserker"];
     }
-    for (let i = 0; i < jobs.length; i++) {
+    for (let i = 0; i < allJobs.length; i++) {
         if (risks <= 0) {
             break;
         }
-        if (getIntInc(0, 100) < risky) {
-            jobs[i] = "Berserker";
+        if (getIncInt(0, 100) < risky) {
+            allJobs[i] = "Berserker";
             risks--;
         }
     }
-    return jobs;
+    return allJobs;
 }
 
 const fiestaGenerators: { [type in mainModes]: fiestaGenerator } = {
@@ -1067,7 +1066,7 @@ function diyFiesta(mainMode: mainModes) {
                     (jobSet === jobSets.JOBS_MAGE && c.is750) ||
                     (jobSet === jobSets.JOBS_PHYS && !c.is750))
         );
-        const fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
+        let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
         let forbJob: string;
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
