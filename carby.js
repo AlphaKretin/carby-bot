@@ -991,7 +991,10 @@ function diyFiesta(mainMode) {
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
             forbJob = fiestaJobs[index];
-            fiestaJobs[index] = "~~" + forbJob + "~~";
+            if (spoil === spoilers.SHOW_JOBS) {
+                // if +hide is on, the strikethrough would spoil the voided job
+                fiestaJobs[index] = "~~" + forbJob + "~~";
+            }
         }
         const bar = spoil === spoilers.HIDE_JOBS ? "|| " : "";
         let out = "Wind Job: " +
