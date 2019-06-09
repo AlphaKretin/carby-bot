@@ -240,6 +240,9 @@ const responses = {
     badfiesta: "The worst fiesta ever happened here: https://www.twitch.tv/dragondarchsda/v/48967944",
     badmod: "`No balance, at all` -mod author http://kyrosiris.com/changes_overview.txt " +
         "https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)",
+    beginner: "alcharagia's beginner guide to the game's Jobs:\n" +
+        "https://forums.somethingawful.com/showthread.php?threadid=3857516&userid=0" +
+        "&perpage=40&pagenumber=13#post484858103",
     blue: "Blue Magic acquisition guide: http://shrines.rpgclassics.com/snes/ff5/bluestrat.shtml",
     catch: "Need catch suggestions? Kyro made a spreadsheet: http://tinyurl.com/catchspreadsheet",
     chemchart: "!Mix Picture Guide: http://i.imgur.com/MBJBNvG.gif",
@@ -303,6 +306,9 @@ const responses = {
         "11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     sandworm: "http://kyrosiris.com/sandworm.gif",
     sandworm2: "This is to go ***FURTHER BEYOND!!!*** http://kyrosiris.com/sandworm2.png",
+    sealed: "**RUN COWARD RUN RUN RUN RUN RUN RUN RUN** https://i.imgur.com/mnarmy3.gif\n" +
+        "https://forums.somethingawful.com/showthread.php?threadid=3776693&pagenumber=87&perpage=40#post461344746\n" +
+        "https://forums.somethingawful.com/showthread.php?threadid=3820741&pagenumber=22&perpage=40#post473264920",
     seals: "Seal Guardians Picture Guide: http://i.imgur.com/c73swws.png",
     stats: "Character stat bonuses are as follows:\nButz - +4 Str, +1 Agi, +3 Vit, +1 Mag\n" +
         "Lenna: +1 Str, +2 Agi, +1 Vit, +4 Mag\nGaluf: +3 Str, +4 Vit\n " +

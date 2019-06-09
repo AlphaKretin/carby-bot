@@ -237,6 +237,7 @@ Each of the following commands recite a quote or link with useful information ab
 -   `.500`/`.karnak`: A map of the Karnak 500 escape sequence.
 -   `.address`: Various memory addresses for use with GBA emulators.
 -   `.algorithm`: The FFV Algorithms guide.
+-   `.beginner`: A beginner's guide to the Job Classes, written by alcharagia.
 -   `!blue`: A Blue Magic acquisition guide.
 -   `!catch`: Catch suggestions for each boss.
 -   `.chemchart`: A pictue guide for !Mix (this should be `.mixchart` but it conflicts with `!mix`).
@@ -249,6 +250,7 @@ Each of the following commands recite a quote or link with useful information ab
 -   `.physical`: A list of commands that trigger React: Physical scripts, such as Omniscient's Reset.
 -   `.piano`: A list of which towns have the pianos needed for the final Bard song.
 -   `.pyramid`: A map of the Pyramid dungeon.
+-   `.sealed`: alcharagia's guide to the Sealed Temple bonus dungeon.
 -   `.seals`: A picture guide for which of the nameless Seal Guardian bosses are which.
 -   `.stats`: A list of the modifiers each character has to their base stats.
 -   `.wonderwand` The order of the spells the Wonder Wand weapon casts.
