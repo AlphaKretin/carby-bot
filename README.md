@@ -245,7 +245,7 @@ Each of the following commands recite a quote or link with useful information ab
 -   `.enkibot`: Asterism's Enkibot interactive guide.
 -   `.fork`: Reminds you which way is which in Fork Tower.
 -   `.lamp`: The Magic Lamp's summon order.
--   `.ned`: A picture guid for which part of Neo Exdeath is which.
+-   `.ned`: A picture guide for which part of Neo Exdeath is which.
 -   `.phoenix`: The order of doors for the Phoenix Tower dungeon.
 -   `.physical`: A list of commands that trigger React: Physical scripts, such as Omniscient's Reset.
 -   `.piano`: A list of which towns have the pianos needed for the final Bard song.
