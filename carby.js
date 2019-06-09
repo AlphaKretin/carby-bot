@@ -231,19 +231,41 @@ const commands = [
     }
 ];
 const responses = {
+    500: "KARNAK 500 TREASURE CHEST MAP, IT'S COOL AND GOOD: " +
+        "https://www.gamefaqs.com/ps/562810-final-fantasy-v/faqs/49618?raw=1",
+    address: "GBA Memory Address list is here: http://tinyurl.com/leq4gje\n" +
+        "Song boosts are stored at 0x0201EE85/86/88/89 for Strength/Agility/Magic/Level!",
+    algorithm: "Algorithms guide: http://www.kyrosiris.com/ff5algorithm.html",
     badfaq: "oh my god I love <:rod:455233447565459471> http://www.gamefaqs.com/snes/588331-final-fantasy-v/faqs/21687",
     badfiesta: "The worst fiesta ever happened here: https://www.twitch.tv/dragondarchsda/v/48967944",
     badmod: "`No balance, at all` -mod author http://kyrosiris.com/changes_overview.txt " +
         "https://www.romhacking.net/forum/index.php?topic=26501.0 (DON'T PLAY THIS)",
+    blue: "Blue Magic acquisition guide: http://shrines.rpgclassics.com/snes/ff5/bluestrat.shtml",
+    catch: "Need catch suggestions? Kyro made a spreadsheet: http://tinyurl.com/catchspreadsheet",
+    chemchart: "!Mix Picture Guide: http://i.imgur.com/MBJBNvG.gif",
     crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     dance: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif",
+    encounter: "Indoor enemy list per zone/encounter is here: " +
+        "https://www.dropbox.com/s/l9cxdjz2atp7ey2/encounter_survey.txt\n" +
+        "World 3 encounter map is here: http://www.cavesofnarshe.com/ff5/finalworld.php\n" +
+        "disastranagant 20/06/2018\n" +
+        "jfc why haven't I posted the sea chart yet https://i.imgur.com/52t2S15.gif\n" +
+        "the grey areas are great abp and gil, the light blue area has stingray " +
+        "and the yellow area has the highest gil and abp of any random battle outside the void.",
+    enkibot: "Asterism's Enkibot guide is here: http://enkibot.herokuapp.com/",
     equipharps: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif",
+    fork: "Fork Tower: Magic Left, Physical Right",
     gaia: "THAT HIPPIE SHIT AIN'T MAGIC http://i.imgur.com/JkwTg5O.png",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",
     help: "I have a lot of commands, too many to list in this Discord PM." +
         " Check this readme: https://tinyurl.com/ybh7lrz2",
     iainuki: "That's a good ability! http://gfycat.com/TenseArtisticCobra",
+    karnak: "KARNAK 500 TREASURE CHEST MAP, IT'S COOL AND GOOD: " +
+        "https://www.gamefaqs.com/ps/562810-final-fantasy-v/faqs/49618?raw=1",
+    lamp: "Magic Lamp cast order: Bahamut, Leviathan, Odin, Syldra, Carbuncle, Catoblepas, " +
+        "Golem, Titan, Ifrit, Ramuh, Shiva, Remora, Sylph, Chocobo.",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
+    ned: "Neo-Exdeath Picture Guide: http://i.imgur.com/FphWf.gif",
     numbers: "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
         "Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n" +
         "1. After getting the wind drake from Bal Castle, go to Kuza and grind to level 32.\n" +
@@ -257,6 +279,13 @@ const responses = {
         "9. Kill the Water, Earth and Wind Crystals.\n10. Kill off everyone except Bartz.\n" +
         "11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     oracle: "https://www.youtube.com/watch?v=makazgIRzfg",
+    phoenix: "Phoenix Tower door order: Left Left Right, " +
+        "Left Left Right, Left Left Right, Left Left Right, Right Left Right, Left Left Right, Center, Phoenix!",
+    physical: "THIS SHIT AIN'T MAGIC (and will trigger React: Physical scripts): Item, Fight, Kick, Focus, Steal, " +
+        "Mug, Lance, Jump, Throw, Mineuchi, Zeninage, Animals, Aim, Rapid Fire, " +
+        "Call, Check, Scan, Release, Mix, Gaia, and Dance.",
+    piano: "The pianos are in: Tule, Carwen, Karnak, Jachol, Crescent, Regole, Moore, and Mirage",
+    pyramid: "https://i.imgur.com/YbXESCb.gif",
     quickleak: "https://www.youtube.com/watch?v=1x7zRK-Fsv8&list=PLMthTW4vRq8bfi6MeqVHU-yWkN4BRE1DJ",
     quicksave: "Hang on while I do some **ENCOUNTER MANIPULATION**",
     rocksfall: "...and *NED* dies? sure, why not https://clips.twitch.tv/ProductiveSavoryHorseradishSoBayed",
@@ -274,6 +303,14 @@ const responses = {
         "11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     sandworm: "http://kyrosiris.com/sandworm.gif",
     sandworm2: "This is to go ***FURTHER BEYOND!!!*** http://kyrosiris.com/sandworm2.png",
+    seals: "Seal Guardians Picture Guide: http://i.imgur.com/c73swws.png",
+    stats: "Character stat bonuses are as follows:\nButz - +4 Str, +1 Agi, +3 Vit, +1 Mag\n" +
+        "Lenna: +1 Str, +2 Agi, +1 Vit, +4 Mag\nGaluf: +3 Str, +4 Vit\n " +
+        "Faris: +3 Str, +3 Agi, +2 Vit, +2 Mag\nKrile: +1 Str, +4 Agi, +3 Mag",
+    wonderwand: "Wonder Wand spell order: Cure, Poisona, Silence, Protect, Mini, Cura, Raise, Confuse, " +
+        "Blink, Shell, Esuna, Curaga, Reflect, Berserk, Arise, Holy, Dispel, " +
+        "Fire, Blizzard, Thunder, Poison, Sleep, Toad, Fira, Blizzara, Thundara, Drain, Break, Bio, " +
+        "Firaga, Blizzaga, Thundaga, Flare, Death, Osmose, repeat!",
     yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png",
     zeninage: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif"
 };

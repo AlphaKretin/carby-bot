@@ -230,6 +230,29 @@ This provides an enemy's elemental and status affinities, including weakness, re
 
 This provides information about an enemy's abilities, such as their known Magic, Blue Magic you can learn from them, and what happens when you !Control or !Catch them.
 
+## Misc. Information
+
+Each of the following commands recite a quote or link with useful information about the game.
+
+-   `.500`/`.karnak`: A map of the Karnak 500 escape sequence.
+-   `.address`: Various memory addresses for use with GBA emulators.
+-   `.algorithm`: The FFV Algorithms guide.
+-   `!blue`: A Blue Magic acquisition guide.
+-   `!catch`: Catch suggestions for each boss.
+-   `.chemchart`: A pictue guide for !Mix (this should be `.mixchart` but it conflicts with `!mix`).
+-   `.encounter`: Several random encounter maps.
+-   `.enkibot`: Asterism's Enkibot interactive guide.
+-   `.fork`: Reminds you which way is which in Fork Tower.
+-   `.lamp`: The Magic Lamp's summon order.
+-   `.ned`: A picture guid for which part of Neo Exdeath is which.
+-   `.phoenix`: The order of doors for the Phoenix Tower dungeon.
+-   `.physical`: A list of commands that trigger React: Physical scripts, such as Omniscient's Reset.
+-   `.piano`: A list of which towns have the pianos needed for the final Bard song.
+-   `.pyramid`: A map of the Pyramid dungeon.
+-   `.seals`: A picture guide for which of the nameless Seal Guardian bosses are which.
+-   `.stats`: A list of the modifiers each character has to their base stats.
+-   `.wonderwand` The order of the spells the Wonder Wand weapon casts.
+
 ## Silly nonsense
 
 ### .dd
