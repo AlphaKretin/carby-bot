@@ -116,12 +116,28 @@ This adds you to a role designating that you braved `#regWinner`, without Berser
 
 **Usage**: `.runtype[+modifier]`
 
-These commands all generate a Four Job Fiesta Job set according to the chosen rules. They support the following additional modifiers after a `+` (e.g. `.normal+forbidden`):
+These commands all generate a Four Job Fiesta Job set according to the chosen rules. They support the following additional modifiers after a `+` (e.g. `.normal+forbidden`). Modifiers come in four categories - you can only use 1 modifier from each category, but you can combine multiple categories as you please.
 
--   `+forbidden`: A random Job will be "lost to the void". After you enter the final dungeon, you can no longer use it or its abilities.
+#### Challenge
+
+-   `+forbidden`/`+void`: A random Job will be "lost to the void". After you enter the final dungeon, you can no longer use it or its abilities.
 -   `+fifthjob`: A fifth Job will be assigned to Krile. When she joins your party, you can no longer use your Earth Job and instead use this fifth Job.
+
+#### Job Set
+
 -   `+750`: You will only be assigned magical jobs, namely White Mage, Black Mage, Blue Mage, Time Mage, Summoner, Red Mage, Geomancer, Bard, Chemist and Dancer.
 -   `+no750`: You will only be assigned physical jobs, namely Thief, Monk, Knight, Mystic Knight, Berserker, Ninja, Beastmaster, Raner, Samurai and Dragoon.
+
+#### #BERSERKERRISK
+
+-   `+lowrisk`: This modifier emulates a low chance of berserker risk - there is a 12% chance per crystal that up to one crystal's job will be replaced by our good friend Zerky.
+-   `+risk`: This modifier emulates a moderate chance of berserker risk - there is a 25% chance per crystal that up to two crystal's jobs will be replaced by our good friend Zerky.
+-   `+highrisk`: This modifier emulates the near-mandate-like chance of berserker risk - there is a 50% chance per crystal that up to three crystal's jobs will be replaced by our good friend Zerky.
+-   `+blameeverhate`: You know what this does.
+
+#### Utility
+
+-   `+hide`: Carby will PM you your jobs with the non-Wind jobs spoiler tagged, so you can play like a "traditional" Fiesta.
 
 You can only use one each out of `+forbidden`/`+fifthjob` and `+750`/`+no750`, but you can use one from each pair.
 
