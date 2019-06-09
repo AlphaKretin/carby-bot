@@ -919,17 +919,18 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean, 
             risks = 3;
             break;
         case berserkerRisks.RISK_EVERHATE:
-	    risky = 100;
-	    risks = allJobs.length;
-	    break;
+            risky = 100;
+            risks = allJobs.length;
+            break;
     }
     if (normal) {
         if (getIncInt(0, 100) < risky) {
-	    if (spoil === spoilers.SHOW_JOBS) {
-		allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
-	    } else { // HIDE_JOBS
-		allJobs[1] = `Berserker`;
-	    }
+            if (spoil === spoilers.SHOW_JOBS) {
+                allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
+            } else {
+                // HIDE_JOBS
+                allJobs[1] = `Berserker`;
+            }
         }
         return allJobs;
     }
@@ -938,12 +939,12 @@ function riskRoll(allJobs: string[], riskMode: berserkerRisks, normal: boolean, 
             break;
         }
         if (getIncInt(0, 100) < risky) {
-	    if (spoil === spoilers.SHOW_JOBS) {
-		allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
-	    } else {
-		allJobs[i] = `Berserker`;
-	    }
-	    risks--;
+            if (spoil === spoilers.SHOW_JOBS) {
+                allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
+            } else {
+                allJobs[i] = `Berserker`;
+            }
+            risks--;
         }
     }
     return allJobs;

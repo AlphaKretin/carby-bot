@@ -810,7 +810,7 @@ const windJobs = (allJobs) => allJobs.filter((c) => c.crystal === 1);
 const waterJobs = (allJobs) => allJobs.filter((c) => c.crystal === 2);
 const fireJobs = (allJobs) => allJobs.filter((c) => c.crystal === 3);
 const earthJobs = (allJobs) => allJobs.filter((c) => c.crystal === 4);
-function riskRoll(allJobs, riskMode, normal) {
+function riskRoll(allJobs, riskMode, normal, spoil) {
     let risky = 0;
     let risks = 0;
     switch (riskMode) {
@@ -827,13 +827,19 @@ function riskRoll(allJobs, riskMode, normal) {
             risks = 3;
             break;
         case berserkerRisks.RISK_EVERHATE:
-	    risky = 100;
-	    risks = allJobs.length;
-	    break;
+            risky = 100;
+            risks = allJobs.length;
+            break;
     }
     if (normal) {
         if (getIncInt(0, 100) < risky) {
-            allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
+            if (spoil === spoilers.SHOW_JOBS) {
+                allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
+            }
+            else {
+                // HIDE_JOBS
+                allJobs[1] = `Berserker`;
+            }
         }
         return allJobs;
     }
@@ -842,7 +848,12 @@ function riskRoll(allJobs, riskMode, normal) {
             break;
         }
         if (getIncInt(0, 100) < risky) {
-            allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
+            if (spoil === spoilers.SHOW_JOBS) {
+                allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
+            }
+            else {
+                allJobs[i] = `Berserker`;
+            }
             risks--;
         }
     }
@@ -993,7 +1004,7 @@ function diyFiesta(mainMode) {
         let fiestaJobs = fiestaGenerators[mainMode](allJobs, extraMode === extraModes.MODE_FIFTH);
         // risk has to be applied before forbidden so it doesn't replace a banned job or ban a replaced job
         if (risk !== berserkerRisks.RISK_NONE) {
-            fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL);
+            fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL, spoil);
         }
         let forbJob;
         if (extraMode === extraModes.MODE_FORB) {
