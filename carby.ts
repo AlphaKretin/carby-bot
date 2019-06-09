@@ -1658,11 +1658,12 @@ async function jobData(msg: Eris.Message) {
         .slice(1)
         .join("")
         .toLowerCase();
-    const result = classes.find((c: Job) =>
-        c.name
-            .toLowerCase()
-            .replace(/ +/g, "")
-            .includes(query)
+    const result = classes.find(
+        (c: Job) =>
+            c.name
+                .toLowerCase()
+                .replace(/ +/g, "")
+                .includes(query) || c.short.includes(query)
     );
     let out;
     if (result) {

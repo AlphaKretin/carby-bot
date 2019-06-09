@@ -3,6 +3,7 @@ export class Job {
     private static crystals = ["Special", "Wind", "Water", "Fire", "Earth", "GBA"];
     private static stats = ["Str", "Agi", "Vit", "Mag"];
     public name: string;
+    public short: string[];
     public crystal: number;
     public is750: boolean;
     public innate: string[];
@@ -14,6 +15,7 @@ export class Job {
     private rawMag: number;
     constructor(obj: any) {
         this.name = obj.name;
+        this.short = obj.short;
         this.crystal = obj.crystal;
         this.is750 = obj["750"];
         this.innate = obj.innate;

@@ -1528,7 +1528,7 @@ async function jobData(msg) {
     const result = classes.find((c) => c.name
         .toLowerCase()
         .replace(/ +/g, "")
-        .includes(query));
+        .includes(query) || c.short.includes(query));
     let out;
     if (result) {
         out = result.profile;

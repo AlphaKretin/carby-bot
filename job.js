@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Job {
     constructor(obj) {
         this.name = obj.name;
+        this.short = obj.short;
         this.crystal = obj.crystal;
         this.is750 = obj["750"];
         this.innate = obj.innate;
