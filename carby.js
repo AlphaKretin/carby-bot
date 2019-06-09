@@ -312,7 +312,8 @@ bot.on("messageCreate", async (msg) => {
                 }
             }
         }
-        if (msg.author.id in queries) {
+        // only continue enemy info stuff in DMs
+        if (msg.author.id in queries && msg.channel instanceof Eris.PrivateChannel) {
             await enemyClarify(msg);
             return;
         }
