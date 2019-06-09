@@ -35,6 +35,9 @@ class Monster {
         this.steal = raw.steal;
         this.rawAi = raw.ai;
     }
+    get statusWeakness() {
+        return Monster.negativeStatus.filter(s => !this.statusImmunity.includes(s));
+    }
     nameString() {
         let out;
         out = "__**" + this.name;
@@ -64,6 +67,9 @@ class Monster {
         }
         if (this.statusImmunity.length > 0) {
             out.push("**Status Immunities**: " + this.statusImmunity.join(", "));
+        }
+        if (this.statusWeakness.length > 0) {
+            out.push("**Status Vulnerabilities**: " + this.statusWeakness.join(", "));
         }
         if (this.initStatus.length > 0) {
             out.push("**Initial Status**: " + this.initStatus.join(", "));
@@ -129,5 +135,21 @@ class Monster {
         return this.nameString() + "\n```css\n" + this.rawAi.join("\n") + "```";
     }
 }
+Monster.negativeStatus = [
+    "Darkness",
+    "Poison",
+    "Mini",
+    "Toad",
+    "Stone",
+    "Dead",
+    "Mute",
+    "Berserk",
+    "Charm",
+    "Paralyze",
+    "Sleep",
+    "Aging",
+    "Slow",
+    "Stop"
+];
 exports.Monster = Monster;
 //# sourceMappingURL=monster.js.map

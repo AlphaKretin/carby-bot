@@ -41,6 +41,22 @@ interface IDrop {
     rare: string;
 }
 export class Monster {
+    private static negativeStatus = [
+        "Darkness",
+        "Poison",
+        "Mini",
+        "Toad",
+        "Stone",
+        "Dead",
+        "Mute",
+        "Berserk",
+        "Charm",
+        "Paralyze",
+        "Sleep",
+        "Aging",
+        "Slow",
+        "Stop"
+    ];
     public name: string;
     public rpgeName: string;
     public level: number;
@@ -108,6 +124,10 @@ export class Monster {
         this.rawAi = raw.ai;
     }
 
+    private get statusWeakness(): string[] {
+        return Monster.negativeStatus.filter(s => !this.statusImmunity.includes(s));
+    }
+
     private nameString(): string {
         let out: string;
         out = "__**" + this.name;
@@ -141,6 +161,9 @@ export class Monster {
         }
         if (this.statusImmunity.length > 0) {
             out.push("**Status Immunities**: " + this.statusImmunity.join(", "));
+        }
+        if (this.statusWeakness.length > 0) {
+            out.push("**Status Vulnerabilities**: " + this.statusWeakness.join(", "));
         }
         if (this.initStatus.length > 0) {
             out.push("**Initial Status**: " + this.initStatus.join(", "));
