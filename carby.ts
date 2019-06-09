@@ -1392,7 +1392,20 @@ async function jobs(msg: Eris.Message) {
                 .slice(2)
                 .join(" ")
                 .toLowerCase();
-            const user = bot.users.find(u => u.username.toLowerCase().includes(uName));
+            const members: Eris.Collection<Eris.Member> | undefined =
+                msg.channel instanceof Eris.GuildChannel ? msg.channel.guild.members : undefined;
+            const user = bot.users.find(u => {
+                if (u.username.toLowerCase().includes(uName)) {
+                    return true;
+                }
+                if (members) {
+                    const mem = members.get(u.id);
+                    if (mem && mem.nick && mem.nick.toLowerCase().includes(uName)) {
+                        return true;
+                    }
+                }
+                return false;
+            });
             if (user) {
                 mentioned = user;
             } else {
