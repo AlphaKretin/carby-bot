@@ -1189,17 +1189,25 @@ function diyFiesta(mainMode: mainModes) {
         if (spoil === spoilers.HIDE_JOBS) {
             const channel = await msg.author.getDMChannel();
             const m = await channel.createMessage(out);
-            if (
-                risk === berserkerRisks.RISK_HIGH &&
-                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4
+            if ((
+                    risk === berserkerRisks.RISK_HIGH &&
+                    fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4
+                ) || (
+                    fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length > 2 &&
+                    extraMode === extraModes.MODE_FORB &&
+                    !forbJob.startsWith(bar + "Berserker")
+                )
             ) {
-                await m.addReaction("🤣");
-            }
         } else {
             const m = await msg.channel.createMessage(out);
-            if (
-                risk === berserkerRisks.RISK_HIGH &&
-                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4
+            if ((
+                    risk === berserkerRisks.RISK_HIGH &&
+                    fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4
+                ) || (
+                    fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length > 2 &&
+                    extraMode === extraModes.MODE_FORB &&
+                    !forbJob.startsWith(bar + "Berserker")
+                )
             ) {
                 await m.addReaction("🤣");
             }
