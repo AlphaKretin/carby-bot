@@ -1051,9 +1051,13 @@ function diyFiesta(mainMode) {
             fiestaJobs = riskRoll(fiestaJobs, risk, mainMode === mainModes.MODE_NORMAL, spoil);
         }
         let forbJob;
+        // check whether forbidden job is not a berserker, for reaction later
+        // needs to happen here so that assignment is outside if block
+        let zerkFlag = false;
         if (extraMode === extraModes.MODE_FORB) {
             const index = getIncInt(0, fiestaJobs.length - 1);
             forbJob = fiestaJobs[index];
+            zerkFlag = !forbJob.startsWith("Berserker");
             if (spoil === spoilers.SHOW_JOBS) {
                 // if +hide is on, the strikethrough would spoil the voided job
                 fiestaJobs[index] = "~~" + forbJob + "~~";
@@ -1083,15 +1087,19 @@ function diyFiesta(mainMode) {
         if (spoil === spoilers.HIDE_JOBS) {
             const channel = await msg.author.getDMChannel();
             const m = await channel.createMessage(out);
-            if (risk === berserkerRisks.RISK_HIGH &&
-                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4) {
+            if ((risk === berserkerRisks.RISK_HIGH && fiestaJobs.filter(j => j.startsWith("Berserker")).length === 4) ||
+                (fiestaJobs.filter(j => j.startsWith("Berserker")).length > 2 &&
+                    extraMode === extraModes.MODE_FORB &&
+                    zerkFlag)) {
                 await m.addReaction("🤣");
             }
         }
         else {
             const m = await msg.channel.createMessage(out);
-            if (risk === berserkerRisks.RISK_HIGH &&
-                fiestaJobs.filter(j => j.startsWith(bar + "Berserker")).length === 4) {
+            if ((risk === berserkerRisks.RISK_HIGH && fiestaJobs.filter(j => j.startsWith("Berserker")).length === 4) ||
+                (fiestaJobs.filter(j => j.startsWith("Berserker")).length > 2 &&
+                    extraMode === extraModes.MODE_FORB &&
+                    zerkFlag)) {
                 await m.addReaction("🤣");
             }
         }
