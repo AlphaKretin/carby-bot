@@ -876,7 +876,7 @@ function riskRoll(allJobs, riskMode, normal, spoil) {
             break;
     }
     if (normal) {
-        if (getIncInt(0, 100) < risky) {
+        if (getIncInt(0, 99) < risky) {
             if (spoil === spoilers.SHOW_JOBS) {
                 allJobs[1] = `Berserker (RISKED ${allJobs[1]}!)`; // water only
             }
@@ -891,7 +891,7 @@ function riskRoll(allJobs, riskMode, normal, spoil) {
         if (risks <= 0) {
             break;
         }
-        if (getIncInt(0, 100) < risky) {
+        if (getIncInt(0, 99) < risky) {
             if (spoil === spoilers.SHOW_JOBS) {
                 allJobs[i] = `Berserker (RISKED ${allJobs[i]}!)`;
             }
