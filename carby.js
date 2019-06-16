@@ -1089,10 +1089,12 @@ function diyFiesta(mainMode) {
         else if (extraMode === extraModes.MODE_FORB) {
             out += "\nLost to the void: " + bar + forbJob + bar;
         }
+        const count = extraMode === extraModes.MODE_FIFTH ? 5 : 4;
         if (spoil === spoilers.HIDE_JOBS) {
             const channel = await msg.author.getDMChannel();
             const m = await channel.createMessage(out);
-            if ((risk === berserkerRisks.RISK_HIGH && fiestaJobs.filter(j => j.startsWith("Berserker")).length === 4) ||
+            if ((risk === berserkerRisks.RISK_HIGH &&
+                fiestaJobs.filter(j => j.startsWith("Berserker")).length === count) ||
                 (fiestaJobs.filter(j => j.startsWith("Berserker")).length > 2 &&
                     extraMode === extraModes.MODE_FORB &&
                     zerkFlag)) {
@@ -1101,7 +1103,8 @@ function diyFiesta(mainMode) {
         }
         else {
             const m = await msg.channel.createMessage(out);
-            if ((risk === berserkerRisks.RISK_HIGH && fiestaJobs.filter(j => j.startsWith("Berserker")).length === 4) ||
+            if ((risk === berserkerRisks.RISK_HIGH &&
+                fiestaJobs.filter(j => j.startsWith("Berserker")).length === count) ||
                 (fiestaJobs.filter(j => j.startsWith("Berserker")).length > 2 &&
                     extraMode === extraModes.MODE_FORB &&
                     zerkFlag)) {
