@@ -193,7 +193,8 @@ const commands: ICommand[] = [
     {
         func: countdown,
         names: ["timer", "fiestatimer", "countdown"]
-    }, {func: rundown, names: ["therun", "runtimer", "rundown"]},
+    },
+    { func: rundown, names: ["therun", "runtimer", "rundown"] },
     {
         func: jobs,
         names: ["jobs"]
@@ -1409,7 +1410,7 @@ async function countdown(msg: Eris.Message) {
     const days = Math.floor(distance / secsPerDay);
     const hours = Math.floor((distance % secsPerDay) / secsPerHour);
     const minutes = Math.floor((distance % secsPerHour) / 60);
-    const seconds = Math.floor((distance % 60);
+    const seconds = Math.floor(distance % 60);
     await msg.channel.createMessage(
         "Fiesta starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds!"
     );
@@ -1421,10 +1422,8 @@ async function rundown(msg: Eris.Message) {
     const days = Math.floor(distance / secsPerDay);
     const hours = Math.floor((distance % secsPerDay) / secsPerHour);
     const minutes = Math.floor((distance % secsPerHour) / 60);
-    const seconds = Math.floor(distance % 60);;
-    await msg.channel.createMessage(
-        `Run starts in ${days}d ${hours}h ${minutes}m ${seconds}s!`
-    );
+    const seconds = Math.floor(distance % 60);
+    await msg.channel.createMessage(`Run starts in ${days}d ${hours}h ${minutes}m ${seconds}s!`);
 }
 
 async function zerky(msg: Eris.Message) {
