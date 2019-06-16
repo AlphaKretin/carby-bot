@@ -307,8 +307,9 @@ const responses = {
         "11. Use !Focus + Drain Sword to kill the Fire Crystal.\n\nIt's easy!",
     sandworm: "http://kyrosiris.com/sandworm.gif",
     sandworm2: "This is to go ***FURTHER BEYOND!!!*** http://kyrosiris.com/sandworm2.png",
-    sealed: "**RUN COWARD RUN RUN RUN RUN RUN RUN RUN** https://i.imgur.com/mnarmy3.gif\n" +
-        "__alcharagia's Sealed Temple Guides: 「Don't Do It」__\n" +
+    sealed: "<a:spinryu:587175221421670402>" +
+        "__alcharagia's Sealed Temple Guides: 「Don't Do It」__" +
+        "<a:spinryu:587175221421670402>\n" +
         "2016:" +
         " https://forums.somethingawful.com/showthread.php?threadid=3776693&pagenumber=87&perpage=40#post461344746\n" +
         "2017:" +
@@ -316,6 +317,7 @@ const responses = {
         "2019:" +
         " https://forums.somethingawful.com/showthread.php?threadid=3889977&perpage=40&pagenumber=12#post495764439",
     seals: "Seal Guardians Picture Guide: http://i.imgur.com/c73swws.png",
+    spinryu: "**RUN COWARD RUN RUN RUN RUN RUN RUN RUN** https://i.imgur.com/mnarmy3.gif",
     stats: "Character stat bonuses are as follows:\nButz - +4 Str, +1 Agi, +3 Vit, +1 Mag\n" +
         "Lenna: +1 Str, +2 Agi, +1 Vit, +4 Mag\nGaluf: +3 Str, +4 Vit\n " +
         "Faris: +3 Str, +3 Agi, +2 Vit, +2 Mag\nKrile: +1 Str, +4 Agi, +3 Mag",

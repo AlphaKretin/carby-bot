@@ -283,6 +283,7 @@ The following commands all recite a quote or link.
 -   `.quicksave`
 -   `.rocksfall`
 -   `.sandworm`
+-   `.spinryu`
 -   `.yburns`
 -   `!zeninage`
 -   `zerky!`
