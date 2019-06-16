@@ -1528,7 +1528,7 @@ async function forbiddenRisk(msg: Eris.Message) {
     if (msg.member) {
         await msg.member.addRole("584065205760163840");
         await msg.addReaction("🏆");
-        await msg.addReaction("black101:326153094868238338");
+        await msg.addReaction("zerky:455235268174413844");
     } else {
         await msg.channel.createMessage("Sorry, I can only add you to a role in the server!");
     }
