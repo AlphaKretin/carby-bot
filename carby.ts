@@ -194,6 +194,7 @@ const commands: ICommand[] = [
         func: countdown,
         names: ["timer", "fiestatimer", "countdown"]
     },
+    { func: rundown, names: ["therun", "runtimer", "rundown"] },
     {
         func: jobs,
         names: ["jobs"]
@@ -1399,17 +1400,30 @@ async function broken(msg: Eris.Message) {
 
 // goofy shit
 
+const secsPerDay = 24 * 60 * 60;
+const secsPerHour = 60 * 60;
+
 async function countdown(msg: Eris.Message) {
     const fiestaDate = Date.UTC(2019, 5, 19, 4, 0, 0); // 0 is Jan, so 5 is June
     const now = Date.now();
-    const distance = fiestaDate - now;
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    const distance = (fiestaDate - now) / 1000;
+    const days = Math.floor(distance / secsPerDay);
+    const hours = Math.floor((distance % secsPerDay) / secsPerHour);
+    const minutes = Math.floor((distance % secsPerHour) / 60);
+    const seconds = Math.floor(distance % 60);
     await msg.channel.createMessage(
         "Fiesta starts in " + days + " days, " + hours + " hours, " + minutes + " minutes, and " + seconds + " seconds!"
     );
+}
+async function rundown(msg: Eris.Message) {
+    const runDate = Date.UTC(2019, 5, 16, 15, 0, 0);
+    const now = Date.now();
+    const distance = (runDate - now) / 1000;
+    const days = Math.floor(distance / secsPerDay);
+    const hours = Math.floor((distance % secsPerDay) / secsPerHour);
+    const minutes = Math.floor((distance % secsPerHour) / 60);
+    const seconds = Math.floor(distance % 60);
+    await msg.channel.createMessage(`Run starts in ${days}d ${hours}h ${minutes}m ${seconds}s!`);
 }
 
 async function zerky(msg: Eris.Message) {
