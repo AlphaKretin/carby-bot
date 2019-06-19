@@ -1,0 +1,896 @@
+{
+    "equippable": {
+        "Axe": ["Berserker", "Gladiator"],
+        "Bell": ["Geomancer"],
+        "Bow": ["Ranger", "Gladiator"],
+        "Cap": ["Monk", "Thief", "Ninja", "Ranger", "Blue Mage", "Red Mage", "Beastmaster", "Chemist", "Dancer", "Mime"],
+        "Dagger": [
+            "Knight", "Thief", "Black Mage", "Blue Mage", "Red Mage", "Time Mage", "Summoner",
+            "Mystic Knight", "Berserker", "Dragoon", "Ninja", "Bard", "Ranger", "Samurai",
+            "Beastmaster", "Dancer", "Geomancer", "Chemist", "Mime", "Gladiator", "Cannoneer"],
+        "Greatsword": ["Knight", "Gladiator"],
+        "Hammer": ["Berserker"],
+        "Harp": ["Bard"],
+        "Helm": ["Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight", "Gladiator", "Mime"],
+        "Katana": ["Samurai"],
+        "Kunai": ["Ninja"],
+        "Mage Cap": ["White Mage", "Black Mage", "Time Mage", "Summoner", "Blue Mage", "Red Mage", "Chemist", "Geomancer", "Bard", "Dancer", "Mimic"],
+        "Mail": ["Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight", "Gladiator", "Mime"],
+        "Rod": ["Summoner", "Black Mage", "Blue Mage", "Time Mage", "Mime", "Red Mage"],
+        "Robe": ["White Mage", "Black Mage", "Time Mage", "Summoner", "Blue Mage", "Red Mage", "Chemist", "Geomancer", "Bard", "Dancer", "Oracle", "Cannoneer", "Mime"],
+        "Shield": ["Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight", "Blue Mage", "Cannoneer", "Gladiator", "Mime"],
+        "Spear": ["Dragoon", "Gladiator"],
+        "Staff": ["White Mage", "Time Mage", "Red Mage", "Chemist", "Oracle", "Mime", "Blue Mage"],
+        "Suit": ["Knight", "Monk", "Thief", "Dragoon", "Ninja", "Samurai", "Berserker", "Ranger", "Mystic Knight", "Blue Mage", "Red Mage", "Beastmaster", "Chemist", "Dancer", "Cannoneer", "Gladiator", "Mime"],
+        "Sword": ["Knight", "Mystic Knight", "Blue Mage", "Red Mage", "Cannoneer", "Gladiator"],
+        "Whip": ["Beastmaster"]
+    }, "consumable": [
+        {"name": "Potion",        "snes": "Tonic",         "buy":   40, "sell":   20, "effect": "Restores 50 HP, 100 with Pharmacology."},
+        {"name": "Hi-Potion",     "snes": "Potion",        "buy":  360, "sell":  180, "effect": "Restores 500 HP, 1000 with Pharmacology."},
+        {"name": "Ether",         "snes": "Tincture",      "buy": 1500, "sell":  750, "effect": "Restores 40 MP, 80 with Pharmacology."},
+        {"name": "Phoenix Down",                           "buy": 1000, "sell":  500, "effect": "Revives with 1/16 maximum HP."},
+        {"name": "Antidote",                               "buy":   30, "sell":   15, "effect": "Removes Poison."},
+        {"name": "Eye Drops",     "snes": "Eye Drop",      "buy":   20, "sell":   10, "effect": "Removes Blind."},
+        {"name": "Maiden's Kiss",                          "buy":   60, "sell":   30, "effect": "Removes Toad."},
+        {"name": "Mallet",        "snes": "Luck Mallet",   "buy":   50, "sell":   25, "effect": "Removes Mini."},
+        {"name": "Gold Needle",   "snes": "Soft",          "buy":  150, "sell":   75, "effect": "Removes Stone."},
+        {"name": "Holy Water",    "snes": "Holy Water",    "buy":  150, "sell":   75, "effect": "Removes Zombie."},
+        {"name": "Magic Lamp",                             "buy":    0, "sell": 5000, "effect": "Progressively summon from a list."},
+        {"name": "Iron Draft",    "snes": "Protect Drink", "buy":  110, "sell":   55, "effect": "Adds Protect."},
+        {"name": "Speed Shake",   "snes": "Speed Drink",   "buy":  110, "sell":   55, "effect": "Adds Haste."},
+        {"name": "Power Drink",                            "buy":  110, "sell":   55, "effect": "Temporarily increases attack power."},
+        {"name": "Goliath Tonic", "snes": "Giant Drink",   "buy":  110, "sell":   55, "effect": "Temporarily doubles maximum HP, capped at 9999."},
+        {"name": "Hero Cocktail", "snes": "Hero Drink",    "buy":  110, "sell":   55, "effect": "Temporarily raises level."},
+        {"name": "Tent",                                   "buy":  250, "sell":  125, "effect": "Restores 1000 HP and 100 MP, removes all conditions."},
+        {"name": "Cottage",       "snes": "Cabin",         "buy":  600, "sell":  300, "effect": "Restores all HP and MP, removes all conditions."},
+        {"name": "Turtle Shell",                           "buy":    0, "sell":    5, "effect": "!Mix ingredient."},
+        {"name": "Dragon Fang",                            "buy":    0, "sell":    5, "effect": "!Mix ingredient."},
+        {"name": "Dark Matter",                            "buy":    0, "sell":    5, "effect": "!Mix ingredient."},
+        {"name": "Buckshot",      "snes": null,            "buy":  200, "sell":  100, "effect": "!Combine ingredient."},
+        {"name": "Blastshot",     "snes": null,            "buy":  500, "sell":  100, "effect": "!Combine ingredient."},
+        {"name": "Blitzshot",     "snes": null,            "buy":  800, "sell":  100, "effect": "!Combine ingredient."}
+    ], "thrown": [
+        {"name": "Ash",              "snes": "Soot",           "buy":     0, "sell":   1, "attack":  25},
+        {"name": "Shuriken",                                   "buy":  2500, "sell":   5, "attack":  50},
+        {"name": "Fuma Shuriken",    "snes": "Pinwheel",       "buy": 25000, "sell":   5, "attack": 117},
+        {"name": "Flame Scroll",                               "buy":   200, "sell": 100, "attack": 120, "flags": ["Fire elemental"]},
+        {"name": "Water Scroll",                               "buy":   200, "sell": 100, "attack": 120, "flags": ["Water elemental"]},
+        {"name": "Lightning Scroll", "snes": "Thunder Scroll", "buy":   200, "sell": 100, "attack": 120, "flags": ["Lightning elemental"]}
+    ], "weapons": [
+        {"name": "Battle Axe",
+            "buy": 650, "sell": 325,
+            "attack": 20,
+            "type": "Axe", "flags": ["Two-Handed OK"]
+        }, {"name": "Ogre Killer",  "snes": "Ogre Axe",
+            "buy": 3200, "sell": 1600,
+            "attack": 30,
+            "type": "Axe", "flags": ["Two-Handed OK", "Giant killer"]
+        }, {"name": "Poison Axe",   "snes": "Venom Axe",
+            "buy": 9600, "sell": 4800,
+            "attack": 45,
+            "type": "Axe", "flags": ["Two-Handed OK", "Poison chance"]
+        }, {"name": "Rune Axe",
+            "buy": 0, "sell": 5,
+            "attack": 69, "magic": 3,
+            "type": "Axe", "flags": ["Two-Handed OK"]
+        }, {"name": "Titan's Axe",  "snes": "Giant's Axe",
+            "buy": 0, "sell": 20000,
+            "attack": 88,
+            "type": "Axe", "flags": ["Two-Handed OK"]
+        }, {"name": "Earthbreaker", "snes": null,
+            "buy": 0, "sell":5,
+            "attack": 130, "strength": 5, "stamina": 5,
+            "type": "Axe", "flags": ["Two-Handed OK"]
+        }, {"name": "Diamond Bell", "snes": "Giyaman Bell",
+            "buy": 500, "sell": 250,
+            "attack": 21,
+            "type": "Bell", "flags": ["Ranged"]
+        }, {"name": "Gaia's Bell", "snes": "Earth Bell",
+            "buy": 0, "sell": 4500,
+            "attack": 32,
+            "type": "Bell", "flags": ["Ranged", "Earth elemental"]
+        }, {"name": "Rune Chime", "snes": "Rune Bell",
+            "buy": 0, "sell": 5,
+            "attack": 43,
+            "type": "Bell", "flags": ["Ranged"]
+        }, {"name": "Tinklebell", "snes": "Tinker Bell",
+            "buy": 0, "sell": 5,
+            "attack": 52,
+            "type": "Bell", "flags": ["Ranged"]
+        }, {"name": "Rune Bow", "snes": "Anti-Magic Bow",
+            "buy": 10000, "sell": 5000,
+            "attack": 0,
+            "type": "Bow", "flags": ["Ranged", "Silence chance"]
+        }, {"name": "Silver Bow",
+            "buy": 1500, "sell": 750,
+            "attack": 35,
+            "type": "Bow", "flags": ["Ranged"]
+        }, {"name": "Flame Bow", "snes": "Fire Bow",
+            "buy": 2500, "sell": 1250,
+            "attack": 36,
+            "type": "Bow", "flags": ["Ranged", "Fire elemental"]
+        }, {"name": "Frost Bow", "snes": "Ice Bow",
+            "buy": 2500, "sell": 1250,
+            "attack": 36,
+            "type": "Bow", "flags": ["Ranged", "Ice elemental"]
+        }, {"name": "Thunder Bow",
+            "buy": 2500, "sell": 1250,
+            "attack": 36,
+            "type": "Bow", "flags": ["Ranged", "Lightning elemental"]
+        }, {"name": "Dark Bow", "snes": "Darkness Bow",
+            "buy": 3800, "sell": 1900,
+            "attack": 40,
+            "type": "Bow", "flags": ["Ranged", "Blind chance"]
+        }, {"name": "Killer Bow",
+            "buy": 5000, "sell": 2500,
+            "attack": 46,
+            "type": "Bow", "flags": ["Ranged", "Death chance"]
+        }, {"name": "Elven Bow",
+            "buy": 7500, "sell": 3750,
+            "attack": 53,
+            "type": "Bow", "flags": ["Ranged"]
+        }, {"name": "Hayate Bow", "snes": "Gale Bow",
+            "buy": 0, "sell": 4250,
+            "attack": 66,
+            "type": "Bow", "flags": ["Ranged", "Rapidfire chance"]
+        }, {"name": "Aevis Killer", "snes": "Avis Killer",
+            "buy": 0, "sell": 10000,
+            "attack": 88,
+            "type": "Bow", "flags": ["Ranged", "Aevis killer"]
+        }, {"name": "Yoichi's Bow", "snes": "Yoichi Bow",
+            "buy": 0, "sell": 5,
+            "attack": 98, "strength": 3, "agility": 3,
+            "type": "Bow", "flags": ["Ranged"]
+        }, {"name": "Artemis Bow",
+            "buy": 0, "sell": 5,
+            "attack": 108,
+            "type": "Bow", "flags": ["Ranged", "Beast killer"]
+        }, {"name": "Fairy's Bow", "snes": null,
+            "attack": 108,
+            "attack": 127,
+            "type": "Bow", "flags": ["Ranged", "Confuse chance"]
+        }, {"name": "Mythril Hammer", "snes": "Mithril Hammer",
+            "buy": 1050, "sell": 525,
+            "attack": 25,
+            "type": "Hammer"
+        }, {"name": "War Hammer",
+            "buy": 6400, "sell": 3200,
+            "attack": 35,
+            "type" "Hammer"
+        }, {"name": "Gaia Hammer", "snes": "Earth Hammer",
+            "buy": 12800, "sell": 6400,
+            "attack": 55,
+            "type": "Hammer", "flags": ["Earthquake chance"]
+        }, {"name": "Thor's Hammer",
+            "buy": 0, "sell": 5,
+            "attack": 78,
+            "type": "Hammer"
+        }, {"name": "Silver Harp",
+            "buy": 800, "sell": 400,
+            "attack": 12,
+            "type": "Harp", "flags": ["Ranged"]
+        }, {"name": "Dream Harp",
+            "buy": 1600, "sell": 800,
+            "attack": 22,
+            "type": "Harp", "flags": ["Ranged"]
+        }, {"name": "Lamia's Harp", "snes": "Lamia Harp",
+            "buy": 0, "sell": 1600,
+            "attack": 32,
+            "type": "Harp", "flags": ["Ranged", "Confuse chance"]
+        }, {"name": "Apollo's Harp", "snes": "Apollo Harp",
+            "buy": 0, "sell": 5,
+            "attack": 42,
+            "type": "Harp", "flags": ["Ranged", "Undead killer", "Dragon killer"]
+        }, {"name": "Ashura", "snes": "Katana",
+            "buy": 5800, "sell": 2900,
+            "attack": 39,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Wind Slash", "snes": "AirBlade",
+            "buy": 0, "sell": 50,
+            "attack": 41,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Osafune", "snes": "Bizen Sword",
+            "buy": 8800, "sell": 4400,
+            "attack": 48,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Kotetsu", "snes": "Kotetsu Sword",
+            "buy": 0, "sell": 5900,
+            "attack": 55,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Kiku-ichimonji", "snes": "Forged Sword",
+            "buy": 14800, "sell": 7400,
+            "attack": 84,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Murasame",
+            "buy": 0, "sell": 5,
+            "attack": 94,
+            "type": "Katana", "flags": ["Two-Handed OK", "More criticals"]
+        }, {"name": "Masamune",
+            "buy": 0, "sell": 5,
+            "attack": 104,
+            "type": "Katana", "flags": ["Two-Handed OK", "Priority"]
+        }, {"name": "Murakumo", "snes": "Tempest Sword",
+            "buy": 0, "sell": 5,
+            "attack": 114,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Mutsunokami", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 139,
+            "type": "Katana", "flags": ["Two-Handed OK"]
+        }, {"name": "Dagger",
+            "buy": 300, "sell": 150,
+            "attack": 3,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Knife",
+            "buy": 0, "sell": 75,
+            "attack": 4,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Mythril Knife", "snes": "Mithril Dagger",
+            "buy": 450, "sell": 225,
+            "attack": 20,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Mage Masher",
+            "buy": 900, "sell": 450,
+            "attack": 28, "magic": 1,
+            "type": "Dagger", "flags": ["Spellblade OK", "Silence chance"]
+        }, {"name": "Main Gauche", "snes": "Guardian",
+            "buy": 0, "sell": 1300,
+            "attack": 33,
+            "type": "Dagger", "flags": ["Spellblade OK", "Evade chance"]
+        }, {"name": "Orichalcum Dirk", "snes": "Orihalcon Dagger",
+            "buy": 3400, "sell": 1700,
+            "attack": 38,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Dancing Dagger",
+            "buy": 0, "sell": 2900,
+            "attack": 48, "agility": 1, "magic": 1,
+            "type": "Dagger", "flags": ["Spellblade OK", "Dance chance"]
+        }, {"name": "Air Knife", "snes": "Air Lancet",
+            "buy": 6800, "sell": 3400,
+            "attack": 53,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Twin Lance", "snes": "Double Lance",
+            "buy": 10800, "sell": 5100, "equippable": ["Thief", "Dancer", "Mime"],
+            "attack": 58,
+            "type": "Dagger", "flags": ["Attack twice"]
+        }, {"name": "Thief Knife", "snes": "Thief's Knife",
+            "buy": 0, "sell": 3400,
+            "attack": 63, "agility": 1,
+            "type": "Dagger", "flags": ["Spellblade OK", "Mug chance"]
+        }, {"name": "Assassin's Dagger", "snes": "Assassin Dagger",
+            "buy": 0, "sell": 10000, "equippable": [],
+            "attack": 78, "agility": 1,
+            "type": "Dagger", "flags": ["Spellblade OK", "Death chance"]
+        }, {"name": "Man-Eater", "snes": "Maneater",
+            "buy": 0, "sell": 1, "equippable": ["Dancer"],
+            "attack": 86, "strength": 2, "stamina": 2, "agility": 2, "magic": 2,
+            "type": "Dagger", "flags": ["Spellblade OK", "Man killer"]
+        }, {"name": "Gladius", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 115, "agility": 2,
+            "type": "Dagger", "flags": ["Spellblade OK"]
+        }, {"name": "Chicken Knife",
+            "buy": 0, "sell": 15000,
+            "attack": 0,
+            "type": "Dagger", "flags": ["Spellblade OK", "Flight strengthens"]
+        }, {"name": "Spear",
+            "buy": 0, "sell": 100,
+            "attack": 22,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Mythril Spear", "snes": "Mithril Spear",
+            "buy": 790, "sell": 395,
+            "attack": 27,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Trident",
+            "buy": 2700, "sell": 1350,
+            "attack": 35,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Wind Spear",
+            "buy": 5400, "sell": 2700,
+            "attack": 41,
+            "type": "Spear", "flags": ["Jump OK", "Wind elemental"]
+        }, {"name": "Heavy Lance", "snes": "Gungnir",
+            "buy": 8100, "sell": 4050,
+            "attack": 51,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Javelin",
+            "buy": 0, "sell": 50,
+            "attack": 52, "strength": 1,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Partisan",
+            "buy": 10200, "sell": 5100,
+            "attack": 59,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Holy Lance", "snes": "Holy Spear",
+            "buy": 0, "sell": 5,
+            "attack": 106, "strength": 3,
+            "type": "Spear", "flags": ["Jump OK", "Holy elemental"]
+        }, {"name": "Dragon Lance", "snes": "Dragoon Spear",
+            "buy": 0, "sell": 15000,
+            "attack": 116,
+            "type": "Spear", "flags": ["Jump OK", "Dragon killer"]
+        }, {"name": "Longinus", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 129,
+            "type": "Spear", "flags": ["Jump OK"]
+        }, {"name": "Wonder Wand", "snes": "Wonder Rod",
+            "buy": 0, "sell": 5000,
+            "attack": 0, "magic": 2,
+            "type": "Rod", "flags": ["Ranged", "Spell chance"]
+        }, {"name": "Rod",
+            "buy": 200, "sell": 100,
+            "attack": 5, "magic": 1,
+            "type": "Rod", "flags": ["Ranged"]
+        }, {"name": "Flame Rod", "snes": "Fire Rod",
+            "buy": 750, "sell": 375,
+            "attack": 13,
+            "type": "Rod", "flags": ["Ranged", "Firaga chance", "Fire booster"]
+        }, {"name": "Frost Rod", "snes": "Ice Rod",
+            "buy": 750, "sell": 375,
+            "attack": 13,
+            "type": "Rod", "flags": ["Ranged", "Blizzaga chance", "Ice booster"]
+        }, {"name": "Thunder Rod",
+            "buy": 750, "sell": 375,
+            "attack": 13,
+            "type": "Rod", "flags": ["Ranged", "Thundaga chance", "Lightning booster"]
+        }, {"name": "Lilith Rod",
+            "buy": 0, "sell": 1500,
+            "attack": 27, "magic": 3,
+            "type": "Rod", "flags": ["Ranged", "Osmose chance"]
+        }, {"name": "Poison Rod", "snes": "Venom Rod",
+            "buy": 1500, "sell": 750,
+            "attack": 29,
+            "type": "Rod", "flags": ["Ranged", "Bio chance"]
+        }, {"name": "Magus Rod", "snes": "Wizard Rod",
+            "buy": 0, "sell": 10000,
+            "attack": 37,
+            "type": "Rod", "flags": ["Ranged", "Element booster"]
+        }, {"name": "Demon's Rod", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 52, "magic": 2,
+            "type": "Rod", "flags": ["Ranged", "Poison chance"]
+        }, {"name": "Kunai",
+            "buy": 600, "sell": 300,
+            "attack": 26, "agility": 1,
+            "type": "Kunai", "flags": ["Spellblade OK"]
+        }, {"name": "Kodachi",
+            "buy": 5100, "sell": 2600,
+            "attack": 43, "agility": 1,
+            "type": "Kunai", "flags": ["Spellblade OK"]
+        }, {"name": "Sasuke's Katana", "snes": "Hardened",
+            "buy": 0, "sell": 10000,
+            "attack": 96, "agility": 1,
+            "type": "Kunai", "flags": ["Spellblade OK", "Evade chance"]
+        }, {"name": "Kagenui", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 123, "agility": 3,
+            "type": "Kunai", "flags": ["Spellblade OK", "Stop chance"]
+        }, {"name": "Moonring Blade", "snes": "Full Moon",
+            "buy": 1100, "sell": 550,
+            "attack": 32,
+            "type": "Kunai"
+        }, {"name": "Rising Sun",
+            "buy": 0, "sell": 5500,
+            "attack": 68,
+            "type": "Kunai"
+        }, {"name": "Healing Staff",
+            "buy": 0, "sell": 450, "equippable": ["White Mage", "Time Mage", "Red Mage", "Chemist", "Oracle", "Mime"],
+            "attack": 0, "magic": 2,
+            "type": "Staff", "flags": ["Cure"]
+        }, {"name": "Power Staff",
+            "buy": 0, "sell": 900,
+            "attack": 0, "strength": 0,
+            "type": "Staff", "flags": ["Berserk"]
+        }, {"name": "Staff",
+            "buy": 200, "sell": 100,
+            "attack": 6,
+            "type": "Staff", "flags": ["Ranged"]
+        }, {"name": "Flail",
+            "buy": 780, "sell": 390,
+            "attack": 13,
+            "type": "Staff", "flags": ["Two-Handed OK", "Ranged"]
+        }, {"name": "Staff of Light", "snes": "Light Staff",
+            "buy": 0, "sell": 1350,
+            "attack": 42, "magic": 2,
+            "type": "Staff", "flags": ["Ranged", "Holy chance"]
+        }, {"name": "Morning Star",
+            "buy": 12800, "sell": 6400,
+            "attack": 47,
+            "type": "Staff", "flags": ["Two-Handed OK", "Ranged"]
+        }, {"name": "Sage's Staff", "snes": "Sage Staff",
+            "buy": 0, "sell": 10000,
+            "attack": 50,
+            "type": "Staff", "flags": ["Ranged", "Holy booster"]
+        }, {"name": "Judgment Staff", "snes": "Staff of Judgement",
+            "buy": 0, "sell": 15000,
+            "attack": 57, "magic": 3,
+            "type": "Staff", "flags": ["Ranged"]
+        }, {"name": "Mace of Zeus", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 75, "magic": 3,
+            "type": "Staff", "flags": ["Two-Handed OK"]
+        }, {"name": "Broad Sword",
+            "buy": 280, "sell": 140,
+            "attack": 13,
+            "type": "Sword", "flags": ["Spellblade OK"]
+        }, {"name": "Long Sword", "snes": "Regal Cutlass",
+            "buy": 480, "sell": 240,
+            "attack": 19,
+            "type": "Sword", "flags": ["Spellblade OK"]
+        }, {"name": "Mythril Sword", "snes": "Mithril Sword",
+            "buy": 880, "sell": 440,
+            "attack": 29,
+            "type": "Sword", "flags": ["Spellblade OK"]
+        }, {"name": "Coral Sword",
+            "buy": 2800, "sell": 1400,
+            "attack": 34,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK", "Lightning elemental"]
+        }, {"name": "Ancient Sword",
+            "buy": 0, "sell": 2100,
+            "attack": 40,
+            "type": "Sword", "flags": ["Spellblade OK", "Old chance"]
+        }, {"name": "Sleep Blade", "snes": "Slumber Sword",
+            "buy": 5600, "sell": 2800,
+            "attack": 46,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK", "Sleep chance"]
+        }, {"name": "Rune Blade", "snes": "Rune Edge",
+            "buy": 0, "sell": 9500,
+            "attack": 47,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK", "Criticals with MP"]
+        }, {"name": "Great Sword", "snes": "Epee",
+            "buy": 8400, "sell": 4200,
+            "attack": 54,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK"]
+        }, {"name": "Flametongue",
+            "buy": 10000, "sell": 5000,
+            "attack": 60,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK", "Fire elemental"]
+        }, {"name": "Icebrand", "snes": "Ice Brand",
+            "buy": 11000, "sell": 5500,
+            "attack": 62,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK", "Ice elemental"]
+        }, {"name": "Blood Sword", "snes": "Drain Sword",
+            "buy": 0, "sell": 8000,
+            "attack": 81, "magic": 5,
+            "type": "Greatsword", "flags": ["Drain HP"]
+        }, {"name": "Defender",
+            "buy": 0, "sell": 5500,
+            "attack": 96,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK", "Evade chance"]
+        }, {"name": "Excalipoor", "snes": "Excalipur",
+            "buy": 0, "sell": 1,
+            "attack": 97,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK", "Minimum damage"]
+        }, {"name": "Enhancer",
+            "buy": 0, "sell": 10000,
+            "attack": 99, "magic": 3,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK"]
+        }, {"name": "Excalibur",
+            "buy": 0, "sell": 5,
+            "attack": 107, "strength": 5,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK", "Holy elemental"]
+        }, {"name": "Ragnarok",
+            "buy": 0, "sell": 5,
+            "attack": 125, "strength": 5,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK"]
+        }, {"name": "Brave Blade",
+            "buy": 0, "sell": 15000,
+            "attack": 127, "strength": 5,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK", "Flight weakens"]
+        }, {"name": "Apocalypse", "snes": null,
+            "buy": 0, "sell": 15000,
+            "attack": 139,
+            "type": "Greatsword", "flags": ["Spellblade OK", "Two-Handed OK"]
+        }, {"name": "Ultima Weapon", "snes": null,
+            "buy": 0, "sell": 5,
+            "attack": 177, "strength": 2, "stamina": 2, "agility": 2, "magic": 2,
+            "type": "Sword", "flags": ["Spellblade OK", "Two-Handed OK"]
+        }, {"name": "Whip",
+            "buy": 1100, "sell": 550,
+            "attack": 23,
+            "type": "Whip", "flags": ["Ranged", "Entangle chance"]
+        }, {"name": "Chain Whip",
+            "buy": 3000, "sell": 1500,
+            "attack": 48,
+            "type": "Whip", "flags": ["Ranged", "Entangle chance"]
+        }, {"name": "Beast Killer",
+            "buy": 0, "sell": 7500,
+            "attack": 69,
+            "type": "Whip", "flags": ["Ranged", "Entangle chance"]
+        }, {"name": "Blitz Whip", "snes": "Thunder Whip",
+            "buy": 0, "sell": 5,
+            "attack": 42,
+            "type": "Whip", "flags": ["Ranged", "Thunder chance"]
+        }, {"name": "Fire Lash", "snes": "Flame Whip",
+            "buy": 0, "sell": 10000,
+            "attack": 79, "strength": 2, "agility": 2,
+            "type": "Whip", "flags": ["Ranged", "Entangle chance"]
+        }, {"name": "Dragon Whisker", "snes": "Dragon Whip",
+            "buy": 0, "sell": 5,
+            "attack": 89, "strength": 5,
+            "type": "Whip", "flags": ["Ranged", "Entangle chance", "Dragon killer"]
+        }
+    ], "shields": [
+        {"name": "Leather Shield",
+            "buy": 90, "sell": 45,
+            "evade": 10, "weight": 2
+        }, {"name": "Bronze Shield",
+            "buy": 290, "sell": 145,
+            "defense": 1, "evade": 15, "weight": 5
+        }, {"name": "Iron Shield",
+            "buy": 390, "sell": 195,
+            "defense": 2, "evade": 20, "weight": 5
+        }, {"name": "Mythril Shield", "snes": "Mithril Shield",
+            "buy": 590, "sell": 295,
+            "defense": 3, "evade": 25, "weight": 5
+        }, {"name": "Golden Shield",  "snes": "Gold Shield",
+            "buy": 3000, "sell": 1500,
+            "defense": 4, "evade": 30, "weight": 5
+        }, {"name": "Aegis Shield",
+            "buy": 0, "sell": 2250,
+            "defense": 5, "evade": 33, "weight": 4, "magic": 1,
+            "flags": ["Spell evade chance"]
+        }, {"name": "Diamond Shield",
+            "buy": 6000, "sell": 3000,
+            "defense": 6, "evade": 35, "weight": 5,
+            "flags": ["Lightning ward"]
+        }, {"name": "Flame Shield",
+            "buy": 0, "sell": 20000,
+            "defense": 7, "evade": 40, "mdefense": 5, "weight": 5,
+            "flags": ["Fire absorb"]
+        }, {"name": "Ice Shield",
+            "buy": 0, "sell": 20000,
+            "defense": 7, "evade": 40, "mdefense": 5, "weight": 5,
+            "flags": ["Ice absorb"]
+        }, {"name": "Crystal Shield",
+            "buy": 9000, "sell": 4500,
+            "defense": 8, "evade": 45, "weight": 6
+        }, {"name": "Genji Shield",
+            "buy": 0, "sell": 10000,
+            "defense": 9, "evade": 50, "mdefense": 1, "weight": 6,
+            "flags": ["Mini proof", "Paralyze proof"]
+        }, {"name": "Force Shield", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 15, "evade": 10, "weight": 15, "agility": -5,
+            "flags": ["Element ward"]
+        }
+    ], "armor": [
+        {"name": "Gold Hairpin",
+            "buy": 0, "sell": 15000,
+            "weight": 2, "mdefense": 2,
+            "flags": ["MP costs halved"],
+            "type": "Mage Cap"
+        }, {"name": "Leather Cap",
+            "buy": 50, "sell": 25,
+            "defense": 1, "weight": 1, "mdefense": 1
+        }, {"name": "Plumed Hat",
+            "buy": 350, "sell": 175,
+            "defense": 2, "weight": 2, "mdefense": 2
+        }, {"name": "Green Beret",
+            "buy": 2500, "sell": 1250,
+            "defense": 3, "mdefense": 1, "weight": 2, "strength": 1, "agility": 1,
+            "type": "Cap"
+        }, {"name": "Lamia's Tiara",
+            "buy": 0, "sell": 1250,
+            "defense": 3, "mdefense": 7, "weight": 2, "magic": 3,
+            "flags": ["Charm block", "Sword Dance likelier"],
+            "type": "Mage Cap"
+        }, {"name": "Wizard's Hat", "snes": "Tricorn",
+            "buy": 1500, "sell": 750,
+            "defense": 4, "mdefense": 2, "weight": 2, "magic": 1,
+            "type": "Mage Cap"
+        }, {"name": "Hypno Crown", "snes": "Coronet",
+            "buy": 0, "sell": 37500,
+            "defense": 5, "mdefense": 4, "weight": 7, "magic": 1,
+            "flags": ["Control likelier"]
+        }, {"name": "Twist Headband", "snes": "Bandana",
+            "buy": 3500, "sell": 1750,
+            "defense": 6, "weight": 2, "strength": 3,
+            "type": "Cap"
+        }, {"name": "Sage's Miter", "snes": "Magus Hat",
+            "buy": 3000, "sell": 1500,
+            "defense": 6, "mdefense": 2, "weight": 2, "magic": 2,
+            "type": "Mage Cap"
+        }, {"name": "Tiger Mask",
+            "buy": 5000, "sell": 2500,
+            "defense": 9, "mdefense": 2, "weight": 2,
+            "type": "Cap"
+        }, {"name": "Circlet", "ps1": "Socklet",
+            "buy": 4500, "sell": 2250,
+            "defense": 10, "mdefense": 2, "weight": 2, "magic": 3, "mevade": 5,
+            "type": "Mage Cap"
+        }, {"name": "Black Cowl", "snes": "Dark Hood",
+            "buy": 6500, "sell": 3250,
+            "defense": 12, "mdefense": 2, "agility": 2,
+            "type": "Cap"
+        }, {"name": "Ribbon",
+            "buy": 0, "sell": 1,
+            "defense": 12, "mdefense": 2, "weight": 2, "strength": 5, "stamina": 5, "agility": 5, "magic": 5,
+            "flags": ["Status block"],
+            "equippable": ["Dancer"]
+        }, {"name": "Royal Crown", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 13, "mdefense": 13, "weight": 8, "evade": 5, "agility": 1, "magic": 1
+        }, {"name": "Bronze Helm", "snes": "Bronze Helmet",
+            "buy": 250, "sell": 125,
+            "defense": 2, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Iron Helm", "snes": "Iron Helmet",
+            "buy": 350, "sell": 175,
+            "defense": 4, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Mythril Helm", "snes": "Mithril Helmet",
+            "buy": 550, "sell": 275,
+            "defense": 6, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Golden Helm", "snes": "Gold Helmet",
+            "buy": 3500, "sell": 1750,
+            "defense": 8, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Diamond Helm", "snes": "Diamond Helmet",
+            "buy": 7000, "sell": 3500,
+            "defense": 10, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Crystal Helm", "snes": "Crystal Helmet",
+            "buy": 10500, "sell": 5250,
+            "defense": 13, "mdefense": 2, "weight": 4,
+            "type": "Helm"
+        }, {"name": "Genji Helm", "snes": "Genji Helmet",
+            "buy": 0, "sell": 12500,
+            "defense": 15, "mdefense": 2, "weight": 5,
+            "flags": ["Mini proof", "Confuse proof"],
+            "type": "Helm"
+        }, {"name": "Grand Helm", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 18, "mdefense": 2, "weight": 6,
+            "type": "Helm"
+        }, {"name": "Thornlet",
+            "buy": 0, "sell": 1,
+            "defense": 20, "mdefense": 5, "weight": 4, "magic": -5,
+            "type": "Helm", "flags": ["Adds Sap"]
+        }, {"name": "Leather Armor", "snes": "Leather Clothes",
+            "buy": 0, "sell": 40,
+            "defense": 1, "mdefense": 1, "weight": 2
+        }, {"name": "Copper Cuirass", "snes": "Copper Plate",
+            "buy": 350, "sell": 175,
+            "defense": 3, "mdefense": 2, "weight": 4,
+            "type": "Suit"
+        }, {"name": "Kenpo Gi", "snes": "Training Suit",
+            "buy": 450, "sell": 225,
+            "defense": 5, "mdefense": 2, "weight": 3, "strength": 1,
+            "type": "Suit"
+        }, {"name": "Silver Plate", "snes": "Silver Armor",
+            "buy": 600, "sell": 300,
+            "defense": 7, "mdefense": 2, "weight": 4,
+            "type": "Suit"
+        }, {"name": "Ninja Suit", "snes": "Stealth Robe",
+            "buy": 3000, "sell": 1500,
+            "defense": 9, "mdefense": 2, "weight": 3, "agility": 1,
+            "type": "Suit"
+        }, {"name": "Power Sash", "snes": "Strength Suit",
+            "buy": 4500, "sell": 2250,
+            "defense": 11, "strength": 3,
+            "type": "Suit"
+        }, {"name": "Diamond Plate",
+            "buy": 6000, "sell": 3000,
+            "defense": 13, "mdefense": 2, "weight": 4,
+            "type": "Suit", "flags": ["Lightning ward"]
+        }, {"name": "Mirage Vest",
+            "buy": 0, "sell": 50,
+            "defense": 14, "mdefense": 4, "weight": 3,
+            "type": "Suit", "flags": ["Adds Image"]
+        }, {"name": "Black Garb", "snes": "Dark Suit",
+            "buy": 9000, "sell": 4500,
+            "defense": 17, "mdefense": 2, "weight": 3, "strength": 1, "agility": 1,
+            "type": "Suit"
+        }, {"name": "Rainbow Dress", "snes": "Rainbow Suit",
+            "buy": 0, "sell": 2900,
+            "defense": 18, "mdefense": 3, "weight": 3,
+            "type": "Suit", "flags": ["Sword Dance likelier"],
+            "equippable": ["Dancer"]
+        }, {"name": "Vishnu Vest", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 20, "mdefense": 8, "weight": 3,
+            "type": "Suit", "flags": ["Element ward"]
+        }, {"name": "Bone Mail",
+            "buy": 0, "sell": 1,
+            "defense": 30, "mdefense": 1, "weight": 3, "stamina": -5,
+            "type": "Suit", "flags": ["Adds Undead"]
+        }, {"name": "Bronze Armor",
+            "buy": 400, "sell": 200,
+            "defense": 4, "mdefense": 2, "weight": 8,
+            "type": "Mail"
+        }, {"name": "Iron Armor",
+            "buy": 500, "sell": 250,
+            "defense": 6, "mdefense": 2, "weight": 8,
+            "type": "Mail"
+        }, {"name": "Mythril Armor", "snes": "Mithril Armor",
+            "buy": 700, "sell": 350,
+            "defense": 9, "mdefense": 2, "weight": 8,
+            "type": "Mail"
+        }, {"name": "Golden Armor", "snes": "Gold Armor",
+            "buy": 4000, "sell": 2000,
+            "defense": 11, "mdefense": 2, "weight": 8,
+            "type": "Mail"
+        }, {"name": "Diamond Armor",
+            "buy": 8000, "sell": 4000,
+            "defense": 15, "mdefense": 2, "weight": 8,
+            "flags": ["Lightning ward"],
+            "type": "Mail"
+        }, {"name": "Crystal Armor",
+            "buy": 12000, "sell": 6000,
+            "defense": 20, "mdefense": 2, "weight": 8,
+            "type": "Mail"
+        }, {"name": "Genji Armor",
+            "buy": 0, "sell": 15000,
+            "defense": 22, "mdefense": 2, "weight": 9,
+            "type": "Mail"
+        }, {"name": "Maximillian", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 27, "mdefense": 5, "weight": 9, "stamina": 2,
+            "type": "Mail"
+        }, {"name": "Cotton Robe", "snes": "Cotton Suit",
+            "buy": 300, "sell": 150,
+            "defense": 2, "mdefense": 4, "weight": 2,
+            "type": "Robe"
+        }, {"name": "Silk Robe",
+            "buy": 500, "sell": 250,
+            "defense": 4, "mdefense": 6, "weight": 2,
+            "type": "Robe"
+        }, {"name": "Sage's Surplice", "snes": "Bard Suit",
+            "buy": 1000, "sell": 500,
+            "defense": 6, "mdefense": 8, "weight": 2,
+            "type": "Robe"
+        }, {"name": "Gaia Gear",
+            "buy": 2000, "sell": 1000,
+            "defense": 8, "mdefense": 10, "weight": 2,
+            "type": "Robe", "flags": ["Earth booster"]
+        }, {"name": "Angel Robe", "snes": "Angel Suit",
+            "buy": 0, "sell": 1500,
+            "defense": 10, "mdefense": 11, "weight": 2, "stamina": 5,
+            "flags": ["Poison ward"],
+            "equippable": ["Chemist", "Mime"]
+        }, {"name": "Luminous Robe", "snes": "Lumina Suit",
+            "buy": 4000, "sell": 2000,
+            "defense": 11, "mdefense": 11, "weight": 2, "magic": 2,
+            "type": "Robe"
+        }, {"name": "White Robe", "snes": "White Suit",
+            "buy": 8000, "sell": 4000,
+            "defense": 14, "mdefense": 14, "weight": 2, "stamina": 3, "magic": 3,
+            "type": "Robe"
+        }, {"name": "Black Robe", "snes": "Black Suit",
+            "buy": 8000, "sell": 4000,
+            "defense": 14, "mdefense": 14, "weight": 2, "magic": 5,
+            "type": "Robe"
+        }, {"name": "Robe of Lords", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 18, "mdefense": 22, "weight": 2, "magic": 1
+        },
+    ], "accessories": [
+        {"name": "Leather Shoes",
+            "buy": 0, "sell": 35,
+            "defense": 1, "mdefense": 1, "weight": 1
+        }, {"name": "Hermes Sandals", "snes": "Running Shoes",
+            "mdefense": 3, "weight": 1, "mevade": 5,
+            "flags": ["Adds Haste"]
+        }, {"name": "Red Slippers", "snes": "Red Shoes",
+            "defense": 11, "mdefense": 2, "weight": 1, "mevade": 3,
+            "flags": ["Sword Dance likelier"],
+            "equippable": ["Dancer"]
+        }, {"name": "Flame Ring",
+            "buy": 50000, "sell": 25000,
+            "defense": 5, "mdefense": 5, "weight": 1, "mevade": 5,
+            "flags": ["Fire absorb", "Ice ward", "Water vulnerable"]
+        }, {"name": "Coral Ring",
+            "buy": 50000, "sell": 25000,
+            "defense": 5, "mdefense": 5, "weight": 1, "mevade": 5,
+            "flags": ["Water absorb", "Fire ward", "Lightning vulnerable"]
+        }, {"name": "Angel Ring",
+            "buy": 50000, "sell": 25000,
+            "defense": 5, "mdefense": 10, "weight": 1, "mevade": 10,
+            "flags": ["Old block", "Zombie block"]
+        }, {"name": "Reflect Ring", "snes": "Wall Ring",
+            "buy": 0, "sell": 10000,
+            "weight": 1,
+            "flags": ["Adds Reflect"]
+        }, {"name": "Protect Ring", "snes": "Guard Ring",
+            "buy": 0, "sell": 15000,
+            "defense": 10, "mdefense": 10, "weight": 1, "stamina": 5, "mevade": 10,
+            "flags": ["Adds Regen"]
+        }, {"name": "Cursed Ring",
+            "buy": 0, "sell": 1,
+            "defense": 25, "mdefense": 5, "weight": 1, "mevade": 10,
+            "flags": ["Adds Condemned"]
+        }, {"name": "Elven Mantle", "snes": "Elf Cape",
+            "buy": 0, "sell": 2000,
+            "mdefense": 3, "weight": 1, "agility": 1, "magic": 1, "mevade": 5,
+            "flags": ["Evade chance"]
+        }, {"name": "Sorcerer's Mantle", "snes": null,
+            "buy": 0, "sell": 5,
+            "evade": 10, "weight": 1,
+            "flags": ["Element block"]
+        }, {"name": "Thief's Gloves", "snes": "Thief Glove",
+            "buy": 0, "sell": 1500,
+            "defense": 4, "weight": 1, "agility": 1,
+            "flags": ["Steal success up"],
+            "equippable": ["Thief", "Mime"]
+        }, {"name": "Mythril Gloves", "snes": "Mithril Glove",
+            "buy": 600, "sell": 300,
+            "defense": 3, "weight": 5,
+            "equippable": [
+                "Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight",
+                "Gladiator", "Mime"
+            ]
+        }, {"name": "Genji Gloves", "snes": "Genji Glove",
+            "buy": 0, "sell": 7500,
+            "defense": 12, "mdefense": 1, "weight": 6,
+            "flags": ["Toad block", "Paralyze block"],
+            "equippable": [
+                "Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight",
+                "Gladiator", "Mime"
+            ]
+        }, {"name": "Gauntlets", "snes": "Gauntlet",
+            "buy": 3000, "sell": 1500,
+            "defense": 6, "mdefense": 1, "weight": 1,
+            "equippable": [
+                "Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight",
+                "Gladiator", "Mime"
+            ]
+        }, {"name": "Titan's Gloves", "snes": "Giant's Glove",
+            "buy": 0, "sell": 2500,
+            "defense": 9, "mdefense": 1, "weight": 10, "strength": 5, "stamina": 5, "agility": -5, "magic": -5,
+            "equippable": [
+                "Knight", "Dragoon", "Samurai", "Berserker", "Mystic Knight",
+                "Gladiator", "Mime"
+            ]
+        }, {"name": "Kaiser Knuckles",
+            "buy": 0, "sell": 7500,
+            "defense": 8, "weight": 1, "strength": 5
+        }, {"name": "Hyper Wrist", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 3, "weight": 1, "strength": 5, "attack": 10
+        }, {"name": "Silver Armlet", "snes": "Silver Ring",
+            "buy": 500, "sell": 250,
+            "defense": 2, "mdefense": 3, "weight": 3,
+            "equippable": [
+                "Monk", "Thief", "Ninja", "Ranger", "White Mage", "Black Mage",
+                "Time Mage", "Summoner", "Blue Mage", "Red Mage",
+                "Beastmaster", "Chemist", "Geomancer", "Bard", "Dancer",
+                "Mime", "Cannoneer", "Gladiator", "Oracle"
+            ]
+        }, {"name": "Power Armlet", "snes": "Power Ring",
+            "buy": 2500, "sell": 1250,
+            "defense": 3, "strength": 3,
+            "equippable": [
+                "Monk", "Thief", "Ninja", "Ranger", "White Mage", "Black Mage",
+                "Time Mage", "Summoner", "Blue Mage", "Red Mage",
+                "Beastmaster", "Chemist", "Geomancer", "Bard", "Dancer",
+                "Mime", "Cannoneer", "Gladiator", "Oracle"
+            ]
+        }, {"name": "Diamond Armlet", "snes": "Diamond Ring",
+            "buy": 4000, "sell": 2000,
+            "defense": 4, "mdefense": 5, "weight": 3,
+            "equippable": [
+                "Monk", "Thief", "Ninja", "Ranger", "White Mage", "Black Mage",
+                "Time Mage", "Summoner", "Blue Mage", "Red Mage",
+                "Beastmaster", "Chemist", "Geomancer", "Bard", "Dancer",
+                "Mime", "Cannoneer", "Gladiator", "Oracle"
+            ]
+        }, {"name": "Chaos Orb", "snes": null,
+            "buy": 0, "sell": 5,
+            "defense": 8, "weight": 1,
+            "flags": ["Element booster"]
+        }, {"name": "Crystal Orb", "snes": null,
+            "buy": 0, "sell": 5,
+            "mdefense": 20, "weight": 1, "magic": 5
+        }, {"name": "Silver Specs", "snes": "Glasses",
+            "buy": 0, "sell": 125,
+            "defense": 1, "mdefense": 1, "weight": 1
+        }, {"name": "Kornago Gourd", "snes": "Corna Jar",
+            "buy": 0, "sell": 10000,
+            "weight": 15,
+            "flags": ["Reduce Catch threshold"]
+        }
+    ]
+}
+//
