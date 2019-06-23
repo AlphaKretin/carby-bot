@@ -266,6 +266,8 @@ const responses = {
         "and the yellow area has the highest gil and abp of any random battle outside the void.",
     enkibot: "Asterism's Enkibot guide is here: http://enkibot.herokuapp.com/",
     equipharps: "http://lparchive.org/Final-Fantasy-V-Advance-%28by-Dr-Pepper%29/1-MaximumTruckStyleLove.gif",
+    flee: "foolofsound made a guide on which encounters you can or can't easily run from:\n" +
+        "https://docs.google.com/document/d/1Kb-lretuvYNOcEEdyHIWq3zz69088EEQ6TBO8j78i9c/edit?usp=sharing",
     fork: "Fork Tower: Magic Left, Physical Right",
     gaia: "THAT HIPPIE SHIT AIN'T MAGIC http://i.imgur.com/JkwTg5O.png",
     happyworm: "https://gifsound.com/?gif=i.imgur.com/UaOsyZS.gif&v=y6Sxv-sUYtM&s=11",

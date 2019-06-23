@@ -260,6 +260,7 @@ Each of the following commands recite a quote or link with useful information ab
 -   `.chemchart`: A pictue guide for !Mix (this should be `.mixchart` but it conflicts with `!mix`).
 -   `.encounter`: Several random encounter maps.
 -   `.enkibot`: Asterism's Enkibot interactive guide.
+-   `!flee`: foolofsound's guide on what encounters are easily runnable.
 -   `.fork`: Reminds you which way is which in Fork Tower.
 -   `.lamp`: The Magic Lamp's summon order.
 -   `.ned`: A picture guide for which part of Neo Exdeath is which.
