@@ -436,6 +436,34 @@ interface IMCalc {
     calc: (nums: number[]) => string;
 }
 const mcalcTable: { [name: string]: IMCalc } = {
+    bell: {
+        args: ["Level", "Magic", "Agility"],
+        calc: (nums: number[]) => {
+            const level = nums[0];
+            const mag = nums[1];
+            const agil = nums[2];
+            let m = Math.floor((level * mag) / 128);
+            const bonus = Math.floor((level * agil) / 128);
+            const n = Math.ceil((128 * (m + 1)) / mag);
+            const ns = Math.ceil((128 * (bonus + 1)) / agil);
+            m += bonus + 2;
+            return (
+                "At Level " +
+                level +
+                ", with " +
+                mag +
+                " Magic and " +
+                agil +
+                " Agility, your Diamond Bell/Tinkerbell M is " +
+                m +
+                ". To reach the next M, you need to reach level " +
+                n +
+                " for Strength and " +
+                ns +
+                " for Agility."
+            );
+        }
+    },
     cannon: {
         args: ["Level"],
         calc: (nums: number[]) => {

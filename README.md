@@ -21,6 +21,7 @@ If you just enter `.mcalc` or otherwise invalid input, Carby will guide you thro
 -   `knife`: Level, Strength, Agility. Used for knives, bows, whips, etc.
 -   `chicken`: Level, Strength, Agility. Used for the Chicken Knife.
 -   `rune`: Level, Strength, Magic. Used for the Rune Axe etc.
+-   `bell`: Level, Magic, Agility. Used for the Diamond Bell and Tinkerbell (but not Gaia Bell or Rune Chime).
 -   `fists`: Level, Strength. Used for unarmed attacks.
 -   `cannon`: Level. Used for !Open Fire.
 
