@@ -228,7 +228,7 @@ const commands = [
     },
     {
         func: mix,
-        names: ["mix", "chem", "drug"]
+        names: ["mix", "drug"]
     }
 ];
 const responses = {

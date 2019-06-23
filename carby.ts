@@ -262,7 +262,7 @@ const commands: ICommand[] = [
     },
     {
         func: mix,
-        names: ["mix", "chem", "drug"]
+        names: ["mix", "drug"]
     }
 ];
 
