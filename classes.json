@@ -32,7 +32,7 @@
         "750": false,
         "innate": ["Cover"],
         "abilities": ["Cover", "!Guard", "Two-Handed", "Equip Shields", "Equip Armor", "Equip Swords"],
-        "ap": [10, 30, 50, 100, 150, 300],
+        "ap": [10, 30, 50, 100, 150, 350],
         "str": 23,
         "agi": 1,
         "vit": 20,
