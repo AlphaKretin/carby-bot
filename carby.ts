@@ -1228,8 +1228,7 @@ function diyFiesta(mainMode: mainModes) {
         }
         const count = extraMode === extraModes.MODE_FIFTH ? 5 : 4;
         if (spoil === spoilers.HIDE_JOBS) {
-            const channel = await msg.author.getDMChannel();
-            const m = await channel.createMessage(out);
+            const m = await replyDM(msg, out);
             if (
                 (risk === berserkerRisks.RISK_HIGH &&
                     fiestaJobs.filter(j => j.startsWith("Berserker")).length === count) ||
@@ -1310,7 +1309,6 @@ async function forbidden(msg: Eris.Message) {
     const index = getIncInt(0, forbJobs.length - 2);
     const voidJob = forbJobs[index];
     forbJobs[index] = "~~" + forbJobs[index] + "~~";
-    // const chan = await msg.author.getDMChannel();
     await msg.channel.createMessage(
         "Wind Job: " +
             forbJobs[0] +
@@ -1607,8 +1605,8 @@ async function purify() {
 // attributes
 async function attributes(msg: Eris.Message) {
     if (monsters.length > 0) {
-        const chan = await msg.author.getDMChannel();
-        await chan.createMessage(
+        await replyDM(
+            msg,
             "The monster database has changed! " +
                 "Instead of looking individual attributes, you use seperate commands for these categories:\n" +
                 "`.info` shows everything but AI\n" +
@@ -1621,7 +1619,7 @@ async function attributes(msg: Eris.Message) {
     }
 }
 
-async function enemyInfo(user: Eris.User, enemy: Monster, type: string) {
+async function enemyInfo(msg: Eris.Message, enemy: Monster, type: string) {
     let out: string | undefined;
     switch (type) {
         case "profile":
@@ -1644,8 +1642,7 @@ async function enemyInfo(user: Eris.User, enemy: Monster, type: string) {
             break;
     }
     if (out) {
-        const chan = await user.getDMChannel();
-        await chan.createMessage(out);
+        await replyDM(msg, out);
     }
 }
 
@@ -1658,7 +1655,7 @@ const aliases: { [alias: string]: string } = {
     treedeath: "Exdeath (Final)"
 };
 
-async function enemySearch(user: Eris.User, query: string, type: string) {
+async function enemySearch(msg: Eris.Message, query: string, type: string) {
     if (query.trim().toLowerCase() in aliases) {
         query = aliases[query.trim().toLowerCase()].toLowerCase();
     }
@@ -1666,10 +1663,9 @@ async function enemySearch(user: Eris.User, query: string, type: string) {
         (enemy: Monster) => enemy.name.toLowerCase().includes(query) || enemy.rpgeName.toLowerCase().includes(query)
     ); // new array which is all enemies with name including message
     if (matches.length < 1) {
-        const chan = await user.getDMChannel();
-        await chan.createMessage("Sorry, I couldn't find any enemies with that name!");
+        await replyDM(msg, "Sorry, I couldn't find any enemies with that name!");
     } else if (matches.length === 1) {
-        enemyInfo(user, matches[0], type);
+        enemyInfo(msg, matches[0], type);
     } else {
         let out = "I'm not sure which enemy you mean! Please pick one of the following:\n";
         let i = 1; // lists from 1-n for humans even tho arrays start at 0
@@ -1677,16 +1673,15 @@ async function enemySearch(user: Eris.User, query: string, type: string) {
             out += i + ". " + match.name + "\n";
             i++;
         }
-        queries[user.id] = {
+        queries[msg.author.id] = {
             // store data in queries, in the form of its own tiny key-value pair
             list: matches,
             type
         };
-        const chan = await user.getDMChannel();
         try {
-            await chan.createMessage(out);
+            await replyDM(msg, out);
         } catch (e) {
-            await chan.createMessage(
+            await replyDM(msg,
                 "There was some sort of error sending you a list of monsters with names that matched." +
                     " This can mean the message was too long. Did you search something too short?" +
                     " Try again with more of the name."
@@ -1699,10 +1694,9 @@ async function enemyClarify(msg: Eris.Message) {
     const input = parseInt(msg.content, 10);
     if (isNaN(input) || !(input - 1 in queries[msg.author.id].list)) {
         // if user didn't type a number or the number wasn't listed (-1 to convert from 1-start to 0-start)
-        const chan = await msg.author.getDMChannel();
-        await chan.createMessage("Sorry, that wasn't the number of a result I had saved. Please try searching again.");
+        await replyDM(msg, "Sorry, that wasn't the number of a result I had saved. Please try searching again.");
     } else {
-        enemyInfo(msg.author, queries[msg.author.id].list[input - 1], queries[msg.author.id].type);
+        enemyInfo(msg, queries[msg.author.id].list[input - 1], queries[msg.author.id].type);
     }
     delete queries[msg.author.id]; // remove element from object
 }
@@ -1714,7 +1708,7 @@ function info(type: string) {
             .split(/ +/)
             .slice(1)
             .join(" ");
-        enemySearch(msg.author, query, type);
+        enemySearch(msg, query, type);
     };
 }
 
@@ -1817,6 +1811,15 @@ async function jobData(msg: Eris.Message) {
         out = "Sorry, I can't find a class with that name!";
     }
     await msg.channel.createMessage(out);
+}
+
+async function replyDM(msg: Eris.Message, content: Eris.MessageContent) {
+    const chan = await msg.author.getDMChannel();
+    const m = await chan.createMessage(content);
+    if (msg.channel instanceof Eris.GuildChannel) {
+        await msg.addReaction("📬");
+    }
+    return m;
 }
 
 Promise.all(proms).then(
