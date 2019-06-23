@@ -65,11 +65,19 @@ This recites information about a Job class, such as its base stats and learned a
 
 This displays the current state of a countdown until the next relevant date, be it preregistration or The Run.
 
+## Fun Toys
+
+These commands are fun little things for users to play around with.
+
 ### .color
 
 This generates a random set of three 0-7 numbers, used for FFV Advance's menu colour option, and reacts to your message with them. Because reactions have to be unique, there are some workarounds for duplicate numbers. The back arrow ◀ represents a repeat of the first number, the forward arrow ▶ represents a repeat of the second number, and the plus ➕ represents 3 of the same number.
 
 For those playing on SNES, with a larger colour range from 0-31, add "SNES" somewhere in the message (e.g. `.color snes` or `.snescolor`) to increase the range appropriately. Because number emoji are only a single digit, 10-31 are represented by letters, similar to hexadecimal - 10 = A, 11 = B and so on.
+
+### .order
+
+This reacts to the user's message with the letter emoji "B", "L", "G" and "F" in a random order, standing for Bartz, Lenna, Galuf and Faris respectively. This allows the user to rearrange their party in a random order each run.
 
 ## Fun Stat Tracking
 

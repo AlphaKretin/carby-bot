@@ -233,6 +233,10 @@ const commands = [
     {
         func: isBowBetter,
         names: ["isbowbetter"]
+    },
+    {
+        func: order,
+        names: ["order", "firstchar"]
     }
 ];
 const responses = {
@@ -1668,6 +1672,13 @@ async function randcolour(msg) {
     else {
         emoji.push(lastColour);
     }
+    for (const emo of emoji) {
+        await msg.addReaction(emo);
+    }
+}
+async function order(msg) {
+    const reactions = ["🇧", "🇱", "🇬", "🇫"];
+    const emoji = shuffle(reactions);
     for (const emo of emoji) {
         await msg.addReaction(emo);
     }

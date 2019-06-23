@@ -267,6 +267,10 @@ const commands: ICommand[] = [
     {
         func: isBowBetter,
         names: ["isbowbetter"]
+    },
+    {
+        func: order,
+        names: ["order", "firstchar"]
     }
 ];
 
@@ -1823,6 +1827,14 @@ async function randcolour(msg: Eris.Message) {
     } else {
         emoji.push(lastColour);
     }
+    for (const emo of emoji) {
+        await msg.addReaction(emo);
+    }
+}
+
+async function order(msg: Eris.Message) {
+    const reactions = ["🇧", "🇱", "🇬", "🇫"];
+    const emoji = shuffle(reactions);
     for (const emo of emoji) {
         await msg.addReaction(emo);
     }
