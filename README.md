@@ -2,7 +2,7 @@
 
 Hi! I'm Discord!Carbybot, made by AlphaKretin, based off of the IRC!Carbybot made by Kyrosiris! I'm here to make Fiestaing easier! If you have other suggestions for commands, let Kyrosiris or someone with the Robit Helper role know. They'll try to add it. Unlike the dumb IRC version of Carbybot, I can accept PMs! Yay!
 
-You can use `.help` to get a link to this readme. Note that while the "intended" prefix alternates between commands, they all work with either `.` or `!`, so don't feel compelled to memorise which is which.
+You can use `.help` to get a link to this readme. Note that while the "intended" prefix alternates between commands, they all work with either `.` or `!`, so don't feel compelled to memorise which is which. For usage, `[]` indicates optional parameters, e.g. for `.almagest [stamina]` you don't have to specify a stamina, and `|` indicates a choice between parameters, so for `.almagest stamina|Job` you can enter either a stamina value or the name of a Job.
 
 ## Mechanical Tips/Useful things
 
@@ -48,6 +48,12 @@ This recites the effects and ingredients of the mixes made with the Chemist's !M
 **Usage**: `!combine item|name`
 
 This recites the effects of the mixes made with the Cannoneer's !Combine ability. Carby can find a combination from either the main ingredient, or the name of the attack. Thanks to Aerdan for assembling this data.
+
+### .isbowbetter
+
+**Usage**: `.isbowbetter level`
+
+This calculates the chance of a Death proc from the Death Sickle against the Seal Guardian boss in World 2, and compares it to the static chance of a Death proc from the Killer Bow, to see which is more likely to inflict the status. It requires the level of the character making the attack. It is assumed that the Bow user has access to !Aim to guarantee the hit, but the Axe user does not.
 
 ### .class
 

@@ -229,6 +229,10 @@ const commands = [
     {
         func: mix,
         names: ["mix", "drug"]
+    },
+    {
+        func: isBowBetter,
+        names: ["isbowbetter"]
     }
 ];
 const responses = {
@@ -855,6 +859,36 @@ async function mix(msg) {
                 await msg.channel.createMessage("Sorry, I couldn't find a mix with those two ingredients!");
             }
         }
+    }
+}
+async function isBowBetter(msg) {
+    // Chance of Killer Axe attack to hit is 85%
+    // Proc chance of Killer Axe is 33%
+    // % chance of Death proc hitting is 80 + Char Level - Seal Level. Seal Level is 77 so this is Char Level + 3.
+    // Seal magic evade is 20% to 80% to not evade.
+    // These are independent and all need to occur, so total chance is multiplied
+    // Compare to Killer Bow flat 8% chance and using !aim to guarantee hit
+    const args = msg.content
+        .toLowerCase()
+        .split(/ +/)
+        .slice(1);
+    const level = parseInt(args[0], 10);
+    if (isNaN(level) || level < 1 || level > 99) {
+        await msg.channel.createMessage("Sorry, I need your level!");
+        return;
+    }
+    // should be (3+level)/100 for proportion, but to get percentage we *100, so it cancels
+    // 0.85 * 0.33 * 0.8 = 0.2244. The less we leave to JS' imprecision the better
+    const axeChance = 0.2244 * (3 + level);
+    if (axeChance >= 8) {
+        await msg.channel.createMessage("Death Sickle is better vs the Seal Guardians! You've got " +
+            axeChance.toPrecision(4) +
+            "% odds per !Attack use.");
+    }
+    else {
+        await msg.channel.createMessage("Killer Bow is better vs the Seal Guardians! Death Sickle only has " +
+            axeChance.toPrecision(4) +
+            "% chance per !Attack use.");
     }
 }
 // DIY fiestas
