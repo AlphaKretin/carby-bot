@@ -1249,7 +1249,13 @@ const ddLines = [
     "Well, he can't cast Aero now. \\*Gigas casts Aero twice\\*",
     "Being higher level isn't really going to help outside of getting higher damage multipliers, basically.",
     "My notes assume I don't get a Lamia Tiara. \\*proceeds to grind for one anyways\\*",
-    "I have a really really dumb strategy! <:yayclod:362777481838592010>"
+    "I have a really really dumb strategy! <:yayclod:362777481838592010>",
+    "I'll admit, I completely forgot he can be confused, that's a better strat than what I'm using.",
+    "Well that was definitely a more consistent strat than what I was trying to do before.",
+    "Two bears and an axe. And then just hope for good damage rolls (to catch a Prototype).",
+    "https://i.imgur.com/CAog7ki.png",
+    "I think I grinded for a little bit too long.",
+    "75% of chance to hit, and of course I whiff it."
 ];
 async function dd(msg) {
     const args = msg.content.toLowerCase().split(/ +/);
