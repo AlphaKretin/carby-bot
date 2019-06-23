@@ -312,7 +312,7 @@ const responses: { [key: string]: string } = {
         "Magic Lamp cast order: Bahamut, Leviathan, Odin, Syldra, Carbuncle, Catoblepas, " +
         "Golem, Titan, Ifrit, Ramuh, Shiva, Remora, Sylph, Chocobo.",
     level5death: "Possibly the best ability! http://gfycat.com/TerrificKeyEmperorshrimp",
-    ned: "Neo-Exdeath Picture Guide: http://i.imgur.com/FphWf.gif",
+    ned: "Neo-Exdeath Picture Guide: https://i.imgur.com/m0E61iK.png",
     numbers:
         "**PREMIUM TACTICAL INFORMATION ITT**\nDragondarch's team is Monk, Mystic Knight, Beastmaster, Dancer. " +
         "Here's his foolproof strategy for dealing with the Seal Guardians in Moore Forest.\n\n" +
