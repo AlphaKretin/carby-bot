@@ -212,7 +212,7 @@ const commands = [
     },
     {
         func: randcolour,
-        names: ["color", "colour"]
+        names: ["color", "colour", "snescolour", "snescolor"]
     },
     {
         func: deathByMaths,
@@ -1560,18 +1560,64 @@ function info(type) {
         enemySearch(msg, query, type);
     };
 }
+const letterEmoji = [
+    "🇦",
+    "🇧",
+    "🇨",
+    "🇩",
+    "🇪",
+    "🇫",
+    "🇬",
+    "🇭",
+    "🇮",
+    "🇯",
+    "🇰",
+    "🇱",
+    "🇲",
+    "🇳",
+    "🇴",
+    "🇵",
+    "🇶",
+    "🇷",
+    "🇸",
+    "🇹",
+    "🇺",
+    "🇻",
+    "🇼",
+    "🇽",
+    "🇾",
+    "🇿"
+];
+function numToEmoji(i) {
+    if (i === 100) {
+        return "💯";
+    }
+    if (i < 0) {
+        throw new Error("That number cannot be represented as an emoji!");
+    }
+    if (i < 10) {
+        return i + "\u20e3";
+    }
+    const letterIndex = i - 10;
+    if (letterIndex in letterEmoji) {
+        return letterEmoji[letterIndex];
+    }
+    throw new Error("That number cannot be represented as an emoji!");
+}
 async function randcolour(msg) {
-    const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
+    const snes = msg.content.toLowerCase().includes("snes");
+    const max = snes ? 31 : 7;
+    const colours = [getIncInt(0, max), getIncInt(0, max), getIncInt(0, max)];
     const emoji = [];
-    emoji.push(colours[0] + "\u20e3");
-    const nextColour = colours[1] + "\u20e3";
+    emoji.push(numToEmoji(colours[0]));
+    const nextColour = numToEmoji(colours[1]);
     if (emoji.includes(nextColour)) {
         emoji.push("◀");
     }
     else {
         emoji.push(nextColour);
     }
-    const lastColour = colours[2] + "\u20e3";
+    const lastColour = numToEmoji(colours[2]);
     const index = emoji.indexOf(lastColour);
     if (index === 0) {
         if (emoji.includes("◀")) {
