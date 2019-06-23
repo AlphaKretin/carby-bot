@@ -61,7 +61,7 @@ This displays the current state of a countdown until the next relevant date, be 
 
 ### .color
 
-This generates a random set of three 0-7 numbers, used for FFV Advance's menu colour option, and reacts to your message with them. Because reactions have to be unique, duplicate numbers are represented with ◀ and ➕.
+This generates a random set of three 0-7 numbers, used for FFV Advance's menu colour option, and reacts to your message with them. Because reactions have to be unique, there are some workarounds for duplicate numbers. The back arrow ◀ represents a repeat of the first number, the forward arrow ▶ represents a repeat of the second number, and the plus ➕ represents 3 of the same number.
 
 ## Fun Stat Tracking
 

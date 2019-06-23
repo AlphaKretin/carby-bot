@@ -1715,15 +1715,26 @@ function info(type: string) {
 async function randcolour(msg: Eris.Message) {
     const colours = [getIncInt(0, 7), getIncInt(0, 7), getIncInt(0, 7)];
     const emoji: string[] = [];
-    for (const color of colours) {
-        const emo = color + "\u20e3";
-        if (emoji.indexOf(emo) === -1) {
-            emoji.push(emo);
-        } else if (emoji.indexOf("◀") === -1) {
-            emoji.push("◀");
-        } else {
+    emoji.push(colours[0] + "\u20e3");
+    const nextColour = colours[1] + "\u20e3";
+    if (emoji.includes(nextColour)) {
+        emoji.push("◀");
+    } else {
+        emoji.push(nextColour);
+    }
+    const lastColour = colours[2] + "\u20e3";
+    const index = emoji.indexOf(lastColour);
+    if (index === 0) {
+        if (emoji.includes("◀")) {
+            // three of a kind
             emoji.push("➕");
+        } else {
+            emoji.push("◀");
         }
+    } else if (index === 1) {
+        emoji.push("▶");
+    } else {
+        emoji.push(lastColour);
     }
     for (const emo of emoji) {
         await msg.addReaction(emo);
