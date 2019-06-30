@@ -205,7 +205,7 @@ This is an obsolete alias for `.chaos+no750`, and does not support other modifie
 
 ## Enemy database
 
-Thanks to DigiPack (Sakako), Carby has a full database of all the enemies in FFV. These commands look them up and display their information. If you search a phrase that matches the names of multiple enemies, Carby will continue with you in DMs, just type the number next to the name you wanted. Carby knows names from both the GBA version onwards and the RPGe fan translation.
+Thanks to DigiPack (Sakako), Carby has a full database of all the enemies in FFV. These commands look them up and display their information. If you search a phrase that matches the names of multiple enemies, Carby will continue with you in DMs. To select one of the listed enemies, just reply to the DM with the corresponding number. Carby knows names from both the GBA version onwards and the RPGe fan translation.
 
 ### .attributes
 
