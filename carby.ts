@@ -892,6 +892,15 @@ async function combine(msg: Eris.Message) {
     }
 }
 
+async function getIngredientName(query: string): Promise<string | undefined> {
+    const q = clean(query);
+    const empty: string[] = [];
+    const ing = mixes
+        .reduce((prev, cur) => prev.concat(cur.mixes.reduce((p, c) => p.concat(c), empty)), empty)
+        .find(i => clean(i).includes(q));
+    return ing;
+}
+
 async function mix(msg: Eris.Message) {
     const args = msg.content.toLowerCase().split(/\s+/);
     args.shift();
@@ -905,7 +914,7 @@ async function mix(msg: Eris.Message) {
         return;
     }
     if (mode === "to") {
-        const curMix = mixes.find(m => clean(m.name) === query || (!!m.snes && clean(m.snes) === query));
+        const curMix = mixes.find(m => clean(m.name).includes(query) || (!!m.snes && clean(m.snes).includes(query)));
         if (curMix) {
             const out =
                 "__**" +
@@ -923,12 +932,15 @@ async function mix(msg: Eris.Message) {
         // if mode === "from"
         const ingredients = query.split("+").slice(0, 2);
         if (ingredients.length === 1) {
+            const ing = await getIngredientName(ingredients[0]);
+            if (!ing) {
+                await msg.channel.createMessage(
+                    "Sorry, I don't know what ingredient you mean by `" + ingredients[0] + "`!"
+                );
+                return;
+            }
             // filter for mixes including the ingredient
-            const curMixes = mixes.filter(m => !!m.mixes.find(i => i.map(clean).includes(ingredients[0])));
-            // find proper case name of ingredient
-            const ing = curMixes[0].mixes
-                .find(m => m.map(clean).includes(ingredients[0]))!
-                .find(k => clean(k) === ingredients[0])!;
+            const curMixes = mixes.filter(m => !!m.mixes.find(ings => ings.includes(ing)));
             if (curMixes.length > 0) {
                 let out = "Mixing with __" + ing + "__:\n";
                 out += curMixes
@@ -953,15 +965,22 @@ async function mix(msg: Eris.Message) {
                 await msg.channel.createMessage("Sorry, I couldn't find a mix using that ingredient!");
             }
         } else {
-            const quer1 = ingredients[0];
-            const quer2 = ingredients[1];
+            const quer1 = await getIngredientName(ingredients[0]);
+            if (!quer1) {
+                await msg.channel.createMessage(
+                    "Sorry, I don't know what ingredient you mean by `" + ingredients[0] + "`!"
+                );
+                return;
+            }
+            const quer2 = await getIngredientName(ingredients[1]);
+            if (!quer2) {
+                await msg.channel.createMessage(
+                    "Sorry, I don't know what ingredient you mean by `" + ingredients[1] + "`!"
+                );
+                return;
+            }
             const curMix = mixes.find(
-                m =>
-                    !!m.mixes.find(i => {
-                        const ing1 = clean(i[0]);
-                        const ing2 = clean(i[1]);
-                        return (ing1 === quer1 && ing2 === quer2) || (ing2 === quer1 && ing1 === quer2);
-                    })
+                m => !!m.mixes.find(i => (i[0] === quer1 && i[1] === quer2) || (i[0] === quer2 && i[1] === quer1))
             );
             if (curMix) {
                 const out =
@@ -974,7 +993,9 @@ async function mix(msg: Eris.Message) {
                     curMix.mixes.map(m => m.join(" + ")).join(", ");
                 await msg.channel.createMessage(out);
             } else {
-                await msg.channel.createMessage("Sorry, I couldn't find a mix with those two ingredients!");
+                await msg.channel.createMessage(
+                    "Sorry, I couldn't find a mix with __" + quer1 + "__ and __" + quer2 + "__!"
+                );
             }
         }
     }
