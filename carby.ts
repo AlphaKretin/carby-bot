@@ -271,6 +271,10 @@ const commands: ICommand[] = [
     {
         func: order,
         names: ["order", "firstchar"]
+    },
+    {
+        func: zeninage,
+        names: ["zeninage", "giltoss"]
     }
 ];
 
@@ -391,8 +395,7 @@ const responses: { [key: string]: string } = {
         "Blink, Shell, Esuna, Curaga, Reflect, Berserk, Arise, Holy, Dispel, " +
         "Fire, Blizzard, Thunder, Poison, Sleep, Toad, Fira, Blizzara, Thundara, Drain, Break, Bio, " +
         "Firaga, Blizzaga, Thundaga, Flare, Death, Osmose, repeat!",
-    yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png",
-    zeninage: "The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif"
+    yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png"
 };
 
 const prefixes = [".", "!"];
@@ -1895,6 +1898,14 @@ async function deathByMaths(msg: Eris.Message) {
             })
             .join("\n");
         await msg.channel.createMessage(out);
+    }
+}
+
+async function zeninage(msg: Eris.Message) {
+    if (getIncInt(0, 1)) {
+        await msg.channel.createMessage("https://i.imgur.com/jdcTSzO.png");
+    } else {
+        await msg.channel.createMessage("The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif");
     }
 }
 
