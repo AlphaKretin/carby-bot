@@ -271,7 +271,7 @@ Each of the following commands recite a quote or link with useful information ab
 -   `.sealed`: alcharagia's guide to the Sealed Temple bonus dungeon.
 -   `.seals`: A picture guide for which of the nameless Seal Guardian bosses are which.
 -   `.stats`: A list of the modifiers each character has to their base stats.
--   `.wonderwand` The order of the spells the Wonder Wand weapon casts.
+-   `.wand` The order of the spells the Wonder Wand weapon casts.
 
 ## Silly nonsense
 

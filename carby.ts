@@ -381,7 +381,12 @@ const responses: { [key: string]: string } = {
         "Character stat bonuses are as follows:\nButz - +4 Str, +1 Agi, +3 Vit, +1 Mag\n" +
         "Lenna: +1 Str, +2 Agi, +1 Vit, +4 Mag\nGaluf: +3 Str, +4 Vit\n " +
         "Faris: +3 Str, +3 Agi, +2 Vit, +2 Mag\nKrile: +1 Str, +4 Agi, +3 Mag",
-    wonderwand:
+    wand:
+        "Wonder Wand spell order: Cure, Poisona, Silence, Protect, Mini, Cura, Raise, Confuse, " +
+        "Blink, Shell, Esuna, Curaga, Reflect, Berserk, Arise, Holy, Dispel, " +
+        "Fire, Blizzard, Thunder, Poison, Sleep, Toad, Fira, Blizzara, Thundara, Drain, Break, Bio, " +
+        "Firaga, Blizzaga, Thundaga, Flare, Death, Osmose, repeat!",
+    wonder:
         "Wonder Wand spell order: Cure, Poisona, Silence, Protect, Mini, Cura, Raise, Confuse, " +
         "Blink, Shell, Esuna, Curaga, Reflect, Berserk, Arise, Holy, Dispel, " +
         "Fire, Blizzard, Thunder, Poison, Sleep, Toad, Fira, Blizzara, Thundara, Drain, Break, Bio, " +
