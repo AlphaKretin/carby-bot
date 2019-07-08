@@ -1769,7 +1769,8 @@ async function zeninage(msg) {
         await msg.channel.createMessage("The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif");
     }
 }
-const flings = (l) => Math.ceil(60000 / ((l - 20) * 150));
+const damPerFling = (l) => Math.min((l - 20) * 150, 9999);
+const flings = (l) => Math.ceil(60000 / damPerFling(l));
 async function loadsOfMoney(msg) {
     const args = msg.content
         .toLowerCase()
@@ -1790,6 +1791,17 @@ async function loadsOfMoney(msg) {
     // cost per fling is 50 * #targets * level
     const numFlings = flings(level);
     const cost = numFlings * 200 * level;
+    if (numFlings === 7) {
+        // damage cap
+        await msg.channel.createMessage("At Level " +
+            level +
+            ", taking " +
+            numFlings +
+            " uses of !Zeninage, it will cost " +
+            cost +
+            " gil to kill Neo Exdeath. Because of the damage cap, any further levels only increase the cost.");
+        return;
+    }
     let nextLevel = level + 1;
     while (flings(nextLevel) === numFlings) {
         nextLevel++;
