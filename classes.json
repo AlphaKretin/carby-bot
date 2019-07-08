@@ -97,7 +97,7 @@
         "750": false,
         "innate": ["Magic Shell"],
         "abilities": ["Magic Shell", "!Spellblade L1", "L2", "L3", "L4", "L5", "L6"],
-        "ap": [10, 20, 30, 50, 50, 100, 400],
+        "ap": [10, 20, 30, 50, 70, 100, 400],
         "str": 14,
         "agi": 14,
         "vit": 14,
