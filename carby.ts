@@ -1933,7 +1933,7 @@ async function zeninage(msg: Eris.Message) {
         await msg.channel.createMessage("The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif");
     }
 }
-
+const flings = (l: number) => Math.ceil(60000 / ((l - 20) * 150));
 async function loadsOfMoney(msg: Eris.Message) {
     const args = msg.content
         .toLowerCase()
@@ -1954,17 +1954,31 @@ async function loadsOfMoney(msg: Eris.Message) {
     // number of flings is NED's biggest HP / damage per fling, round up
     // cost to kill is cost per fling * number of flings
     // cost per fling is 50 * #targets * level
-    const numFlings = Math.ceil(60000 / ((level - 20) * 150));
-    const cost = numFlings * (200 * level);
-    await msg.channel.createMessage(
-        "With level __" +
-            level +
-            "__ characters, it will take __" +
-            numFlings +
-            "__ !Zeninages to kill all of Neo Exdeath, costing __" +
-            cost +
-            "__ gil!"
-    );
+    const numFlings = flings(level);
+    const cost = numFlings * 200 * level;
+    let nextLevel = level + 1;
+    while (flings(nextLevel) === numFlings) {
+        nextLevel++;
+    }
+    const nextCost = flings(nextLevel) * 200 * nextLevel;
+    let out =
+        "At Level " +
+        level +
+        ", taking " +
+        numFlings +
+        " uses of !Zeninage, it will cost " +
+        cost +
+        " gil to kill Neo Exdeath. The next level that reduces is the cost is " +
+        nextLevel +
+        ", where it takes " +
+        flings(nextLevel) +
+        " uses, costing " +
+        nextCost +
+        " gil.";
+    if (nextLevel - level > 1) {
+        out += " Any intermediate levels will increase the cost for no benefit.";
+    }
+    await msg.channel.createMessage(out);
 }
 
 async function jobData(msg: Eris.Message) {
