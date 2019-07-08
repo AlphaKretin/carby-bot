@@ -1944,6 +1944,12 @@ async function loadsOfMoney(msg: Eris.Message) {
         await msg.channel.createMessage("Sorry, I need your level!");
         return;
     }
+    if (level <= 20) {
+        await msg.channel.createMessage(
+            "Sorry, at level " + level + ", your !Zeninage doesn't get through NED's defense!"
+        );
+        return;
+    }
     // damage per fling is level - DEF * 150
     // number of flings is NED's biggest HP / damage per fling, round up
     // cost to kill is cost per fling * number of flings
