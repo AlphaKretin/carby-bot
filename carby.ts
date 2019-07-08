@@ -275,6 +275,10 @@ const commands: ICommand[] = [
     {
         func: zeninage,
         names: ["zeninage", "giltoss"]
+    },
+    {
+        func: loadsOfMoney,
+        names: ["loadsofmoney"]
     }
 ];
 
@@ -939,7 +943,7 @@ async function mix(msg: Eris.Message) {
                 );
                 return;
             }
-            // filter for mixes including the ingredient
+            // filter for mixes including thecommands ingredient
             const curMixes = mixes.filter(m => !!m.mixes.find(ings => ings.includes(ing)));
             if (curMixes.length > 0) {
                 let out = "Mixing with __" + ing + "__:\n";
@@ -1013,7 +1017,7 @@ async function isBowBetter(msg: Eris.Message) {
         .split(/ +/)
         .slice(1);
     const level = parseInt(args[0], 10);
-    if (isNaN(level) || level < 1 || level > 99) {
+    if (isNaN(level) || level < 1 || level > 255) {
         await msg.channel.createMessage("Sorry, I need your level!");
         return;
     }
@@ -1928,6 +1932,33 @@ async function zeninage(msg: Eris.Message) {
     } else {
         await msg.channel.createMessage("The damage only goes up uP UP! http://i.imgur.com/7wxm7dy.gif");
     }
+}
+
+async function loadsOfMoney(msg: Eris.Message) {
+    const args = msg.content
+        .toLowerCase()
+        .split(/ +/)
+        .slice(1);
+    const level = parseInt(args[0], 10);
+    if (isNaN(level) || level < 1 || level > 255) {
+        await msg.channel.createMessage("Sorry, I need your level!");
+        return;
+    }
+    // damage per fling is level - DEF * 150
+    // number of flings is NED's biggest HP / damage per fling, round up
+    // cost to kill is cost per fling * number of flings
+    // cost per fling is 50 * #targets * level
+    const numFlings = Math.ceil(60000 / ((level - 20) * 150));
+    const cost = numFlings * (200 * level);
+    await msg.channel.createMessage(
+        "With level __" +
+            level +
+            "__ characters, it will take __" +
+            numFlings +
+            "__ !Zeninages to kill all of Neo Exdeath, costing __" +
+            cost +
+            "__ gil!"
+    );
 }
 
 async function jobData(msg: Eris.Message) {

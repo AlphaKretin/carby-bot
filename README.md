@@ -55,6 +55,12 @@ This recites the effects of the mixes made with the Cannoneer's !Combine ability
 
 This calculates the chance of a Death proc from the Death Sickle against the Seal Guardian boss in World 2, and compares it to the static chance of a Death proc from the Killer Bow, to see which is more likely to inflict the status. It requires the level of the character making the attack. It is assumed that the Bow user has access to !Aim to guarantee the hit, but the Axe user does not.
 
+### .loadsofmoney
+
+**Usage**: `.loadsofmoney level`
+
+This calculates the cost of shooting at Neo Exdeath until it dies, with !Zeninage. It takes your level and outputs both the number of throws and the amount of gil that many throws will cost.
+
 ### .class
 
 **Usage**: `.class name`
