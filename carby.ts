@@ -460,7 +460,7 @@ bot.on("messageReactionAdd", async (msg: Eris.Message, emoji: Eris.EmojiBase, us
         const user = bot.users.get(userID);
         if (user && !user.bot) {
             const chan = await user.getDMChannel();
-            chan.createMessage(dmReplies[msg.id]);
+            await chan.createMessage(dmReplies[msg.id]);
         }
     }
 });

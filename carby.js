@@ -397,7 +397,7 @@ bot.on("messageReactionAdd", async (msg, emoji, userID) => {
         const user = bot.users.get(userID);
         if (user && !user.bot) {
             const chan = await user.getDMChannel();
-            chan.createMessage(dmReplies[msg.id]);
+            await chan.createMessage(dmReplies[msg.id]);
         }
     }
 });
