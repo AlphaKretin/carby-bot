@@ -455,6 +455,16 @@ bot.on("messageCreate", async (msg: Eris.Message) => {
     }
 });
 
+bot.on("messageReactionAdd", async (msg: Eris.Message, emoji: Eris.EmojiBase, userID: string) => {
+    if (msg.id in dmReplies && emoji.name === "📬") {
+        const user = bot.users.get(userID);
+        if (user && !user.bot) {
+            const chan = await user.getDMChannel();
+            chan.createMessage(dmReplies[msg.id]);
+        }
+    }
+});
+
 // .mcalc
 interface IMCalc {
     args: string[];
@@ -2028,12 +2038,25 @@ async function jobData(msg: Eris.Message) {
     await msg.channel.createMessage(out);
 }
 
+const dmReplies: { [messageID: string]: Eris.MessageContent } = {};
+
 async function replyDM(msg: Eris.Message, content: Eris.MessageContent) {
     const chan = await msg.author.getDMChannel();
     const m = await chan.createMessage(content);
     if (msg.channel instanceof Eris.GuildChannel) {
         await msg.addReaction("📬");
     }
+    dmReplies[msg.id] = content;
+    // clear cache after a minute
+    setTimeout(
+        (id: string) => {
+            if (id in dmReplies) {
+                delete dmReplies[id];
+            }
+        },
+        60000,
+        msg.id
+    );
     return m;
 }
 
