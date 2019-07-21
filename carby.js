@@ -904,24 +904,36 @@ async function isBowBetter(msg) {
         .toLowerCase()
         .split(/ +/)
         .slice(1);
-    const level = parseInt(args[0], 10);
-    if (isNaN(level) || level < 1 || level > 255) {
+    let level = parseInt(args[0], 10);
+    if (isNaN(level) || level < 1) {
         await msg.channel.createMessage("Sorry, I need your level!");
         return;
+    }
+    let capped = false;
+    if (level > 97) {
+        capped = true;
+        level = 97;
     }
     // should be (3+level)/100 for proportion, but to get percentage we *100, so it cancels
     // 0.85 * 0.33 * 0.8 = 0.2244. The less we leave to JS' imprecision the better
     const axeChance = 0.2244 * (3 + level);
+    let out;
     if (axeChance >= 8) {
-        await msg.channel.createMessage("Death Sickle is better vs the Seal Guardians! You've got " +
-            axeChance.toPrecision(4) +
-            "% odds per !Attack use.");
+        out =
+            "Death Sickle is better vs the Seal Guardians! You've got " +
+                axeChance.toPrecision(4) +
+                "% odds per !Attack use.";
     }
     else {
-        await msg.channel.createMessage("Killer Bow is better vs the Seal Guardians! Death Sickle only has " +
-            axeChance.toPrecision(4) +
-            "% chance per !Attack use.");
+        out =
+            "Killer Bow is better vs the Seal Guardians! Death Sickle only has " +
+                axeChance.toPrecision(4) +
+                "% chance per !Attack use.";
     }
+    if (capped) {
+        out += "\n(Level capped at 97, no increase past that.)";
+    }
+    await msg.channel.createMessage(out);
 }
 // DIY fiestas
 var jobSets;
