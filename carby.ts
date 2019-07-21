@@ -301,7 +301,9 @@ const responses: { [key: string]: string } = {
         "&perpage=40&pagenumber=13#post484858103",
     blue: "Blue Magic acquisition guide: http://shrines.rpgclassics.com/snes/ff5/bluestrat.shtml",
     catch: "Need catch suggestions? Kyro made a spreadsheet: http://tinyurl.com/catchspreadsheet",
-    chemchart: "!Mix Picture Guide: http://i.imgur.com/MBJBNvG.gif",
+    chemchart:
+        "!Mix Picture Guide: http://i.imgur.com/MBJBNvG.gif\nFor a version with the cruft removed, click here: " +
+        "<https://cdn.discordapp.com/attachments/315364661832843265/600020062413258762/mixchart-improved.gif>",
     crystelle: "Those are easy to catch, right? http://i.imgur.com/WD40MES.png",
     dance: "It's *sensual.* https://i.imgur.com/qX3ElWK.gif",
     encounter:
@@ -913,7 +915,8 @@ async function mix(msg: Eris.Message) {
     if (!mode || !(mode === "to" || mode === "from")) {
         await msg.channel.createMessage(
             "Sorry, I need to know which direction to search!\n" +
-                "Type `!mix from` to specify ingredients, or `!mix to` to specify the mix."
+                "Type `!mix from` to specify ingredients, or `!mix to` to specify the mix. " +
+                "If you're looking for the chart, use `.chemchart`."
         );
         return;
     }
