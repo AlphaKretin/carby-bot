@@ -6,7 +6,7 @@
         "750": false,
         "innate": ["Barehanded", "Counter"],
         "abilities": ["!Focus", "Barehanded", "!Chakra", "Counter", "HP+10%", "HP+20%", "HP+30%"],
-        "ap": [10, 30, 45, 50, 100, 150, 300],
+        "ap": [15, 30, 45, 50, 100, 150, 300],
         "str": 26,
         "agi": 1,
         "vit": 26,
