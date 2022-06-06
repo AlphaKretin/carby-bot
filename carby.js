@@ -348,7 +348,7 @@ const responses = {
         "Blink, Shell, Esuna, Curaga, Reflect, Berserk, Arise, Holy, Dispel, " +
         "Fire, Blizzard, Thunder, Poison, Sleep, Toad, Fira, Blizzara, Thundara, Drain, Break, Bio, " +
         "Firaga, Blizzaga, Thundaga, Flare, Death, Osmose, repeat!",
-    worsefaq: "I, Carbybot, happen to be a big fan of Really Bad Walkthroughs. Like this one: https://finalfantasy.fandom.com/wiki/Walkthrough:Final_Fantasy_V/BlueHighwind"
+    worsefaq: "I, Carbybot, happen to be a big fan of Really Bad Walkthroughs. Like this one: https://finalfantasy.fandom.com/wiki/Walkthrough:Final_Fantasy_V/BlueHighwind",
     yburns: "The Y-BURNS? My favorite team! http://i.imgur.com/aQ18OQF.png"
 };
 const prefixes = [".", "!"];
